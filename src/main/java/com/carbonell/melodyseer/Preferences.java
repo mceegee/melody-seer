@@ -32,12 +32,13 @@ public class Preferences extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grpFormat = new javax.swing.ButtonGroup();
         pnlMainPanel = new javax.swing.JPanel();
         lblUrlRequest = new javax.swing.JLabel();
         txtUrlRequest = new javax.swing.JTextField();
         lblFormatRequest = new javax.swing.JLabel();
-        btnMp3 = new javax.swing.JRadioButton();
         bntVideo = new javax.swing.JRadioButton();
+        btnMp3 = new javax.swing.JRadioButton();
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownloadProgress = new javax.swing.JProgressBar();
@@ -60,17 +61,24 @@ public class Preferences extends javax.swing.JFrame {
         lblUrlRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
         lblUrlRequest.setText("Insert video URL here:");
         pnlMainPanel.add(lblUrlRequest);
-        lblUrlRequest.setBounds(70, 40, 140, 30);
+        lblUrlRequest.setBounds(50, 40, 170, 30);
 
         txtUrlRequest.setToolTipText("write your URL here");
         pnlMainPanel.add(txtUrlRequest);
-        txtUrlRequest.setBounds(220, 40, 510, 20);
+        txtUrlRequest.setBounds(220, 40, 510, 30);
 
         lblFormatRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
         lblFormatRequest.setText("Choose format:");
         pnlMainPanel.add(lblFormatRequest);
-        lblFormatRequest.setBounds(100, 80, 110, 20);
+        lblFormatRequest.setBounds(50, 80, 170, 20);
 
+        grpFormat.add(bntVideo);
+        bntVideo.setSelected(true);
+        bntVideo.setText("Video");
+        pnlMainPanel.add(bntVideo);
+        bntVideo.setBounds(220, 80, 98, 20);
+
+        grpFormat.add(btnMp3);
         btnMp3.setText("MP3");
         btnMp3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,11 +86,7 @@ public class Preferences extends javax.swing.JFrame {
             }
         });
         pnlMainPanel.add(btnMp3);
-        btnMp3.setBounds(220, 80, 47, 20);
-
-        bntVideo.setText("Video");
-        pnlMainPanel.add(bntVideo);
-        bntVideo.setBounds(290, 80, 98, 20);
+        btnMp3.setBounds(300, 80, 47, 20);
 
         btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
@@ -92,9 +96,9 @@ public class Preferences extends javax.swing.JFrame {
 
         lblProgress.setText("Progress:");
         pnlMainPanel.add(lblProgress);
-        lblProgress.setBounds(150, 230, 50, 20);
+        lblProgress.setBounds(50, 230, 150, 20);
         pnlMainPanel.add(prgDownloadProgress);
-        prgDownloadProgress.setBounds(220, 235, 510, 10);
+        prgDownloadProgress.setBounds(220, 235, 510, 15);
 
         getContentPane().add(pnlMainPanel);
         pnlMainPanel.setBounds(0, 0, 800, 800);
@@ -137,6 +141,7 @@ public class Preferences extends javax.swing.JFrame {
     private javax.swing.JRadioButton bntVideo;
     private javax.swing.JButton btnDownload;
     private javax.swing.JRadioButton btnMp3;
+    private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JLabel lblFormatRequest;
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblUrlRequest;

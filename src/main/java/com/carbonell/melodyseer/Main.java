@@ -2,6 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
+// <a href="https://www.flaticon.com/free-icons/valentine" title="valentine icons">Valentine icons created by Studio MRPOR - Flaticon</a>
 package com.carbonell.melodyseer;
 
 /**
@@ -38,6 +40,7 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(800, 800));
         setName("MainFrame"); // NOI18N
         setResizable(false);
@@ -97,7 +100,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniExitActionPerformed
 
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
-
+        Preferences openPreferences = new Preferences();
+        openPreferences.setVisible(true);
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
