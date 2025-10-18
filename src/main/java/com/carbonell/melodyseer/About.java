@@ -82,7 +82,8 @@ public class About extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseReleased
-        System.exit(0); // Same as run()
+        // https://stackoverflow.com/questions/6969164/button-for-closing-a-jdialog
+        dispose();
     }//GEN-LAST:event_btnCloseMouseReleased
 
     /**

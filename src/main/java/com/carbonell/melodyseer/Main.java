@@ -38,10 +38,10 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
-        setMinimumSize(new java.awt.Dimension(860, 470));
+        setMinimumSize(new java.awt.Dimension(800, 800));
         setName("MainFrame"); // NOI18N
         setResizable(false);
-        setSize(new java.awt.Dimension(860, 470));
+        setSize(new java.awt.Dimension(800, 800));
         getContentPane().setLayout(null);
 
         mnuFile.setText("File");
@@ -92,13 +92,12 @@ public class Main extends javax.swing.JFrame {
 
     
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
-    
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
         System.exit(NORMAL);
     }//GEN-LAST:event_mniExitActionPerformed
 
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
