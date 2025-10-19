@@ -11,7 +11,9 @@ package com.carbonell.melodyseer;
 import javax.swing.SwingWorker;
 import java.io.*;
 import java.util.List;
-import javax.swing.JOptionPane;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  *
  * @author marta
@@ -49,6 +51,7 @@ public class Preferences extends javax.swing.JFrame {
         lblProgress = new javax.swing.JLabel();
         prgDownloadProgress = new javax.swing.JProgressBar();
         scrOutput = new javax.swing.JScrollPane();
+        txaOutput = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
@@ -111,8 +114,13 @@ public class Preferences extends javax.swing.JFrame {
         lblProgress.setBounds(50, 230, 150, 20);
         pnlMainPanel.add(prgDownloadProgress);
         prgDownloadProgress.setBounds(220, 235, 510, 15);
+
+        txaOutput.setColumns(20);
+        txaOutput.setRows(5);
+        scrOutput.setViewportView(txaOutput);
+
         pnlMainPanel.add(scrOutput);
-        scrOutput.setBounds(90, 300, 660, 180);
+        scrOutput.setBounds(50, 340, 690, 180);
 
         getContentPane().add(pnlMainPanel);
         pnlMainPanel.setBounds(0, 0, 800, 800);
@@ -130,8 +138,7 @@ public class Preferences extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
        private void downloadVideo() {
-        //txaDebug.append("Trying to download " + txtUrl.getText() + "...\n\n");
-        //txaDebug.append(YTDLP_PATH);
+
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -146,15 +153,12 @@ public class Preferences extends javax.swing.JFrame {
                     String line;
                     StringBuilder output = new StringBuilder();
                     while ((line = reader.readLine()) != null) {
-                        //System.out.println("doInBackground> 1 line published. In thread " + //Thread.currentThread().getName());
-                        //System.out.println("\t" + line);
-                        
                         output.append(line).append("\n");
-                        publish(line);
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
                     }
 
                     int exitCode = process.waitFor();
-                    JOptionPane.showMessageDialog(null, output.toString());
+                    
                     publish("Exited with code: " + exitCode + "\n");
 
                 } catch (IOException | InterruptedException e) {
@@ -167,8 +171,19 @@ public class Preferences extends javax.swing.JFrame {
             protected void process(List<String> chunks) {
                 System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
                 for (String line : chunks) {
+                    String[] splitMessage;
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+                    
                     System.out.println("\t" + line);
-                    //txaDebug.append(line + "\n");
+                    txaOutput.append(line + "\n");
+                    
+                    if(matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%",""));
+                        prgDownloadProgress.setValue((int)progress);
+                    }
                 }
 
             }
@@ -212,6 +227,7 @@ public class Preferences extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMainPanel;
     private javax.swing.JProgressBar prgDownloadProgress;
     private javax.swing.JScrollPane scrOutput;
+    private javax.swing.JTextArea txaOutput;
     private javax.swing.JTextField txtUrlRequest;
     // End of variables declaration//GEN-END:variables
 }
