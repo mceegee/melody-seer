@@ -180,7 +180,7 @@ public class Preferences extends javax.swing.JFrame {
             protected Void doInBackground() throws Exception {
                 try {
                     // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText());
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText(), "-P", saveToPath);
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
