@@ -6,6 +6,7 @@
 // <a href="https://www.flaticon.com/free-icons/popular" title="popular icons">Popular icons created by Indygo - Flaticon</a>
 // <a href="https://www.flaticon.com/free-icons/ui" title="ui icons">Ui icons created by Freepik - Flaticon</a> 
 // <a href="https://www.flaticon.com/free-icons/cute" title="cute icons">Cute icons created by Backwoods - Flaticon</a>
+// <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by DinosoftLabs - Flaticon</a>
 package com.carbonell.melodyseer;
 
 import javax.swing.SwingWorker;
@@ -13,6 +14,7 @@ import java.io.*;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -21,6 +23,7 @@ import java.util.regex.Pattern;
 public class Preferences extends javax.swing.JFrame {
     
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
+    private String saveToPath;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Preferences.class.getName());
 
@@ -52,6 +55,8 @@ public class Preferences extends javax.swing.JFrame {
         prgDownloadProgress = new javax.swing.JProgressBar();
         scrOutput = new javax.swing.JScrollPane();
         txaOutput = new javax.swing.JTextArea();
+        btnChooser = new javax.swing.JButton();
+        lblSaveTo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
@@ -107,13 +112,13 @@ public class Preferences extends javax.swing.JFrame {
             }
         });
         pnlMainPanel.add(btnDownload);
-        btnDownload.setBounds(270, 130, 230, 60);
+        btnDownload.setBounds(280, 170, 230, 60);
 
         lblProgress.setText("Progress:");
         pnlMainPanel.add(lblProgress);
-        lblProgress.setBounds(50, 230, 150, 20);
+        lblProgress.setBounds(60, 270, 150, 20);
         pnlMainPanel.add(prgDownloadProgress);
-        prgDownloadProgress.setBounds(220, 235, 510, 15);
+        prgDownloadProgress.setBounds(230, 280, 510, 15);
 
         txaOutput.setColumns(20);
         txaOutput.setRows(5);
@@ -121,6 +126,20 @@ public class Preferences extends javax.swing.JFrame {
 
         pnlMainPanel.add(scrOutput);
         scrOutput.setBounds(50, 340, 690, 180);
+
+        btnChooser.setText("Choose...");
+        btnChooser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooserActionPerformed(evt);
+            }
+        });
+        pnlMainPanel.add(btnChooser);
+        btnChooser.setBounds(220, 110, 100, 23);
+
+        lblSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
+        lblSaveTo.setText("Save to...");
+        pnlMainPanel.add(lblSaveTo);
+        lblSaveTo.setBounds(50, 120, 100, 16);
 
         getContentPane().add(pnlMainPanel);
         pnlMainPanel.setBounds(0, 0, 800, 800);
@@ -137,7 +156,78 @@ public class Preferences extends javax.swing.JFrame {
         downloadVideo();
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    private void btnChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooserActionPerformed
+      
+        // https://www.youtube.com/watch?v=HQ8JAbHmOvs
+        // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
+        
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        
+        int option = chooser.showOpenDialog(this);
+        if(option == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            saveToPath = f.getAbsolutePath();
+            System.out.println(saveToPath);
+        }
+    }//GEN-LAST:event_btnChooserActionPerformed
+
        private void downloadVideo() {
+           // Código proporcionado por el profesor
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText());
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
+                    }
+
+                    int exitCode = process.waitFor();
+                    
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+                    
+                    System.out.println("\t" + line);
+                    txaOutput.append(line + "\n");
+                    
+                    if(matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%",""));
+                        prgDownloadProgress.setValue((int)progress);
+                    }
+                }
+
+            }
+        };
+        worker.execute();
+    }
+    
+       
+    private void downloadAudio() {
 
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
@@ -171,7 +261,6 @@ public class Preferences extends javax.swing.JFrame {
             protected void process(List<String> chunks) {
                 System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
                 for (String line : chunks) {
-                    String[] splitMessage;
                     Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
                     Matcher matcher = pattern.matcher(line);
                     
@@ -190,7 +279,6 @@ public class Preferences extends javax.swing.JFrame {
         };
         worker.execute();
     }
-    
     /**
      * @param args the command line arguments
      */
@@ -218,11 +306,13 @@ public class Preferences extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton bntVideo;
+    private javax.swing.JButton btnChooser;
     private javax.swing.JButton btnDownload;
     private javax.swing.JRadioButton btnMp3;
     private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JLabel lblFormatRequest;
     private javax.swing.JLabel lblProgress;
+    private javax.swing.JLabel lblSaveTo;
     private javax.swing.JLabel lblUrlRequest;
     private javax.swing.JPanel pnlMainPanel;
     private javax.swing.JProgressBar prgDownloadProgress;

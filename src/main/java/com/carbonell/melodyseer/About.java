@@ -32,6 +32,8 @@ public class About extends javax.swing.JDialog {
         lblName = new javax.swing.JLabel();
         lblModule = new javax.swing.JLabel();
         btnClose = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
@@ -47,6 +49,11 @@ public class About extends javax.swing.JDialog {
                 btnCloseMouseReleased(evt);
             }
         });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Resources:\nImages: https://www.flaticon.com/free-icons/popular, https://www.flaticon.com/free-icons/ui, https://www.flaticon.com/free-icons/cute, https://www.flaticon.com/free-icons/folder\nSoftware: yt-dlp (https://github.com/yt-dlp/yt-dlp), FFmpeg (https://github.com/yt-dlp/FFmpeg-Builds)");
+        jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,6 +72,10 @@ public class About extends javax.swing.JDialog {
                 .addGap(369, 369, 369)
                 .addComponent(btnClose)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,7 +84,9 @@ public class About extends javax.swing.JDialog {
                 .addComponent(lblName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblModule)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnClose)
                 .addGap(28, 28, 28))
         );
@@ -125,6 +138,8 @@ public class About extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblModule;
     private javax.swing.JLabel lblName;
     // End of variables declaration//GEN-END:variables

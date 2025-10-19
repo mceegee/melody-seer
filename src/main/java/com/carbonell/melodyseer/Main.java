@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-// <a href="https://www.flaticon.com/free-icons/valentine" title="valentine icons">Valentine icons created by Studio MRPOR - Flaticon</a>
 package com.carbonell.melodyseer;
 
 /**
