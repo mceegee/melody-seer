@@ -8,11 +8,17 @@
 // <a href="https://www.flaticon.com/free-icons/cute" title="cute icons">Cute icons created by Backwoods - Flaticon</a>
 package com.carbonell.melodyseer;
 
+import javax.swing.SwingWorker;
+import java.io.*;
+import java.util.List;
+import javax.swing.JOptionPane;
 /**
  *
  * @author marta
  */
 public class Preferences extends javax.swing.JFrame {
+    
+    private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Preferences.class.getName());
 
@@ -42,6 +48,7 @@ public class Preferences extends javax.swing.JFrame {
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownloadProgress = new javax.swing.JProgressBar();
+        scrOutput = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
@@ -91,6 +98,11 @@ public class Preferences extends javax.swing.JFrame {
         btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
         btnDownload.setText("DOWNLOAD");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
         pnlMainPanel.add(btnDownload);
         btnDownload.setBounds(270, 130, 230, 60);
 
@@ -99,6 +111,8 @@ public class Preferences extends javax.swing.JFrame {
         lblProgress.setBounds(50, 230, 150, 20);
         pnlMainPanel.add(prgDownloadProgress);
         prgDownloadProgress.setBounds(220, 235, 510, 15);
+        pnlMainPanel.add(scrOutput);
+        scrOutput.setBounds(90, 300, 660, 180);
 
         getContentPane().add(pnlMainPanel);
         pnlMainPanel.setBounds(0, 0, 800, 800);
@@ -111,6 +125,56 @@ public class Preferences extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMp3ActionPerformed
 
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        downloadVideo();
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
+       private void downloadVideo() {
+        //txaDebug.append("Trying to download " + txtUrl.getText() + "...\n\n");
+        //txaDebug.append(YTDLP_PATH);
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText());
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        //System.out.println("doInBackground> 1 line published. In thread " + //Thread.currentThread().getName());
+                        //System.out.println("\t" + line);
+                        
+                        output.append(line).append("\n");
+                        publish(line);
+                    }
+
+                    int exitCode = process.waitFor();
+                    JOptionPane.showMessageDialog(null, output.toString());
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    System.out.println("\t" + line);
+                    //txaDebug.append(line + "\n");
+                }
+
+            }
+        };
+        worker.execute();
+    }
     
     /**
      * @param args the command line arguments
@@ -147,6 +211,7 @@ public class Preferences extends javax.swing.JFrame {
     private javax.swing.JLabel lblUrlRequest;
     private javax.swing.JPanel pnlMainPanel;
     private javax.swing.JProgressBar prgDownloadProgress;
+    private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTextField txtUrlRequest;
     // End of variables declaration//GEN-END:variables
 }
