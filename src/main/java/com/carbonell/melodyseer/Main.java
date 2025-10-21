@@ -5,6 +5,8 @@
 
 package com.carbonell.melodyseer;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author marta
@@ -95,6 +97,7 @@ public class Main extends javax.swing.JFrame {
     
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
+        JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
         System.exit(NORMAL);
     }//GEN-LAST:event_mniExitActionPerformed
 

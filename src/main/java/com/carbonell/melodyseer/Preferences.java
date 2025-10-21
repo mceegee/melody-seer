@@ -48,8 +48,8 @@ public class Preferences extends javax.swing.JFrame {
         lblUrlRequest = new javax.swing.JLabel();
         txtUrlRequest = new javax.swing.JTextField();
         lblFormatRequest = new javax.swing.JLabel();
-        bntVideo = new javax.swing.JRadioButton();
-        btnMp3 = new javax.swing.JRadioButton();
+        radVideo = new javax.swing.JRadioButton();
+        radMp3 = new javax.swing.JRadioButton();
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownloadProgress = new javax.swing.JProgressBar();
@@ -57,6 +57,7 @@ public class Preferences extends javax.swing.JFrame {
         txaOutput = new javax.swing.JTextArea();
         btnChooser = new javax.swing.JButton();
         lblSaveTo = new javax.swing.JLabel();
+        chkOpen = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
@@ -87,21 +88,21 @@ public class Preferences extends javax.swing.JFrame {
         pnlMainPanel.add(lblFormatRequest);
         lblFormatRequest.setBounds(50, 80, 170, 20);
 
-        grpFormat.add(bntVideo);
-        bntVideo.setSelected(true);
-        bntVideo.setText("Video");
-        pnlMainPanel.add(bntVideo);
-        bntVideo.setBounds(220, 80, 98, 20);
+        grpFormat.add(radVideo);
+        radVideo.setSelected(true);
+        radVideo.setText("Video");
+        pnlMainPanel.add(radVideo);
+        radVideo.setBounds(220, 80, 98, 20);
 
-        grpFormat.add(btnMp3);
-        btnMp3.setText("MP3");
-        btnMp3.addActionListener(new java.awt.event.ActionListener() {
+        grpFormat.add(radMp3);
+        radMp3.setText("MP3");
+        radMp3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMp3ActionPerformed(evt);
+                radMp3ActionPerformed(evt);
             }
         });
-        pnlMainPanel.add(btnMp3);
-        btnMp3.setBounds(300, 80, 47, 20);
+        pnlMainPanel.add(radMp3);
+        radMp3.setBounds(300, 80, 47, 20);
 
         btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
@@ -141,6 +142,16 @@ public class Preferences extends javax.swing.JFrame {
         pnlMainPanel.add(lblSaveTo);
         lblSaveTo.setBounds(50, 120, 100, 16);
 
+        chkOpen.setSelected(true);
+        chkOpen.setText("Open file after download");
+        chkOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkOpenActionPerformed(evt);
+            }
+        });
+        pnlMainPanel.add(chkOpen);
+        chkOpen.setBounds(370, 110, 190, 20);
+
         getContentPane().add(pnlMainPanel);
         pnlMainPanel.setBounds(0, 0, 800, 800);
         pnlMainPanel.getAccessibleContext().setAccessibleName("Melody Seer");
@@ -148,12 +159,19 @@ public class Preferences extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMp3ActionPerformed
+    private void radMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMp3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMp3ActionPerformed
+    }//GEN-LAST:event_radMp3ActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        downloadVideo();
+
+        if(radMp3.isSelected()) {
+            downloadAudio();
+        } else if(radVideo.isSelected()) {
+            downloadVideo();
+        } else {
+            System.out.println("Error: Check radButton");
+        }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooserActionPerformed
@@ -172,6 +190,10 @@ public class Preferences extends javax.swing.JFrame {
             System.out.println(saveToPath);
         }
     }//GEN-LAST:event_btnChooserActionPerformed
+
+    private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkOpenActionPerformed
 
        private void downloadVideo() {
            // Código proporcionado por el profesor
@@ -234,7 +256,7 @@ public class Preferences extends javax.swing.JFrame {
             protected Void doInBackground() throws Exception {
                 try {
                     // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText());
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,"-x", "--audio-format=mp3", "-P", saveToPath, txtUrlRequest.getText());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -305,10 +327,9 @@ public class Preferences extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton bntVideo;
     private javax.swing.JButton btnChooser;
     private javax.swing.JButton btnDownload;
-    private javax.swing.JRadioButton btnMp3;
+    private javax.swing.JCheckBox chkOpen;
     private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JLabel lblFormatRequest;
     private javax.swing.JLabel lblProgress;
@@ -316,6 +337,8 @@ public class Preferences extends javax.swing.JFrame {
     private javax.swing.JLabel lblUrlRequest;
     private javax.swing.JPanel pnlMainPanel;
     private javax.swing.JProgressBar prgDownloadProgress;
+    private javax.swing.JRadioButton radMp3;
+    private javax.swing.JRadioButton radVideo;
     private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTextArea txaOutput;
     private javax.swing.JTextField txtUrlRequest;
