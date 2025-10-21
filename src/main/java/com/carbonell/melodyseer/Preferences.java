@@ -178,13 +178,20 @@ public class Preferences extends javax.swing.JFrame {
 
     private void openMedia() throws IOException {
         if (chkOpen.isSelected()) {
-            // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
-            Desktop desktop = Desktop.getDesktop();
-            File myFile = new File(lastSavedFile);
-            desktop.open(myFile);
+            try {
+                // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
+                Desktop desktop = Desktop.getDesktop();
+                File myFile = new File(lastSavedFile);
+                desktop.open(myFile);
 //            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
-//            pb.redirectErrorStream(true); // Combine stdout and stderr
-//            Process process = pb.start();
+//            pb.redirectErrorStream(true); 
+//            Process process = pb.start(); 
+            } catch (Exception e) {
+                ProcessBuilder pb = new ProcessBuilder(
+                        "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
+                        lastSavedFile);
+                pb.start();
+            }
         }
     }
 
@@ -217,8 +224,8 @@ public class Preferences extends javax.swing.JFrame {
                     // Replace "yourExecutable.exe" and arguments as needed
                     ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
                             txtUrlRequest.getText(),
-                            "-f",
-                            "mp4", // TO BE FIXED: no se m'obren els arxius webm :(
+                            "-t",
+                            "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
                             "-P",
                             saveToPath);
                     pb.redirectErrorStream(true); // Combine stdout and stderr
