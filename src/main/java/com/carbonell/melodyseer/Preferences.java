@@ -187,10 +187,7 @@ public class Preferences extends javax.swing.JFrame {
 //            pb.redirectErrorStream(true); 
 //            Process process = pb.start(); 
             } catch (Exception e) {
-                ProcessBuilder pb = new ProcessBuilder(
-                        "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
-                        lastSavedFile);
-                pb.start();
+                
             }
         }
     }
