@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 // <a href="https://www.flaticon.com/free-icons/popular" title="popular icons">Popular icons created by Indygo - Flaticon</a>
 // <a href="https://www.flaticon.com/free-icons/ui" title="ui icons">Ui icons created by Freepik - Flaticon</a> 
 // <a href="https://www.flaticon.com/free-icons/cute" title="cute icons">Cute icons created by Backwoods - Flaticon</a>
 // <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by DinosoftLabs - Flaticon</a>
 package com.carbonell.melodyseer;
 
+import java.awt.Desktop;
 import javax.swing.SwingWorker;
 import java.io.*;
 import java.util.List;
@@ -21,10 +21,11 @@ import javax.swing.JFileChooser;
  * @author marta
  */
 public class Preferences extends javax.swing.JFrame {
-    
+
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     private String saveToPath;
-    
+    private String lastSavedFile;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Preferences.class.getName());
 
     /**
@@ -165,26 +166,38 @@ public class Preferences extends javax.swing.JFrame {
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
 
-        if(radMp3.isSelected()) {
+        if (radMp3.isSelected()) {
             downloadAudio();
-        } else if(radVideo.isSelected()) {
+        } else if (radVideo.isSelected()) {
             downloadVideo();
         } else {
             System.out.println("Error: Check radButton");
         }
+
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    private void openMedia() throws IOException {
+        if (chkOpen.isSelected()) {
+            // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
+            Desktop desktop = Desktop.getDesktop();
+            File myFile = new File(lastSavedFile);
+            desktop.open(myFile);
+//            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
+//            pb.redirectErrorStream(true); // Combine stdout and stderr
+//            Process process = pb.start();
+        }
+    }
+
     private void btnChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooserActionPerformed
-      
+
         // https://www.youtube.com/watch?v=HQ8JAbHmOvs
         // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
-        
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
-        
+
         int option = chooser.showOpenDialog(this);
-        if(option == JFileChooser.APPROVE_OPTION) {
+        if (option == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             saveToPath = f.getAbsolutePath();
             System.out.println(saveToPath);
@@ -195,14 +208,19 @@ public class Preferences extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkOpenActionPerformed
 
-       private void downloadVideo() {
-           // Código proporcionado por el profesor
+    private void downloadVideo() {
+        // Código proporcionado por el profesor
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
                     // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH, txtUrlRequest.getText(), "-P", saveToPath);
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            txtUrlRequest.getText(),
+                            "-f",
+                            "mp4", // TO BE FIXED: no se m'obren els arxius webm :(
+                            "-P",
+                            saveToPath);
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -216,7 +234,7 @@ public class Preferences extends javax.swing.JFrame {
                     }
 
                     int exitCode = process.waitFor();
-                    
+
                     publish("Exited with code: " + exitCode + "\n");
 
                 } catch (IOException | InterruptedException e) {
@@ -231,24 +249,41 @@ public class Preferences extends javax.swing.JFrame {
                 for (String line : chunks) {
                     Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
                     Matcher matcher = pattern.matcher(line);
-                    
+
                     System.out.println("\t" + line);
                     txaOutput.append(line + "\n");
-                    
-                    if(matcher.find()) {
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
                         // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
                         // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%",""));
-                        prgDownloadProgress.setValue((int)progress);
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownloadProgress.setValue((int) progress);
                     }
-                }
 
+                }
             }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+                        openMedia();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+
         };
+
         worker.execute();
+
     }
-    
-       
+
     private void downloadAudio() {
 
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
@@ -256,7 +291,12 @@ public class Preferences extends javax.swing.JFrame {
             protected Void doInBackground() throws Exception {
                 try {
                     // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,"-x", "--audio-format=mp3", "-P", saveToPath, txtUrlRequest.getText());
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            "-x",
+                            "--audio-format=mp3",
+                            "-P",
+                            saveToPath,
+                            txtUrlRequest.getText());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -270,7 +310,7 @@ public class Preferences extends javax.swing.JFrame {
                     }
 
                     int exitCode = process.waitFor();
-                    
+
                     publish("Exited with code: " + exitCode + "\n");
 
                 } catch (IOException | InterruptedException e) {
@@ -285,22 +325,45 @@ public class Preferences extends javax.swing.JFrame {
                 for (String line : chunks) {
                     Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
                     Matcher matcher = pattern.matcher(line);
-                    
+
                     System.out.println("\t" + line);
                     txaOutput.append(line + "\n");
-                    
-                    if(matcher.find()) {
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
                         // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
                         // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%",""));
-                        prgDownloadProgress.setValue((int)progress);
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownloadProgress.setValue((int) progress);
                     }
                 }
 
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+                        openMedia();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+                        openMedia();
+                    }
+                } catch (IOException e) {
+
+                }
             }
         };
         worker.execute();
     }
+
     /**
      * @param args the command line arguments
      */
