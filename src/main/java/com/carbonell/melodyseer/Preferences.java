@@ -8,10 +8,12 @@
 // <a href="https://www.flaticon.com/free-icons/folder" title="folder icons">Folder icons created by DinosoftLabs - Flaticon</a>
 package com.carbonell.melodyseer;
 
+import com.carbonell.melodyseer.models.MyFile;
 import java.awt.Desktop;
 import javax.swing.SwingWorker;
 import java.io.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -25,14 +27,20 @@ public class Preferences extends javax.swing.JFrame {
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     private String saveToPath;
     private String lastSavedFile;
+    
+    private Consumer<MyFile> onDownloaded;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Preferences.class.getName());
 
     /**
      * Creates new form Main
+     * @param onDownloaded
      */
-    public Preferences() {
+    public Preferences(Consumer<MyFile> onDownloaded){
+        this.onDownloaded = onDownloaded;
         initComponents();
+        setSize(800, 800);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -60,7 +68,7 @@ public class Preferences extends javax.swing.JFrame {
         lblSaveTo = new javax.swing.JLabel();
         chkOpen = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Melody Seer");
         setMinimumSize(new java.awt.Dimension(800, 800));
         setName("MainFrame"); // NOI18N
@@ -93,7 +101,7 @@ public class Preferences extends javax.swing.JFrame {
         radVideo.setSelected(true);
         radVideo.setText("Video");
         pnlMainPanel.add(radVideo);
-        radVideo.setBounds(220, 80, 98, 20);
+        radVideo.setBounds(220, 80, 70, 20);
 
         grpFormat.add(radMp3);
         radMp3.setText("MP3");
@@ -177,17 +185,18 @@ public class Preferences extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void openMedia() throws IOException {
+        File myFile = new File(lastSavedFile);
+        onDownloaded.accept(new MyFile(myFile));
         if (chkOpen.isSelected()) {
             try {
                 // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
                 Desktop desktop = Desktop.getDesktop();
-                File myFile = new File(lastSavedFile);
                 desktop.open(myFile);
 //            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
 //            pb.redirectErrorStream(true); 
 //            Process process = pb.start(); 
             } catch (Exception e) {
-                
+
             }
         }
     }
@@ -276,6 +285,7 @@ public class Preferences extends javax.swing.JFrame {
                 try {
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
+                        dispose();
                     }
                 } catch (IOException e) {
 
@@ -345,20 +355,23 @@ public class Preferences extends javax.swing.JFrame {
                     }
                 }
 
-                try {
-                    if (chkOpen.isSelected() && lastSavedFile != null) {
-                        openMedia();
-                    }
-                } catch (IOException e) {
-
-                }
+//                try {
+//                    if (chkOpen.isSelected() && lastSavedFile != null) {
+//                        openMedia();
+//                        dispose();
+//                    }
+//                } catch (IOException e) {
+//
+//                }
             }
 
             @Override
             protected void done() {
                 try {
                     if (chkOpen.isSelected() && lastSavedFile != null) {
+                        
                         openMedia();
+                        dispose();
                     }
                 } catch (IOException e) {
 
@@ -390,7 +403,7 @@ public class Preferences extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Preferences().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new Preferences().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

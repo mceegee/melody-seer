@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 package com.carbonell.melodyseer;
 
+import com.carbonell.melodyseer.models.*;
+import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,14 +14,31 @@ import javax.swing.JOptionPane;
  * @author marta
  */
 public class Main extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
+    public static ArrayList<MyFile> downloads;
 
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        setSize(800, 800);
+        setLocationRelativeTo(null);
+
+        downloads = new ArrayList<MyFile>();
+
+        tblDownloads.setModel(new MyFileTableModel(downloads));
+
+        // FOR TESTING 
+        // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
+    }
+
+    private void onDownloadedFile(MyFile newFile) {
+        downloads.add(newFile);
+
+        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
+        tblDownloads.setModel(new MyFileTableModel(downloads));
     }
 
     /**
@@ -31,6 +50,14 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDownloads = new javax.swing.JTable();
+        lblDownloads = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mniExit = new javax.swing.JMenuItem();
@@ -47,6 +74,58 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(800, 800));
         getContentPane().setLayout(null);
+
+        tblDownloads.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblDownloads);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 40, 452, 402);
+
+        lblDownloads.setText("Your downloads so far 🙂");
+        getContentPane().add(lblDownloads);
+        lblDownloads.setBounds(170, 10, 140, 16);
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUpdate);
+        btnUpdate.setBounds(360, 10, 72, 23);
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(560, 40, 200, 250);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(jComboBox1);
+        jComboBox1.setBounds(560, 390, 110, 22);
+
+        jButton1.setText("Delete");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(690, 390, 72, 23);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
@@ -94,7 +173,6 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
         JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
@@ -102,14 +180,22 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniExitActionPerformed
 
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
-        Preferences openPreferences = new Preferences();
+        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
         openPreferences.setVisible(true);
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
-      About openAbout = new About(this,true);
-      openAbout.setVisible(true);
+        About openAbout = new About(this, true);
+        openAbout.setVisible(true);
     }//GEN-LAST:event_mniAboutActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,12 +223,20 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblDownloads;
     private javax.swing.JMenuItem mniAbout;
     private javax.swing.JMenuItem mniExit;
     private javax.swing.JMenuItem mniPreferences;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
+    private javax.swing.JTable tblDownloads;
     // End of variables declaration//GEN-END:variables
 }
