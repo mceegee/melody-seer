@@ -25,6 +25,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
+        pnlPreferences.setVisible(false);
 
         downloads = new ArrayList<MyFile>();
 
@@ -50,14 +51,27 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grpFormat = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDownloads = new javax.swing.JTable();
         lblDownloads = new javax.swing.JLabel();
         btnUpdate = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        pnlDownload = new javax.swing.JPanel();
+        lblUrlRequest = new javax.swing.JLabel();
+        txtUrlRequest = new javax.swing.JTextField();
+        chkOpen = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
+        lblProgress = new javax.swing.JLabel();
+        prgDownload = new javax.swing.JProgressBar();
+        pnlPreferences = new javax.swing.JPanel();
+        radMp3 = new javax.swing.JRadioButton();
+        radVideo = new javax.swing.JRadioButton();
+        lblFormatRequest = new javax.swing.JLabel();
+        lblSaveTo = new javax.swing.JLabel();
+        btnSaveTo = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        scrOutput = new javax.swing.JScrollPane();
+        txaOutput = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mniExit = new javax.swing.JMenuItem();
@@ -89,11 +103,11 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblDownloads);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 40, 452, 402);
+        jScrollPane1.setBounds(40, 440, 590, 150);
 
         lblDownloads.setText("Your downloads so far 🙂");
         getContentPane().add(lblDownloads);
-        lblDownloads.setBounds(170, 10, 140, 16);
+        lblDownloads.setBounds(210, 410, 140, 16);
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -102,30 +116,93 @@ public class Main extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnUpdate);
-        btnUpdate.setBounds(360, 10, 72, 23);
+        btnUpdate.setBounds(670, 470, 72, 23);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
+        pnlDownload.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Download", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlDownload.setLayout(null);
 
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(560, 40, 200, 250);
+        lblUrlRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
+        lblUrlRequest.setText("Insert video URL here:");
+        pnlDownload.add(lblUrlRequest);
+        lblUrlRequest.setBounds(10, 30, 150, 16);
+        pnlDownload.add(txtUrlRequest);
+        txtUrlRequest.setBounds(160, 20, 300, 30);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1);
-        jComboBox1.setBounds(560, 390, 110, 22);
-
-        jButton1.setText("Delete");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        chkOpen.setSelected(true);
+        chkOpen.setText("Open file after download");
+        chkOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                chkOpenActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(690, 390, 72, 23);
+        pnlDownload.add(chkOpen);
+        chkOpen.setBounds(160, 60, 300, 20);
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
+        jButton1.setText("DOWNLOAD");
+        pnlDownload.add(jButton1);
+        jButton1.setBounds(110, 90, 240, 50);
+
+        lblProgress.setText("Progress");
+        pnlDownload.add(lblProgress);
+        lblProgress.setBounds(20, 170, 50, 16);
+        pnlDownload.add(prgDownload);
+        prgDownload.setBounds(80, 170, 380, 20);
+
+        getContentPane().add(pnlDownload);
+        pnlDownload.setBounds(20, 10, 480, 200);
+
+        pnlPreferences.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Preferences", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlPreferences.setLayout(null);
+
+        grpFormat.add(radMp3);
+        radMp3.setText("MP3");
+        pnlPreferences.add(radMp3);
+        radMp3.setBounds(90, 60, 47, 21);
+
+        grpFormat.add(radVideo);
+        radVideo.setText("Video");
+        radVideo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radVideoActionPerformed(evt);
+            }
+        });
+        pnlPreferences.add(radVideo);
+        radVideo.setBounds(10, 60, 53, 21);
+
+        lblFormatRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
+        lblFormatRequest.setText("Choose format...");
+        pnlPreferences.add(lblFormatRequest);
+        lblFormatRequest.setBounds(10, 30, 120, 16);
+
+        lblSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
+        lblSaveTo.setText("Save to...");
+        pnlPreferences.add(lblSaveTo);
+        lblSaveTo.setBounds(10, 100, 90, 16);
+
+        btnSaveTo.setText("Choose");
+        btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveToActionPerformed(evt);
+            }
+        });
+        pnlPreferences.add(btnSaveTo);
+        btnSaveTo.setBounds(100, 100, 75, 23);
+
+        jButton2.setText("Hide Preferences");
+        pnlPreferences.add(jButton2);
+        jButton2.setBounds(60, 160, 130, 23);
+
+        getContentPane().add(pnlPreferences);
+        pnlPreferences.setBounds(510, 10, 250, 200);
+
+        txaOutput.setColumns(20);
+        txaOutput.setRows(5);
+        scrOutput.setViewportView(txaOutput);
+
+        getContentPane().add(scrOutput);
+        scrOutput.setBounds(30, 230, 730, 130);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
@@ -180,8 +257,9 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniExitActionPerformed
 
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
-        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
-        openPreferences.setVisible(true);
+//        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
+//        openPreferences.setVisible(true);
+           pnlPreferences.setVisible(true);
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
@@ -193,9 +271,17 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_radVideoActionPerformed
+
+    private void btnSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSaveToActionPerformed
+
+    private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkOpenActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,20 +309,33 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSaveTo;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JCheckBox chkOpen;
+    private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDownloads;
+    private javax.swing.JLabel lblFormatRequest;
+    private javax.swing.JLabel lblProgress;
+    private javax.swing.JLabel lblSaveTo;
+    private javax.swing.JLabel lblUrlRequest;
     private javax.swing.JMenuItem mniAbout;
     private javax.swing.JMenuItem mniExit;
     private javax.swing.JMenuItem mniPreferences;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
+    private javax.swing.JPanel pnlDownload;
+    private javax.swing.JPanel pnlPreferences;
+    private javax.swing.JProgressBar prgDownload;
+    private javax.swing.JRadioButton radMp3;
+    private javax.swing.JRadioButton radVideo;
+    private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTable tblDownloads;
+    private javax.swing.JTextArea txaOutput;
+    private javax.swing.JTextField txtUrlRequest;
     // End of variables declaration//GEN-END:variables
 }
