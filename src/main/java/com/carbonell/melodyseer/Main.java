@@ -397,8 +397,7 @@ public class Main extends javax.swing.JFrame {
             protected void done() {
                 try {
                     if (chkOpen.isSelected() && lastSavedFile != null) {
-                        openMedia();
-                        dispose();
+                        openMedia();                      
                     }
                 } catch (IOException e) {
 
@@ -491,7 +490,6 @@ public class Main extends javax.swing.JFrame {
                     if (chkOpen.isSelected() && lastSavedFile != null) {
 
                         openMedia();
-                        dispose();
                     }
                 } catch (IOException e) {
 
