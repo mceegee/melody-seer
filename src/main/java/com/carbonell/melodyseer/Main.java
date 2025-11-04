@@ -5,9 +5,19 @@
 package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.models.*;
+import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -17,6 +27,10 @@ public class Main extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
     public static ArrayList<MyFile> downloads;
+
+    private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
+    private String saveToPath = Paths.get("").toString();
+    private String lastSavedFile;
 
     /**
      * Creates new form Main
@@ -60,7 +74,7 @@ public class Main extends javax.swing.JFrame {
         lblUrlRequest = new javax.swing.JLabel();
         txtUrlRequest = new javax.swing.JTextField();
         chkOpen = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownload = new javax.swing.JProgressBar();
         pnlPreferences = new javax.swing.JPanel();
@@ -69,7 +83,7 @@ public class Main extends javax.swing.JFrame {
         lblFormatRequest = new javax.swing.JLabel();
         lblSaveTo = new javax.swing.JLabel();
         btnSaveTo = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnHidePreferences = new javax.swing.JButton();
         scrOutput = new javax.swing.JScrollPane();
         txaOutput = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -124,9 +138,9 @@ public class Main extends javax.swing.JFrame {
         lblUrlRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
         lblUrlRequest.setText("Insert video URL here:");
         pnlDownload.add(lblUrlRequest);
-        lblUrlRequest.setBounds(10, 30, 150, 16);
+        lblUrlRequest.setBounds(10, 40, 150, 16);
         pnlDownload.add(txtUrlRequest);
-        txtUrlRequest.setBounds(160, 20, 300, 30);
+        txtUrlRequest.setBounds(170, 30, 300, 30);
 
         chkOpen.setSelected(true);
         chkOpen.setText("Open file after download");
@@ -136,22 +150,27 @@ public class Main extends javax.swing.JFrame {
             }
         });
         pnlDownload.add(chkOpen);
-        chkOpen.setBounds(160, 60, 300, 20);
+        chkOpen.setBounds(160, 70, 300, 20);
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
-        jButton1.setText("DOWNLOAD");
-        pnlDownload.add(jButton1);
-        jButton1.setBounds(110, 90, 240, 50);
+        btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
+        btnDownload.setText("DOWNLOAD");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+        pnlDownload.add(btnDownload);
+        btnDownload.setBounds(110, 100, 240, 50);
 
         lblProgress.setText("Progress");
         pnlDownload.add(lblProgress);
-        lblProgress.setBounds(20, 170, 50, 16);
+        lblProgress.setBounds(20, 170, 60, 16);
         pnlDownload.add(prgDownload);
-        prgDownload.setBounds(80, 170, 380, 20);
+        prgDownload.setBounds(90, 170, 370, 20);
 
         getContentPane().add(pnlDownload);
-        pnlDownload.setBounds(20, 10, 480, 200);
+        pnlDownload.setBounds(10, 10, 490, 200);
 
         pnlPreferences.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Preferences", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlPreferences.setLayout(null);
@@ -162,6 +181,7 @@ public class Main extends javax.swing.JFrame {
         radMp3.setBounds(90, 60, 47, 21);
 
         grpFormat.add(radVideo);
+        radVideo.setSelected(true);
         radVideo.setText("Video");
         radVideo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,9 +210,14 @@ public class Main extends javax.swing.JFrame {
         pnlPreferences.add(btnSaveTo);
         btnSaveTo.setBounds(100, 100, 75, 23);
 
-        jButton2.setText("Hide Preferences");
-        pnlPreferences.add(jButton2);
-        jButton2.setBounds(60, 160, 130, 23);
+        btnHidePreferences.setText("Hide Preferences");
+        btnHidePreferences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHidePreferencesActionPerformed(evt);
+            }
+        });
+        pnlPreferences.add(btnHidePreferences);
+        btnHidePreferences.setBounds(60, 160, 130, 23);
 
         getContentPane().add(pnlPreferences);
         pnlPreferences.setBounds(510, 10, 250, 200);
@@ -259,7 +284,7 @@ public class Main extends javax.swing.JFrame {
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
 //        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
 //        openPreferences.setVisible(true);
-           pnlPreferences.setVisible(true);
+        pnlPreferences.setVisible(true);
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
@@ -276,12 +301,205 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToActionPerformed
-        // TODO add your handling code here:
+
+        // https://www.youtube.com/watch?v=HQ8JAbHmOvs
+        // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        int option = chooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            saveToPath = f.getAbsolutePath();
+            System.out.println(saveToPath);
+        }
     }//GEN-LAST:event_btnSaveToActionPerformed
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkOpenActionPerformed
+
+    private void btnHidePreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHidePreferencesActionPerformed
+        pnlPreferences.setVisible(false);
+    }//GEN-LAST:event_btnHidePreferencesActionPerformed
+
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        if (radMp3.isSelected()) {
+            downloadAudio();
+        } else if (radVideo.isSelected()) {
+            downloadVideo();
+        } else {
+            System.out.println("Error: Check radButton");
+        }
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void downloadVideo() {
+        // Código proporcionado por el profesor
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            txtUrlRequest.getText(),
+                            "-t",
+                            "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
+                            "-P",
+                            saveToPath);
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
+                    }
+
+                    int exitCode = process.waitFor();
+
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+
+                    System.out.println("\t" + line);
+                    txaOutput.append(line + "\n");
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownload.setValue((int) progress);
+                    }
+
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+                        openMedia();
+                        dispose();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+
+        };
+
+        worker.execute();
+
+    }
+
+    private void openMedia() throws IOException {
+        File myFile = new File(lastSavedFile);
+        if (chkOpen.isSelected()) {
+            try {
+                // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(myFile);
+//            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
+//            pb.redirectErrorStream(true); 
+//            Process process = pb.start(); 
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    private void downloadAudio() {
+
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            "-x",
+                            "--audio-format=mp3",
+                            "-P",
+                            saveToPath,
+                            txtUrlRequest.getText());
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
+                    }
+
+                    int exitCode = process.waitFor();
+
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+
+                    System.out.println("\t" + line);
+                    txaOutput.append(line + "\n");
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownload.setValue((int) progress);
+                    }
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+
+                        openMedia();
+                        dispose();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+        };
+        worker.execute();
+    }
 
     /**
      * @param args the command line arguments
@@ -309,12 +527,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnHidePreferences;
     private javax.swing.JButton btnSaveTo;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkOpen;
     private javax.swing.ButtonGroup grpFormat;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDownloads;
