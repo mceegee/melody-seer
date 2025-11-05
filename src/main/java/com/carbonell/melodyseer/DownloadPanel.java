@@ -23,7 +23,7 @@ import javax.swing.SwingWorker;
 public class DownloadPanel extends javax.swing.JPanel {
 
     Main jFrameMain;
-    private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe";
+    private String YTDLP_PATH = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
     private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
 
