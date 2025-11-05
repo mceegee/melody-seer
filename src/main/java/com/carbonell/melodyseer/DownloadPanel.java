@@ -4,18 +4,38 @@
  */
 package com.carbonell.melodyseer;
 
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
+import javax.swing.SwingWorker;
+
 /**
  *
  * @author marta
  */
 public class DownloadPanel extends javax.swing.JPanel {
 
+    Main jFrameMain;
+    private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe";
+    private String saveToPath = Paths.get("").toString();
+    private String lastSavedFile;
+
     /**
      * Creates new form DownloadPanel
+     *
+     * @param jFrameMain
      */
-    public DownloadPanel() {
+    public DownloadPanel(Main jFrameMain) {
         initComponents();
         setSize(800, 800);
+        this.jFrameMain = jFrameMain;
     }
 
     /**
@@ -33,17 +53,16 @@ public class DownloadPanel extends javax.swing.JPanel {
         chkOpen = new javax.swing.JCheckBox();
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
-        prgProgress = new javax.swing.JProgressBar();
+        prgDownload = new javax.swing.JProgressBar();
         scrOutput = new javax.swing.JScrollPane();
         txaOutput = new javax.swing.JTextArea();
-        btnHide = new javax.swing.JButton();
         lblChoose = new javax.swing.JLabel();
         lblSaveTo = new javax.swing.JLabel();
         btnSaveTo = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        radVideo = new javax.swing.JRadioButton();
+        radMp3 = new javax.swing.JRadioButton();
         cmbVideoFormat = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbAudioFormat = new javax.swing.JComboBox<>();
 
         setLayout(null);
 
@@ -67,14 +86,19 @@ public class DownloadPanel extends javax.swing.JPanel {
         btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
         btnDownload.setText("Download");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
         add(btnDownload);
-        btnDownload.setBounds(280, 330, 230, 90);
+        btnDownload.setBounds(270, 250, 230, 90);
 
         lblProgress.setText("Progress");
         add(lblProgress);
-        lblProgress.setBounds(40, 450, 60, 20);
-        add(prgProgress);
-        prgProgress.setBounds(130, 450, 630, 20);
+        lblProgress.setBounds(30, 370, 60, 20);
+        add(prgDownload);
+        prgDownload.setBounds(120, 370, 630, 20);
 
         txaOutput.setEditable(false);
         txaOutput.setColumns(20);
@@ -82,16 +106,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         scrOutput.setViewportView(txaOutput);
 
         add(scrOutput);
-        scrOutput.setBounds(30, 500, 740, 180);
-
-        btnHide.setText("Hide");
-        btnHide.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHideActionPerformed(evt);
-            }
-        });
-        add(btnHide);
-        btnHide.setBounds(330, 720, 72, 23);
+        scrOutput.setBounds(20, 420, 740, 180);
 
         lblChoose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
         lblChoose.setText("Choose format...");
@@ -101,7 +116,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         lblSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         lblSaveTo.setText("Save to...");
         add(lblSaveTo);
-        lblSaveTo.setBounds(40, 230, 90, 20);
+        lblSaveTo.setBounds(40, 200, 90, 20);
 
         btnSaveTo.setText("Choose");
         btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
@@ -110,65 +125,246 @@ public class DownloadPanel extends javax.swing.JPanel {
             }
         });
         add(btnSaveTo);
-        btnSaveTo.setBounds(150, 230, 75, 23);
+        btnSaveTo.setBounds(150, 200, 75, 23);
 
-        grpFormat.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Video");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        grpFormat.add(radVideo);
+        radVideo.setSelected(true);
+        radVideo.setText("Video");
+        radVideo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                radVideoActionPerformed(evt);
             }
         });
-        add(jRadioButton1);
-        jRadioButton1.setBounds(180, 110, 53, 21);
+        add(radVideo);
+        radVideo.setBounds(180, 110, 53, 21);
 
-        grpFormat.add(jRadioButton2);
-        jRadioButton2.setText("Audio");
-        add(jRadioButton2);
-        jRadioButton2.setBounds(180, 180, 55, 21);
+        grpFormat.add(radMp3);
+        radMp3.setText("Audio");
+        add(radMp3);
+        radMp3.setBounds(180, 150, 55, 21);
 
         cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP4", "MOV", "WEBM" }));
         add(cmbVideoFormat);
         cmbVideoFormat.setBounds(290, 110, 72, 22);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
-        add(jComboBox1);
-        jComboBox1.setBounds(290, 180, 72, 22);
+        cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
+        add(cmbAudioFormat);
+        cmbAudioFormat.setBounds(290, 150, 72, 22);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkOpenActionPerformed
 
-    private void btnHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHideActionPerformed
-
     private void btnSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToActionPerformed
-        // TODO add your handling code here:
+
+        // https://www.youtube.com/watch?v=HQ8JAbHmOvs
+        // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        int option = chooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            saveToPath = f.getAbsolutePath();
+            System.out.println(saveToPath);
+        }
     }//GEN-LAST:event_btnSaveToActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_radVideoActionPerformed
 
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        if (radMp3.isSelected()) {
+            downloadAudio();
+        } else if (radVideo.isSelected()) {
+            downloadVideo();
+        } else {
+            System.out.println("Error: Check radButton");
+        }
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void downloadVideo() {
+        // Código proporcionado por el profesor
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            txtUrl.getText(),
+                            "-t",
+                            "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
+                            "-P",
+                            saveToPath);
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
+                    }
+
+                    int exitCode = process.waitFor();
+
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+
+                    System.out.println("\t" + line);
+                    txaOutput.append(line + "\n");
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownload.setValue((int) progress);
+                    }
+
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+                        openMedia();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+
+        };
+
+        worker.execute();
+
+    }
+
+    private void openMedia() throws IOException {
+        File myFile = new File(lastSavedFile);
+        if (chkOpen.isSelected()) {
+            try {
+                // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(myFile);
+//            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
+//            pb.redirectErrorStream(true); 
+//            Process process = pb.start(); 
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    private void downloadAudio() {
+
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    // Replace "yourExecutable.exe" and arguments as needed
+                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                            "-x",
+                            "--audio-format=mp3",
+                            "-P",
+                            saveToPath,
+                            txtUrl.getText());
+                    pb.redirectErrorStream(true); // Combine stdout and stderr
+                    Process process = pb.start();
+
+                    // Read output
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line).append("\n");
+                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
+                    }
+
+                    int exitCode = process.waitFor();
+
+                    publish("Exited with code: " + exitCode + "\n");
+
+                } catch (IOException | InterruptedException e) {
+                    publish("Error: " + e.getMessage());
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<String> chunks) {
+                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+                for (String line : chunks) {
+                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+                    Matcher matcher = pattern.matcher(line);
+
+                    System.out.println("\t" + line);
+                    txaOutput.append(line + "\n");
+
+                    if (line.contains("Destination:")) {
+                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                    }
+
+                    if (matcher.find()) {
+                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                        prgDownload.setValue((int) progress);
+                    }
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    if (chkOpen.isSelected() && lastSavedFile != null) {
+
+                        openMedia();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+        };
+        worker.execute();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
-    private javax.swing.JButton btnHide;
     private javax.swing.JButton btnSaveTo;
     private javax.swing.JCheckBox chkOpen;
+    private javax.swing.JComboBox<String> cmbAudioFormat;
     private javax.swing.JComboBox<String> cmbVideoFormat;
     private javax.swing.ButtonGroup grpFormat;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JLabel lblChoose;
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;
     private javax.swing.JLabel lblUrl;
-    private javax.swing.JProgressBar prgProgress;
+    private javax.swing.JProgressBar prgDownload;
+    private javax.swing.JRadioButton radMp3;
+    private javax.swing.JRadioButton radVideo;
     private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTextArea txaOutput;
     private javax.swing.JTextField txtUrl;

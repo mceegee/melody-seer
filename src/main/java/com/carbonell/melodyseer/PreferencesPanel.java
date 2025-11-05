@@ -10,12 +10,17 @@ package com.carbonell.melodyseer;
  */
 public class PreferencesPanel extends javax.swing.JPanel {
 
+    Main jFrameMain;
+
     /**
      * Creates new form PreferencesPanel
+     *
+     * @param jFrameMain
      */
-    public PreferencesPanel() {
+    public PreferencesPanel(Main jFrameMain) {
         initComponents();
-        setSize(800, 800);
+        setSize(725, 200);
+        this.jFrameMain = jFrameMain;
 
     }
 
@@ -52,7 +57,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
             }
         });
         add(btnHide);
-        btnHide.setBounds(610, 30, 160, 40);
+        btnHide.setBounds(490, 40, 160, 40);
 
         lblLimitDwld.setText("Limit download to...");
         add(lblLimitDwld);
@@ -64,7 +69,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideActionPerformed
-        // TODO add your handling code here:
+        jFrameMain.showDownloadPanel();
     }//GEN-LAST:event_btnHideActionPerformed
 
 

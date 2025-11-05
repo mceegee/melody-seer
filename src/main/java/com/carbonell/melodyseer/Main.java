@@ -32,6 +32,9 @@ public class Main extends javax.swing.JFrame {
     private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
 
+    private DownloadPanel downloadPanel;
+    private PreferencesPanel preferencesPanel;
+
     /**
      * Creates new form Main
      */
@@ -39,24 +42,38 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
-        pnlPreferences.setVisible(false);
-        pnlMain.setSize(800, 800);
+
+        downloadPanel = new DownloadPanel(this);
+        getContentPane().add(downloadPanel);
+        downloadPanel.setVisible(true);
+
+        preferencesPanel = new PreferencesPanel(this);
+        getContentPane().add(preferencesPanel);
+        preferencesPanel.setVisible(false);
 
         downloads = new ArrayList<MyFile>();
 
-        tblDownloads.setModel(new MyFileTableModel(downloads));
-
+        //       tblDownloads.setModel(new MyFileTableModel(downloads));
         // FOR TESTING 
         // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
     }
 
-    private void onDownloadedFile(MyFile newFile) {
-        downloads.add(newFile);
-
-        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
-        tblDownloads.setModel(new MyFileTableModel(downloads));
+    public void showPreferencesPanel() {
+        downloadPanel.setVisible(false);
+        preferencesPanel.setVisible(true);
     }
 
+    public void showDownloadPanel() {
+        downloadPanel.setVisible(true);
+        preferencesPanel.setVisible(false);
+    }
+
+//    private void onDownloadedFile(MyFile newFile) {
+//        downloads.add(newFile);
+//
+//        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
+//        tblDownloads.setModel(new MyFileTableModel(downloads));
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,28 +83,6 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        grpFormat = new javax.swing.ButtonGroup();
-        pnlMain = new javax.swing.JPanel();
-        lblDownloads = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblDownloads = new javax.swing.JTable();
-        btnUpdate = new javax.swing.JButton();
-        pnlDownload = new javax.swing.JPanel();
-        lblUrlRequest = new javax.swing.JLabel();
-        txtUrlRequest = new javax.swing.JTextField();
-        chkOpen = new javax.swing.JCheckBox();
-        btnDownload = new javax.swing.JButton();
-        lblProgress = new javax.swing.JLabel();
-        prgDownload = new javax.swing.JProgressBar();
-        scrOutput = new javax.swing.JScrollPane();
-        txaOutput = new javax.swing.JTextArea();
-        pnlPreferences = new javax.swing.JPanel();
-        radMp3 = new javax.swing.JRadioButton();
-        radVideo = new javax.swing.JRadioButton();
-        lblFormatRequest = new javax.swing.JLabel();
-        lblSaveTo = new javax.swing.JLabel();
-        btnSaveTo = new javax.swing.JButton();
-        btnHidePreferences = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mniExit = new javax.swing.JMenuItem();
@@ -104,140 +99,6 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(800, 800));
         getContentPane().setLayout(null);
-
-        pnlMain.setLayout(null);
-
-        lblDownloads.setText("Your downloads so far 🙂");
-        pnlMain.add(lblDownloads);
-        lblDownloads.setBounds(210, 410, 140, 16);
-
-        tblDownloads.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tblDownloads);
-
-        pnlMain.add(jScrollPane1);
-        jScrollPane1.setBounds(40, 440, 590, 150);
-
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-        pnlMain.add(btnUpdate);
-        btnUpdate.setBounds(670, 470, 72, 23);
-
-        pnlDownload.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Download", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        pnlDownload.setLayout(null);
-
-        lblUrlRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
-        lblUrlRequest.setText("Insert video URL here:");
-        pnlDownload.add(lblUrlRequest);
-        lblUrlRequest.setBounds(10, 40, 150, 16);
-        pnlDownload.add(txtUrlRequest);
-        txtUrlRequest.setBounds(170, 30, 400, 30);
-
-        chkOpen.setSelected(true);
-        chkOpen.setText("Open file after download");
-        chkOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkOpenActionPerformed(evt);
-            }
-        });
-        pnlDownload.add(chkOpen);
-        chkOpen.setBounds(580, 40, 170, 20);
-
-        btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
-        btnDownload.setText("DOWNLOAD");
-        btnDownload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDownloadActionPerformed(evt);
-            }
-        });
-        pnlDownload.add(btnDownload);
-        btnDownload.setBounds(290, 90, 240, 50);
-
-        lblProgress.setText("Progress");
-        pnlDownload.add(lblProgress);
-        lblProgress.setBounds(20, 170, 60, 16);
-        pnlDownload.add(prgDownload);
-        prgDownload.setBounds(90, 170, 660, 20);
-
-        pnlMain.add(pnlDownload);
-        pnlDownload.setBounds(10, 10, 760, 200);
-
-        txaOutput.setColumns(20);
-        txaOutput.setRows(5);
-        scrOutput.setViewportView(txaOutput);
-
-        pnlMain.add(scrOutput);
-        scrOutput.setBounds(30, 230, 740, 130);
-
-        getContentPane().add(pnlMain);
-        pnlMain.setBounds(0, 0, 780, 540);
-
-        pnlPreferences.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Preferences", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        pnlPreferences.setMaximumSize(new java.awt.Dimension(790, 750));
-        pnlPreferences.setMinimumSize(new java.awt.Dimension(790, 750));
-        pnlPreferences.setPreferredSize(new java.awt.Dimension(790, 750));
-        pnlPreferences.setLayout(null);
-
-        grpFormat.add(radMp3);
-        radMp3.setText("MP3");
-        pnlPreferences.add(radMp3);
-        radMp3.setBounds(90, 60, 47, 21);
-
-        grpFormat.add(radVideo);
-        radVideo.setSelected(true);
-        radVideo.setText("Video");
-        radVideo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radVideoActionPerformed(evt);
-            }
-        });
-        pnlPreferences.add(radVideo);
-        radVideo.setBounds(10, 60, 53, 21);
-
-        lblFormatRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
-        lblFormatRequest.setText("Choose format...");
-        pnlPreferences.add(lblFormatRequest);
-        lblFormatRequest.setBounds(10, 30, 120, 16);
-
-        lblSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
-        lblSaveTo.setText("Save to...");
-        pnlPreferences.add(lblSaveTo);
-        lblSaveTo.setBounds(190, 30, 90, 16);
-
-        btnSaveTo.setText("Choose");
-        btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveToActionPerformed(evt);
-            }
-        });
-        pnlPreferences.add(btnSaveTo);
-        btnSaveTo.setBounds(280, 30, 75, 23);
-
-        btnHidePreferences.setText("Hide Preferences");
-        btnHidePreferences.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHidePreferencesActionPerformed(evt);
-            }
-        });
-        pnlPreferences.add(btnHidePreferences);
-        btnHidePreferences.setBounds(150, 140, 130, 23);
-
-        getContentPane().add(pnlPreferences);
-        pnlPreferences.setBounds(0, 0, 790, 750);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
@@ -294,222 +155,13 @@ public class Main extends javax.swing.JFrame {
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
 //        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
 //        openPreferences.setVisible(true);
-        pnlPreferences.setVisible(true);
-        pnlMain.setVisible(false);
+        showPreferencesPanel();
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
         About openAbout = new About(this, true);
         openAbout.setVisible(true);
     }//GEN-LAST:event_mniAboutActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radVideoActionPerformed
-
-    private void btnSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToActionPerformed
-
-        // https://www.youtube.com/watch?v=HQ8JAbHmOvs
-        // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-
-        int option = chooser.showOpenDialog(this);
-        if (option == JFileChooser.APPROVE_OPTION) {
-            File f = chooser.getSelectedFile();
-            saveToPath = f.getAbsolutePath();
-            System.out.println(saveToPath);
-        }
-    }//GEN-LAST:event_btnSaveToActionPerformed
-
-    private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkOpenActionPerformed
-
-    private void btnHidePreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHidePreferencesActionPerformed
-        pnlPreferences.setVisible(false);
-        pnlMain.setVisible(true);
-    }//GEN-LAST:event_btnHidePreferencesActionPerformed
-
-    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        if (radMp3.isSelected()) {
-            downloadAudio();
-        } else if (radVideo.isSelected()) {
-            downloadVideo();
-        } else {
-            System.out.println("Error: Check radButton");
-        }
-    }//GEN-LAST:event_btnDownloadActionPerformed
-
-    private void downloadVideo() {
-        // Código proporcionado por el profesor
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
-                            txtUrlRequest.getText(),
-                            "-t",
-                            "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
-                            "-P",
-                            saveToPath);
-                    pb.redirectErrorStream(true); // Combine stdout and stderr
-                    Process process = pb.start();
-
-                    // Read output
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    StringBuilder output = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        output.append(line).append("\n");
-                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
-                    }
-
-                    int exitCode = process.waitFor();
-
-                    publish("Exited with code: " + exitCode + "\n");
-
-                } catch (IOException | InterruptedException e) {
-                    publish("Error: " + e.getMessage());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks) {
-                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
-                for (String line : chunks) {
-                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
-                    Matcher matcher = pattern.matcher(line);
-
-                    System.out.println("\t" + line);
-                    txaOutput.append(line + "\n");
-
-                    if (line.contains("Destination:")) {
-                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
-                    }
-
-                    if (matcher.find()) {
-                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
-                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
-                        prgDownload.setValue((int) progress);
-                    }
-
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    if (chkOpen.isSelected() && lastSavedFile != null) {
-                        openMedia();                      
-                    }
-                } catch (IOException e) {
-
-                }
-            }
-
-        };
-
-        worker.execute();
-
-    }
-
-    private void openMedia() throws IOException {
-        File myFile = new File(lastSavedFile);
-        if (chkOpen.isSelected()) {
-            try {
-                // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
-                Desktop desktop = Desktop.getDesktop();
-                desktop.open(myFile);
-//            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
-//            pb.redirectErrorStream(true); 
-//            Process process = pb.start(); 
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    private void downloadAudio() {
-
-        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
-                            "-x",
-                            "--audio-format=mp3",
-                            "-P",
-                            saveToPath,
-                            txtUrlRequest.getText());
-                    pb.redirectErrorStream(true); // Combine stdout and stderr
-                    Process process = pb.start();
-
-                    // Read output
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    StringBuilder output = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        output.append(line).append("\n");
-                        publish(line); // https://stackoverflow.com/questions/18535303/how-are-the-publish-and-process-methods-on-swingworker-properly-used                        
-                    }
-
-                    int exitCode = process.waitFor();
-
-                    publish("Exited with code: " + exitCode + "\n");
-
-                } catch (IOException | InterruptedException e) {
-                    publish("Error: " + e.getMessage());
-                }
-                return null;
-            }
-
-            @Override
-            protected void process(List<String> chunks) {
-                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
-                for (String line : chunks) {
-                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
-                    Matcher matcher = pattern.matcher(line);
-
-                    System.out.println("\t" + line);
-                    txaOutput.append(line + "\n");
-
-                    if (line.contains("Destination:")) {
-                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
-                    }
-
-                    if (matcher.find()) {
-                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
-                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
-                        prgDownload.setValue((int) progress);
-                    }
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    if (chkOpen.isSelected() && lastSavedFile != null) {
-
-                        openMedia();
-                    }
-                } catch (IOException e) {
-
-                }
-            }
-        };
-        worker.execute();
-    }
 
     /**
      * @param args the command line arguments
@@ -537,34 +189,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDownload;
-    private javax.swing.JButton btnHidePreferences;
-    private javax.swing.JButton btnSaveTo;
-    private javax.swing.JButton btnUpdate;
-    private javax.swing.JCheckBox chkOpen;
-    private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblDownloads;
-    private javax.swing.JLabel lblFormatRequest;
-    private javax.swing.JLabel lblProgress;
-    private javax.swing.JLabel lblSaveTo;
-    private javax.swing.JLabel lblUrlRequest;
     private javax.swing.JMenuItem mniAbout;
     private javax.swing.JMenuItem mniExit;
     private javax.swing.JMenuItem mniPreferences;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
-    private javax.swing.JPanel pnlDownload;
-    private javax.swing.JPanel pnlMain;
-    private javax.swing.JPanel pnlPreferences;
-    private javax.swing.JProgressBar prgDownload;
-    private javax.swing.JRadioButton radMp3;
-    private javax.swing.JRadioButton radVideo;
-    private javax.swing.JScrollPane scrOutput;
-    private javax.swing.JTable tblDownloads;
-    private javax.swing.JTextArea txaOutput;
-    private javax.swing.JTextField txtUrlRequest;
     // End of variables declaration//GEN-END:variables
 }
