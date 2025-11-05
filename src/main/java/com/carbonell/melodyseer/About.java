@@ -38,10 +38,15 @@ public class About extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
         setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        getContentPane().setLayout(null);
 
         lblName.setText("Marta Carbonell Giménez");
+        getContentPane().add(lblName);
+        lblName.setBounds(345, 20, 134, 16);
 
         lblModule.setText("Diseño de Interfaces - Curs 2025/26");
+        getContentPane().add(lblModule);
+        lblModule.setBounds(315, 42, 185, 16);
 
         btnClose.setText("Tanca");
         btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -49,47 +54,17 @@ public class About extends javax.swing.JDialog {
                 btnCloseMouseReleased(evt);
             }
         });
+        getContentPane().add(btnClose);
+        btnClose.setBounds(369, 226, 72, 23);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Resources:\nImages: https://www.flaticon.com/free-icons/popular, https://www.flaticon.com/free-icons/ui, https://www.flaticon.com/free-icons/cute, https://www.flaticon.com/free-icons/folder\nSoftware: yt-dlp (https://github.com/yt-dlp/yt-dlp), FFmpeg (https://github.com/yt-dlp/FFmpeg-Builds)");
+        jTextArea1.setText("Resources:\nImages: https://www.flaticon.com/free-icons/popular\nhttps://www.flaticon.com/free-icons/ui\nhttps://www.flaticon.com/free-icons/cute\nhttps://www.flaticon.com/free-icons/folder\nhttps://www.flaticon.com/free-icons/close\nSoftware: yt-dlp (https://github.com/yt-dlp/yt-dlp), FFmpeg (https://github.com/yt-dlp/FFmpeg-Builds)");
         jScrollPane1.setViewportView(jTextArea1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(315, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblName)
-                        .addGap(332, 332, 332))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblModule)
-                        .addGap(311, 311, 311))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(369, 369, 369)
-                .addComponent(btnClose)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(lblName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblModule)
-                .addGap(24, 24, 24)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnClose)
-                .addGap(28, 28, 28))
-        );
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(49, 82, 756, 132);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
