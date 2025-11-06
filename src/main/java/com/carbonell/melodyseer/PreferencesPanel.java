@@ -4,6 +4,9 @@
  */
 package com.carbonell.melodyseer;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author marta
@@ -23,6 +26,8 @@ public class PreferencesPanel extends javax.swing.JPanel {
         this.jFrameMain = jFrameMain;
 
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,6 +51,11 @@ public class PreferencesPanel extends javax.swing.JPanel {
         lblTempFiles.setBounds(50, 50, 180, 16);
 
         btnTempFiles.setText("Choose");
+        btnTempFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTempFilesActionPerformed(evt);
+            }
+        });
         add(btnTempFiles);
         btnTempFiles.setBounds(250, 40, 75, 23);
 
@@ -64,6 +74,11 @@ public class PreferencesPanel extends javax.swing.JPanel {
         lblLimitDwld.setBounds(50, 90, 150, 16);
 
         cmbLimitDwld.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't limit", "10 MB/s", "15 MB/s", "20 MB/s", "25 MB/s" }));
+        cmbLimitDwld.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbLimitDwldActionPerformed(evt);
+            }
+        });
         add(cmbLimitDwld);
         cmbLimitDwld.setBounds(230, 90, 120, 22);
     }// </editor-fold>//GEN-END:initComponents
@@ -72,6 +87,23 @@ public class PreferencesPanel extends javax.swing.JPanel {
         jFrameMain.showDownloadPanel();
     }//GEN-LAST:event_btnHideActionPerformed
 
+    private void btnTempFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTempFilesActionPerformed
+                // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        int option = chooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            jFrameMain.setSaveToPathTemp(f.getAbsolutePath().toString());
+        }
+      
+    }//GEN-LAST:event_btnTempFilesActionPerformed
+
+    private void cmbLimitDwldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLimitDwldActionPerformed
+        jFrameMain.setSelectedSpeed(cmbLimitDwld.getSelectedItem().toString());
+    }//GEN-LAST:event_cmbLimitDwldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHide;

@@ -26,6 +26,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private String YTDLP_PATH = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
     private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
+    private String downloadSpeed;
 
     /**
      * Creates new form DownloadPanel
@@ -177,6 +178,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        changeDownloadSpeed();
         if (radMp3.isSelected()) {
             downloadAudio();
         } else if (radVideo.isSelected()) {
@@ -198,7 +200,11 @@ public class DownloadPanel extends javax.swing.JPanel {
                             "-t",
                             "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
                             "-P",
-                            saveToPath);
+                            saveToPath,
+                            "-P",
+                            "temp:"
+                            + jFrameMain.getSaveToPathTemp()),
+                            downloadSpeed;
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -278,19 +284,28 @@ public class DownloadPanel extends javax.swing.JPanel {
         }
     }
 
+    private void changeDownloadSpeed() {
+        if (!jFrameMain.getSelectedSpeed().equals("Don't limit")) {
+            downloadSpeed = "-r " + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
+        }
+    }
+
     private void downloadAudio() {
 
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    // Replace "yourExecutable.exe" and arguments as needed
                     ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
                             "-x",
                             "--audio-format=mp3",
                             "-P",
                             saveToPath,
-                            txtUrl.getText());
+                            "-P",
+                            "temp:"
+                            + jFrameMain.getSaveToPathTemp(),
+                            txtUrl.getText()),
+                            downloadSpeed;
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 

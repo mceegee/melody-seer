@@ -30,7 +30,9 @@ public class Main extends javax.swing.JFrame {
 
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     private String saveToPath = Paths.get("").toString();
+    private String saveToPathTemp = saveToPath;
     private String lastSavedFile;
+    private String selectedSpeed;
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
@@ -58,6 +60,25 @@ public class Main extends javax.swing.JFrame {
         // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
     }
 
+    public void setSaveToPathTemp(String saveToPathTemp) {
+        this.saveToPathTemp = saveToPathTemp;
+    }
+
+    public String getSaveToPathTemp() {
+        return saveToPathTemp;
+    }
+
+    public String getSelectedSpeed() {
+        return selectedSpeed;
+    }
+
+    public void setSelectedSpeed(String selectedSpeed) {
+        this.selectedSpeed = selectedSpeed;
+    }
+    
+    
+    
+    
     public void showPreferencesPanel() {
         downloadPanel.setVisible(false);
         preferencesPanel.setVisible(true);
