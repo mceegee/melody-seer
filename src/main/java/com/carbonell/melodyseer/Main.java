@@ -32,7 +32,7 @@ public class Main extends javax.swing.JFrame {
     private String saveToPath = Paths.get("").toString();
     private String saveToPathTemp = saveToPath;
     private String lastSavedFile;
-    private String selectedSpeed;
+    private String selectedSpeed = "";
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;

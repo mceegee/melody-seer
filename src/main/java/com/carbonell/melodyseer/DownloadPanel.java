@@ -26,7 +26,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private String YTDLP_PATH = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
     private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
-    private String downloadSpeed;
+    private String downloadSpeed = "";
 
     /**
      * Creates new form DownloadPanel
@@ -179,13 +179,12 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         changeDownloadSpeed();
+        
         if (radMp3.isSelected()) {
             downloadAudio();
         } else if (radVideo.isSelected()) {
             downloadVideo();
-        } else {
-            System.out.println("Error: Check radButton");
-        }
+        } 
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void downloadVideo() {
@@ -285,8 +284,10 @@ public class DownloadPanel extends javax.swing.JPanel {
     }
 
     private void changeDownloadSpeed() {
-        if (!jFrameMain.getSelectedSpeed().equals("Don't limit")) {
+        if (!jFrameMain.getSelectedSpeed().equals("") && !jFrameMain.getSelectedSpeed().equals("Don't limit")) {
             downloadSpeed = "-r " + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
+        } else {
+            downloadSpeed = "";
         }
     }
 
@@ -304,8 +305,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                             "-P",
                             "temp:"
                             + jFrameMain.getSaveToPathTemp(),
-                            txtUrl.getText()),
-                            downloadSpeed;
+                            txtUrl.getText());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
