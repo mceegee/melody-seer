@@ -9,13 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.io.Serializable;
 
 
 /**
  *
  * @author marta
  */
-public class MyFile {
+public class MyFile implements Serializable{
     private File file;
     private LocalDate downloadDate;
     

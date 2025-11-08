@@ -4,7 +4,9 @@
  */
 package com.carbonell.melodyseer.models;
 
+import com.carbonell.melodyseer.Main;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -14,16 +16,16 @@ import javax.swing.table.AbstractTableModel;
  */
 public class MyFileTableModel extends AbstractTableModel {
 
-    private List<MyFile> listFiles;
     private String columns[] = {"Filename", "Size", "MIME type", "Download date"};
+    private Main jFrameMain;
 
-    public MyFileTableModel(List<MyFile> listFiles) {
-        this.listFiles = listFiles;
+    public MyFileTableModel(Main jFrameMain) {
+        this.jFrameMain = jFrameMain;
     }
 
     @Override
     public int getRowCount() {
-        return listFiles.size();
+        return jFrameMain.getMyFiles().size();
     }
 
     @Override
@@ -33,6 +35,7 @@ public class MyFileTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        ArrayList<MyFile> listFiles = jFrameMain.getMyFiles();
         try{
         switch (columnIndex) {
             case 0:

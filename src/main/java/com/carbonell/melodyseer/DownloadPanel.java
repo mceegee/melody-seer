@@ -4,6 +4,7 @@
  */
 package com.carbonell.melodyseer;
 
+import com.carbonell.melodyseer.models.MyFile;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
+import utilities.FileManager;
 
 /**
  *
@@ -27,6 +29,8 @@ public class DownloadPanel extends javax.swing.JPanel {
     private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
     private String downloadSpeed = "";
+    File currentFile;
+    FileManager fm;
 
     /**
      * Creates new form DownloadPanel
@@ -190,12 +194,13 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         changeDownloadSpeed();
-        
+
         if (radMp3.isSelected()) {
             downloadAudio();
         } else if (radVideo.isSelected()) {
             downloadVideo();
-        } 
+        }
+
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDwldFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDwldFilesActionPerformed
@@ -253,6 +258,9 @@ public class DownloadPanel extends javax.swing.JPanel {
 
                     if (line.contains("Destination:")) {
                         lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                        currentFile = new File(lastSavedFile);
+                        MyFile newFile = new MyFile(currentFile);
+                        jFrameMain.addNewFile(newFile);
                     }
 
                     if (matcher.find()) {
@@ -283,12 +291,11 @@ public class DownloadPanel extends javax.swing.JPanel {
     }
 
     private void openMedia() throws IOException {
-        File myFile = new File(lastSavedFile);
         if (chkOpen.isSelected()) {
             try {
                 // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
                 Desktop desktop = Desktop.getDesktop();
-                desktop.open(myFile);
+                desktop.open(currentFile);
 //            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
 //            pb.redirectErrorStream(true); 
 //            Process process = pb.start(); 
@@ -355,6 +362,10 @@ public class DownloadPanel extends javax.swing.JPanel {
 
                     if (line.contains("Destination:")) {
                         lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                        currentFile = new File(lastSavedFile);
+                        MyFile newFile = new MyFile(currentFile);
+
+                        jFrameMain.addNewFile(newFile);
                     }
 
                     if (matcher.find()) {

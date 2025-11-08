@@ -4,8 +4,11 @@
  */
 package com.carbonell.melodyseer;
 
+import com.carbonell.melodyseer.models.MyFile;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import utilities.FileManager;
 
 /**
  *
@@ -18,8 +21,10 @@ public class Main extends javax.swing.JFrame {
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     private String saveToPath = Paths.get("").toString();
     private String saveToPathTemp = saveToPath;
+    private String downloadedMediaInfoPath = Paths.get("").toString()+"downloads.txt";
     private String lastSavedFile;
     private String selectedSpeed = "";
+    private ArrayList<MyFile> myFiles;
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
@@ -29,6 +34,11 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
+        myFiles = FileManager.readFile(downloadedMediaInfoPath);
+        if(myFiles == null)
+        {
+            myFiles = new ArrayList<>();
+        }
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
@@ -45,11 +55,24 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(mediaPanel);
         mediaPanel.setVisible(false);
 
+        
         //       tblDownloads.setModel(new MyFileTableModel(downloads));
         // FOR TESTING 
         // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
     }
 
+    public ArrayList<MyFile> getMyFiles() {
+        return myFiles;
+    }
+    
+    public void addNewFile(MyFile file) {
+        myFiles.add(file);       
+        
+        FileManager.writeFile(myFiles, downloadedMediaInfoPath);
+        
+        mediaPanel.refreshModel();
+    }
+    
     public void setSaveToPathTemp(String saveToPathTemp) {
         this.saveToPathTemp = saveToPathTemp;
     }

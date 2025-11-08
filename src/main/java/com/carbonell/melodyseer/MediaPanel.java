@@ -6,7 +6,8 @@ package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileTableModel;
-import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 
@@ -30,9 +31,9 @@ public class MediaPanel extends javax.swing.JPanel {
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
 
-        ArrayList placeholder = new ArrayList<>();
+
         // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
-        tblDownloads.setModel(new MyFileTableModel(placeholder));
+        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
 
         lstDate = new javax.swing.JList<>();
         scrDate = new JScrollPane();
@@ -44,6 +45,27 @@ public class MediaPanel extends javax.swing.JPanel {
         cmbFormat = new JComboBox<>();
         cmbFormat.setBounds(470, 100, 150, 22);
         add(cmbFormat);
+        
+        loadFormatFromDb();
+        loadDateFromDb();
+    }
+    
+    private void loadFormatFromDb(){
+        var format = jFrameMain.getMyFiles();
+        DefaultComboBoxModel<MyFile> dcbm = new DefaultComboBoxModel<>();
+        for(MyFile f: format){
+            dcbm.addElement(f);
+        }
+        cmbFormat.setModel(dcbm);
+    }
+    
+    private void loadDateFromDb(){
+        var date = jFrameMain.getMyFiles();
+        DefaultListModel<MyFile> dlm = new DefaultListModel<>();
+        for(MyFile f: date) {
+            dlm.addElement(f);
+        }
+        lstDate.setModel(dlm);
     }
 
     /**
@@ -129,4 +151,9 @@ public class MediaPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
     // End of variables declaration//GEN-END:variables
+
+    void refreshModel() {
+        loadFormatFromDb();
+        loadDateFromDb();
+    }
 }
