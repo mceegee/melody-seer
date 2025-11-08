@@ -43,3 +43,9 @@ Problema: necesito que se cierre solo el diálogo cuando pulso el botón de Clos
 Solución: método dispose()
 Recursos: 
 Stack Overflow:  https://stackoverflow.com/questions/6969164/button-for-closing-a-jdialog 
+
+
+DI01_02
+
+Problema: serialización de los objetos
+Recursos: https://www.geeksforgeeks.org/java/serialization-and-deserialization-in-java/ 
