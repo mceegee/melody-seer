@@ -64,6 +64,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         radMp3 = new javax.swing.JRadioButton();
         cmbVideoFormat = new javax.swing.JComboBox<>();
         cmbAudioFormat = new javax.swing.JComboBox<>();
+        btnDwldFiles = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -151,6 +152,16 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
         add(cmbAudioFormat);
         cmbAudioFormat.setBounds(290, 150, 72, 22);
+
+        btnDwldFiles.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnDwldFiles.setText("Downloaded files");
+        btnDwldFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDwldFilesActionPerformed(evt);
+            }
+        });
+        add(btnDwldFiles);
+        btnDwldFiles.setBounds(280, 610, 280, 80);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -186,6 +197,10 @@ public class DownloadPanel extends javax.swing.JPanel {
             downloadVideo();
         } 
     }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void btnDwldFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDwldFilesActionPerformed
+        jFrameMain.showMediaPanel();
+    }//GEN-LAST:event_btnDwldFilesActionPerformed
 
     private void downloadVideo() {
         // Código proporcionado por el profesor
@@ -368,6 +383,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnDwldFiles;
     private javax.swing.JButton btnSaveTo;
     private javax.swing.JCheckBox chkOpen;
     private javax.swing.JComboBox<String> cmbAudioFormat;

@@ -4,20 +4,8 @@
  */
 package com.carbonell.melodyseer;
 
-import com.carbonell.melodyseer.models.*;
-import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 /**
  *
@@ -26,7 +14,6 @@ import javax.swing.SwingWorker;
 public class Main extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
-    public static ArrayList<MyFile> downloads;
 
     private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
     private String saveToPath = Paths.get("").toString();
@@ -36,6 +23,7 @@ public class Main extends javax.swing.JFrame {
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
+    private MediaPanel mediaPanel;
 
     /**
      * Creates new form Main
@@ -53,7 +41,9 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(preferencesPanel);
         preferencesPanel.setVisible(false);
 
-        downloads = new ArrayList<MyFile>();
+        mediaPanel = new MediaPanel(this);
+        getContentPane().add(mediaPanel);
+        mediaPanel.setVisible(false);
 
         //       tblDownloads.setModel(new MyFileTableModel(downloads));
         // FOR TESTING 
@@ -75,26 +65,25 @@ public class Main extends javax.swing.JFrame {
     public void setSelectedSpeed(String selectedSpeed) {
         this.selectedSpeed = selectedSpeed;
     }
-    
-    
-    
-    
+
     public void showPreferencesPanel() {
         downloadPanel.setVisible(false);
+        mediaPanel.setVisible(false);
         preferencesPanel.setVisible(true);
     }
 
     public void showDownloadPanel() {
         downloadPanel.setVisible(true);
         preferencesPanel.setVisible(false);
+        mediaPanel.setVisible(false);
     }
 
-//    private void onDownloadedFile(MyFile newFile) {
-//        downloads.add(newFile);
-//
-//        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
-//        tblDownloads.setModel(new MyFileTableModel(downloads));
-//    }
+    public void showMediaPanel() {
+        downloadPanel.setVisible(false);
+        preferencesPanel.setVisible(false);
+        mediaPanel.setVisible(true);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -167,18 +156,21 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // FILE - EXIT
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
         JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
         System.exit(NORMAL);
     }//GEN-LAST:event_mniExitActionPerformed
 
+    // EDIT - PREFERENCES
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
 //        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
 //        openPreferences.setVisible(true);
         showPreferencesPanel();
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
+    // HELP - ABOUT
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
         About openAbout = new About(this, true);
         openAbout.setVisible(true);
