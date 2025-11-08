@@ -5,6 +5,8 @@
 package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.models.MyFile;
+import com.carbonell.melodyseer.models.MyFileDateModel;
+import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -19,9 +21,9 @@ public class MediaPanel extends javax.swing.JPanel {
 
     Main jFrameMain;
 
-    private javax.swing.JList<MyFile> lstDate;
+    private javax.swing.JList<MyFileDateModel> lstDate;
     private javax.swing.JScrollPane scrDate;
-    private javax.swing.JComboBox<MyFile> cmbFormat;
+    private javax.swing.JComboBox<MyFileMimeModel> cmbFormat;
 
     /**
      * Creates new form MediaPanel
@@ -52,18 +54,18 @@ public class MediaPanel extends javax.swing.JPanel {
     
     private void loadFormatFromDb(){
         var format = jFrameMain.getMyFiles();
-        DefaultComboBoxModel<MyFile> dcbm = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel<MyFileMimeModel> dcbm = new DefaultComboBoxModel<>();
         for(MyFile f: format){
-            dcbm.addElement(f);
+            dcbm.addElement(new MyFileMimeModel(f));
         }
         cmbFormat.setModel(dcbm);
     }
     
     private void loadDateFromDb(){
         var date = jFrameMain.getMyFiles();
-        DefaultListModel<MyFile> dlm = new DefaultListModel<>();
+        DefaultListModel<MyFileDateModel> dlm = new DefaultListModel<>();
         for(MyFile f: date) {
-            dlm.addElement(f);
+            dlm.addElement(new MyFileDateModel(f));
         }
         lstDate.setModel(dlm);
     }
@@ -155,5 +157,6 @@ public class MediaPanel extends javax.swing.JPanel {
     void refreshModel() {
         loadFormatFromDb();
         loadDateFromDb();
+        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
     }
 }
