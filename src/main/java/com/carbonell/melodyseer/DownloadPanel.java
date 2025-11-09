@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,12 +24,8 @@ import utilities.FileManager;
 public class DownloadPanel extends javax.swing.JPanel {
 
     Main jFrameMain;
-    private String YTDLP_PATH = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
-    private String saveToPath = Paths.get("").toString();
     private String lastSavedFile;
-    private String downloadSpeed = "";
     File currentFile;
-    FileManager fm;
 
     /**
      * Creates new form DownloadPanel
@@ -183,7 +178,8 @@ public class DownloadPanel extends javax.swing.JPanel {
         int option = chooser.showOpenDialog(this);
         if (option == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
-            saveToPath = f.getAbsolutePath();
+            String saveToPath = f.getAbsolutePath();
+            jFrameMain.setSaveToPath(saveToPath);
             System.out.println(saveToPath);
         }
     }//GEN-LAST:event_btnSaveToActionPerformed
@@ -193,8 +189,6 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        changeDownloadSpeed();
-
         if (radMp3.isSelected()) {
             downloadAudio();
         } else if (radVideo.isSelected()) {
@@ -214,16 +208,16 @@ public class DownloadPanel extends javax.swing.JPanel {
             protected Void doInBackground() throws Exception {
                 try {
                     // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                    ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                             txtUrl.getText(),
                             "-t",
                             "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
                             "-P",
-                            saveToPath,
+                            jFrameMain.getSaveToPath(),
                             "-P",
                             "temp:"
-                            + jFrameMain.getSaveToPathTemp()),
-                            downloadSpeed;
+                            + jFrameMain.getSaveToPathTemp(),
+                            getDownloadSpeedCommand());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -248,7 +242,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                processDownload(chunks);
+                processDownload(chunks, ".mp4");
 
             }
 
@@ -269,7 +263,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     }
 
-    private void processDownload(List<String> chunks) {
+    private void processDownload(List<String> chunks, String extension) {
         System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
         for (String line : chunks) {
             Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
@@ -278,7 +272,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
             txaOutput.append(line + "\n");
 
-            if (line.contains("Destination:")) {
+            if (line.contains("Destination:") && line.contains(extension)) {
                 lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
                 currentFile = new File(lastSavedFile);
                 MyFile newFile = new MyFile(currentFile);
@@ -310,11 +304,11 @@ public class DownloadPanel extends javax.swing.JPanel {
         }
     }
 
-    private void changeDownloadSpeed() {
+    private String getDownloadSpeedCommand() {
         if (!jFrameMain.getSelectedSpeed().equals("") && !jFrameMain.getSelectedSpeed().equals("Don't limit")) {
-            downloadSpeed = "-r " + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
+            return  "-r" + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
         } else {
-            downloadSpeed = "";
+            return "";
         }
     }
 
@@ -324,15 +318,16 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    ProcessBuilder pb = new ProcessBuilder(YTDLP_PATH,
+                    ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                             "-x",
                             "--audio-format=mp3",
                             "-P",
-                            saveToPath,
+                            jFrameMain.getSaveToPath(),
                             "-P",
                             "temp:"
                             + jFrameMain.getSaveToPathTemp(),
-                            txtUrl.getText());
+                            txtUrl.getText(),
+                    getDownloadSpeedCommand());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -357,7 +352,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                processDownload(chunks);
+                processDownload(chunks, ".mp3");
             }
 
             @Override

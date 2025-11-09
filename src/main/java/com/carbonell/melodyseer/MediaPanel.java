@@ -71,6 +71,7 @@ public class MediaPanel extends javax.swing.JPanel {
 
         loadFormatFromFile();
         loadDateFromFile();
+        
     }
 
     private void loadFormatFromFile() {
@@ -132,8 +133,6 @@ public class MediaPanel extends javax.swing.JPanel {
         lblFormat = new javax.swing.JLabel();
         lblFiles = new javax.swing.JLabel();
         btnDeleteItem = new javax.swing.JButton();
-        txtFilter = new javax.swing.JTextField();
-        btnFilter = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -190,17 +189,6 @@ public class MediaPanel extends javax.swing.JPanel {
         });
         add(btnDeleteItem);
         btnDeleteItem.setBounds(300, 650, 180, 23);
-        add(txtFilter);
-        txtFilter.setBounds(200, 280, 270, 22);
-
-        btnFilter.setText("Filter");
-        btnFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterActionPerformed(evt);
-            }
-        });
-        add(btnFilter);
-        btnFilter.setBounds(490, 280, 72, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void hideMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideMediaActionPerformed
@@ -218,10 +206,6 @@ public class MediaPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteItemActionPerformed
 
-    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        filterFormat();
-    }//GEN-LAST:event_btnFilterActionPerformed
-
     void refreshModel() {
         loadFormatFromFile();
         loadDateFromFile();
@@ -231,7 +215,6 @@ public class MediaPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteItem;
-    private javax.swing.JButton btnFilter;
     private javax.swing.JButton hideMedia;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDownloads;
@@ -239,7 +222,6 @@ public class MediaPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblFormat;
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
-    private javax.swing.JTextField txtFilter;
     // End of variables declaration//GEN-END:variables
 
 }

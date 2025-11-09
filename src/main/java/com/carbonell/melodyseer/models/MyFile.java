@@ -46,6 +46,10 @@ public class MyFile implements Serializable{
         return Files.probeContentType(file.toPath());
     }
 
+    public void setDownloadDate(LocalDate downloadDate) {
+        this.downloadDate = downloadDate;
+    }
+
 
     public String getDownloadDate() {
         // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html

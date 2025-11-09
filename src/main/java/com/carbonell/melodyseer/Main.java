@@ -18,7 +18,7 @@ public class Main extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
-    private String YTDLP_PATH = "C:\\Users\\marta\\yt-dlp\\yt-dlp.exe"; // only works if it's hard-codded :( :(
+    private String ytdlp_path = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe"; 
     private String saveToPath = Paths.get("").toString();
     private String saveToPathTemp = saveToPath;
     private String downloadedMediaInfoPath = Paths.get("").toString()+"downloads.txt";
@@ -76,6 +76,22 @@ public class Main extends javax.swing.JFrame {
     public void deleteFile(int i) {
         myFiles.remove(i);
     }
+
+    public String getYtdlp_path() {
+        return ytdlp_path;
+    }
+    
+    public void setYtdlp_path(String ytdlp_path) {
+        this.ytdlp_path = ytdlp_path;
+    }   
+
+    public String getSaveToPath() {
+        return saveToPath;
+    }
+
+    public void setSaveToPath(String saveToPath) {
+        this.saveToPath = saveToPath;
+    }    
     
     public void setSaveToPathTemp(String saveToPathTemp) {
         this.saveToPathTemp = saveToPathTemp;

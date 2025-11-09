@@ -43,12 +43,14 @@ public class PreferencesPanel extends javax.swing.JPanel {
         btnHide = new javax.swing.JButton();
         lblLimitDwld = new javax.swing.JLabel();
         cmbLimitDwld = new javax.swing.JComboBox<>();
+        lblChoosePath = new javax.swing.JLabel();
+        btnChoosePath = new javax.swing.JButton();
 
         setLayout(null);
 
         lblTempFiles.setText("Path to store temporary files...");
         add(lblTempFiles);
-        lblTempFiles.setBounds(50, 50, 180, 16);
+        lblTempFiles.setBounds(60, 110, 180, 16);
 
         btnTempFiles.setText("Choose");
         btnTempFiles.addActionListener(new java.awt.event.ActionListener() {
@@ -57,7 +59,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
             }
         });
         add(btnTempFiles);
-        btnTempFiles.setBounds(250, 40, 75, 23);
+        btnTempFiles.setBounds(260, 100, 75, 23);
 
         btnHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
         btnHide.setText("Hide preferences");
@@ -71,16 +73,29 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
         lblLimitDwld.setText("Limit download to...");
         add(lblLimitDwld);
-        lblLimitDwld.setBounds(50, 90, 150, 16);
+        lblLimitDwld.setBounds(60, 150, 150, 16);
 
-        cmbLimitDwld.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't limit", "10 MB/s", "15 MB/s", "20 MB/s", "25 MB/s" }));
+        cmbLimitDwld.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Don't limit", "1 MB/s", "5 MB/s", "10 MB/s" }));
         cmbLimitDwld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbLimitDwldActionPerformed(evt);
             }
         });
         add(cmbLimitDwld);
-        cmbLimitDwld.setBounds(230, 90, 120, 22);
+        cmbLimitDwld.setBounds(240, 150, 120, 22);
+
+        lblChoosePath.setText("Select yt-dlp path");
+        add(lblChoosePath);
+        lblChoosePath.setBounds(60, 50, 100, 16);
+
+        btnChoosePath.setText("Choose");
+        btnChoosePath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChoosePathActionPerformed(evt);
+            }
+        });
+        add(btnChoosePath);
+        btnChoosePath.setBounds(260, 50, 72, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideActionPerformed
@@ -105,10 +120,24 @@ public class PreferencesPanel extends javax.swing.JPanel {
         jFrameMain.setSelectedSpeed(cmbLimitDwld.getSelectedItem().toString());
     }//GEN-LAST:event_cmbLimitDwldActionPerformed
 
+    private void btnChoosePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChoosePathActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        int option = chooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            jFrameMain.setYtdlp_path(f.getAbsolutePath().toString());
+        }
+    }//GEN-LAST:event_btnChoosePathActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChoosePath;
     private javax.swing.JButton btnHide;
     private javax.swing.JButton btnTempFiles;
     private javax.swing.JComboBox<String> cmbLimitDwld;
+    private javax.swing.JLabel lblChoosePath;
     private javax.swing.JLabel lblLimitDwld;
     private javax.swing.JLabel lblTempFiles;
     // End of variables declaration//GEN-END:variables
