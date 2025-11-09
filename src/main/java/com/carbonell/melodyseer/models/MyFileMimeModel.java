@@ -21,7 +21,7 @@ public class MyFileMimeModel {
     @Override
     public String toString() {
         try {
-        return file.getMime();
+        return file.getMime() + ": " + file.getFileName().substring(0,20);
         } catch (IOException ioe) {
             System.out.println("Something went wrong with MIME type :(");
         }

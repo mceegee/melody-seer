@@ -8,10 +8,13 @@ import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -24,6 +27,7 @@ public class MediaPanel extends javax.swing.JPanel {
     private javax.swing.JList<MyFileDateModel> lstDate;
     private javax.swing.JScrollPane scrDate;
     private javax.swing.JComboBox<MyFileMimeModel> cmbFormat;
+    private MyFileTableModel mftm;
 
     /**
      * Creates new form MediaPanel
@@ -33,9 +37,9 @@ public class MediaPanel extends javax.swing.JPanel {
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
 
+        mftm = new MyFileTableModel(jFrameMain);
 
-        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
-        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
+        tblDownloads.setModel(mftm);
 
         lstDate = new javax.swing.JList<>();
         scrDate = new JScrollPane();
@@ -45,26 +49,26 @@ public class MediaPanel extends javax.swing.JPanel {
         scrDate.setBounds(150, 100, 220, 160);
 
         cmbFormat = new JComboBox<>();
-        cmbFormat.setBounds(470, 100, 150, 22);
+        cmbFormat.setBounds(470, 100, 200, 22);
         add(cmbFormat);
-        
-        loadFormatFromDb();
-        loadDateFromDb();
+
+        loadFormatFromFile();
+        loadDateFromFile();
     }
-    
-    private void loadFormatFromDb(){
+
+    private void loadFormatFromFile() {
         var format = jFrameMain.getMyFiles();
         DefaultComboBoxModel<MyFileMimeModel> dcbm = new DefaultComboBoxModel<>();
-        for(MyFile f: format){
+        for (MyFile f : format) {
             dcbm.addElement(new MyFileMimeModel(f));
         }
         cmbFormat.setModel(dcbm);
     }
-    
-    private void loadDateFromDb(){
+
+    private void loadDateFromFile() {
         var date = jFrameMain.getMyFiles();
         DefaultListModel<MyFileDateModel> dlm = new DefaultListModel<>();
-        for(MyFile f: date) {
+        for (MyFile f : date) {
             dlm.addElement(new MyFileDateModel(f));
         }
         lstDate.setModel(dlm);
@@ -85,7 +89,8 @@ public class MediaPanel extends javax.swing.JPanel {
         lblDownloads = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
         lblFormat = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblFiles = new javax.swing.JLabel();
+        btnDeleteItem = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -113,12 +118,12 @@ public class MediaPanel extends javax.swing.JPanel {
         scrDwnld.setViewportView(tblDownloads);
 
         add(scrDwnld);
-        scrDwnld.setBounds(50, 350, 700, 350);
+        scrDwnld.setBounds(60, 280, 700, 320);
 
         lblDownloads.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblDownloads.setText("Your downloads");
         add(lblDownloads);
-        lblDownloads.setBounds(50, 320, 120, 20);
+        lblDownloads.setBounds(60, 250, 120, 20);
 
         lblDate.setText("Download date");
         add(lblDate);
@@ -128,35 +133,51 @@ public class MediaPanel extends javax.swing.JPanel {
         add(lblFormat);
         lblFormat.setBounds(420, 100, 70, 16);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Filters");
-        add(jLabel1);
-        jLabel1.setBounds(50, 50, 90, 30);
+        lblFiles.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblFiles.setText("Files");
+        add(lblFiles);
+        lblFiles.setBounds(50, 50, 90, 30);
+
+        btnDeleteItem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDeleteItem.setText("Delete selected item");
+        btnDeleteItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteItemActionPerformed(evt);
+            }
+        });
+        add(btnDeleteItem);
+        btnDeleteItem.setBounds(300, 620, 180, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void hideMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideMediaActionPerformed
         jFrameMain.showDownloadPanel();
     }//GEN-LAST:event_hideMediaActionPerformed
 
-//    private void onDownloadedFile(MyFile newFile) {
-//        ArrayList placeholder = new ArrayList<>();
-//        // https://stackoverflow.com/questions/3179136/jtable-how-to-refresh-table-model-after-insert-delete-or-update-the-data
-//        tblDownloads.setModel(new MyFileTableModel(placeholder));
-//    }
+    private void btnDeleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteItemActionPerformed
+        ArrayList<MyFile> files = jFrameMain.getMyFiles();
+        MyFile currentFile = files.get(tblDownloads.getSelectedRow());
+        if (!files.isEmpty()) {
+            currentFile.delete();
+            jFrameMain.deleteFile(tblDownloads.getSelectedRow());
+            refreshModel();
+        }
+    }//GEN-LAST:event_btnDeleteItemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeleteItem;
     private javax.swing.JButton hideMedia;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDownloads;
+    private javax.swing.JLabel lblFiles;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
     // End of variables declaration//GEN-END:variables
 
     void refreshModel() {
-        loadFormatFromDb();
-        loadDateFromDb();
+        loadFormatFromFile();
+        loadDateFromFile();
         tblDownloads.setModel(new MyFileTableModel(jFrameMain));
     }
 }

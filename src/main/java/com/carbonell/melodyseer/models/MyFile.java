@@ -50,6 +50,10 @@ public class MyFile implements Serializable{
     public String getDownloadDate() {
         // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html
         return downloadDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-    }   
+    } 
+    
+    public void delete() {
+        file.delete();
+    }
     
 }

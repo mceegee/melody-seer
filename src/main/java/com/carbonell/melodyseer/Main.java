@@ -73,6 +73,10 @@ public class Main extends javax.swing.JFrame {
         mediaPanel.refreshModel();
     }
     
+    public void deleteFile(int i) {
+        myFiles.remove(i);
+    }
+    
     public void setSaveToPathTemp(String saveToPathTemp) {
         this.saveToPathTemp = saveToPathTemp;
     }

@@ -18,7 +18,7 @@ public class MyFileDateModel {
 
     @Override
     public String toString() {
-        return file.getDownloadDate();
+        return file.getDownloadDate() + ": " + file.getFileName().substring(0,20);
     }
     
     

@@ -248,29 +248,8 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
-                for (String line : chunks) {
-                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
-                    Matcher matcher = pattern.matcher(line);
+                processDownload(chunks);
 
-                    System.out.println("\t" + line);
-                    txaOutput.append(line + "\n");
-
-                    if (line.contains("Destination:")) {
-                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
-                        currentFile = new File(lastSavedFile);
-                        MyFile newFile = new MyFile(currentFile);
-                        jFrameMain.addNewFile(newFile);
-                    }
-
-                    if (matcher.find()) {
-                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
-                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
-                        prgDownload.setValue((int) progress);
-                    }
-
-                }
             }
 
             @Override
@@ -288,6 +267,32 @@ public class DownloadPanel extends javax.swing.JPanel {
 
         worker.execute();
 
+    }
+
+    private void processDownload(List<String> chunks) {
+        System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
+        for (String line : chunks) {
+            Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+            Matcher matcher = pattern.matcher(line);
+
+            System.out.println("\t" + line);
+            txaOutput.append(line + "\n");
+
+            if (line.contains("Destination:")) {
+                lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+                currentFile = new File(lastSavedFile);
+                MyFile newFile = new MyFile(currentFile);
+                jFrameMain.addNewFile(newFile);
+            }
+
+            if (matcher.find()) {
+                // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
+                // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
+                double progress = Double.parseDouble(matcher.group().replace("%", ""));
+                prgDownload.setValue((int) progress);
+            }
+
+        }
     }
 
     private void openMedia() throws IOException {
@@ -352,36 +357,13 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
-                for (String line : chunks) {
-                    Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
-                    Matcher matcher = pattern.matcher(line);
-
-                    System.out.println("\t" + line);
-                    txaOutput.append(line + "\n");
-
-                    if (line.contains("Destination:")) {
-                        lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
-                        currentFile = new File(lastSavedFile);
-                        MyFile newFile = new MyFile(currentFile);
-
-                        jFrameMain.addNewFile(newFile);
-                    }
-
-                    if (matcher.find()) {
-                        // https://stackoverflow.com/questions/25277300/how-to-return-a-string-which-matches-the-regex-in-java
-                        // https://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
-                        double progress = Double.parseDouble(matcher.group().replace("%", ""));
-                        prgDownload.setValue((int) progress);
-                    }
-                }
+                processDownload(chunks);
             }
 
             @Override
             protected void done() {
                 try {
                     if (chkOpen.isSelected() && lastSavedFile != null) {
-
                         openMedia();
                     }
                 } catch (IOException e) {

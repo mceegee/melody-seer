@@ -49,3 +49,14 @@ DI01_02
 
 Problema: serialización de los objetos
 Recursos: https://www.geeksforgeeks.org/java/serialization-and-deserialization-in-java/ 
+
+Problema: Extraer información diferente de objetos de la misma clase, que se alimentan del método toString()
+Solución: creación de clases intermedias -- MyFileMimeModel y MyFileDateModel
+
+Problema: ordenación de tablas
+Recursos: https://www.youtube.com/watch?v=K648UkfJQMY
+
+Problema: filtrado de tablas
+Recursos: https://www.youtube.com/watch?v=6EclI2pzLiU
+
+
