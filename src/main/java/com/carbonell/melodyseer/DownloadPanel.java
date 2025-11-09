@@ -15,7 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
-import utilities.FileManager;
+
+//MISSING -- change file types
 
 /**
  *
