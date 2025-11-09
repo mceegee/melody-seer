@@ -8,12 +8,13 @@ import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -28,6 +29,8 @@ public class MediaPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrDate;
     private javax.swing.JComboBox<MyFileMimeModel> cmbFormat;
     private MyFileTableModel mftm;
+    int modelRow;
+    private TableRowSorter<MyFileTableModel> sorter;
 
     /**
      * Creates new form MediaPanel
@@ -38,8 +41,10 @@ public class MediaPanel extends javax.swing.JPanel {
         this.jFrameMain = jFrameMain;
 
         mftm = new MyFileTableModel(jFrameMain);
-
         tblDownloads.setModel(mftm);
+
+        sorter = new TableRowSorter<>(mftm);
+        tblDownloads.setRowSorter(sorter);
 
         lstDate = new javax.swing.JList<>();
         scrDate = new JScrollPane();
@@ -51,6 +56,18 @@ public class MediaPanel extends javax.swing.JPanel {
         cmbFormat = new JComboBox<>();
         cmbFormat.setBounds(470, 100, 200, 22);
         add(cmbFormat);
+
+        cmbFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterFormat();
+            }
+        });
+
+        lstDate.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                filterDate();
+            }
+        });
 
         loadFormatFromFile();
         loadDateFromFile();
@@ -74,6 +91,30 @@ public class MediaPanel extends javax.swing.JPanel {
         lstDate.setModel(dlm);
     }
 
+    private void filterFormat() {
+        String filterText = cmbFormat.getSelectedItem().toString();
+
+        if (filterText == null || filterText.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter(Pattern.quote(filterText), 2));
+        }
+        //System.out.println("DEBUG - Expected result: " + mftm.getValueAt(0, 2));
+        //System.out.println("DEBUG -  Filter: " + cmbFormat.getSelectedItem());
+    }
+
+    private void filterDate() {
+        String filterText = lstDate.getSelectedValue().toString();
+
+        if (filterText == null || filterText.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(RowFilter.regexFilter(Pattern.quote(filterText), 3));
+        }
+        //System.out.println("DEBUG - Expected result: " + mftm.getValueAt(0, 3));
+        //System.out.println("DEBUG -  Filter: " + lstDate.getSelectedValue());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +132,8 @@ public class MediaPanel extends javax.swing.JPanel {
         lblFormat = new javax.swing.JLabel();
         lblFiles = new javax.swing.JLabel();
         btnDeleteItem = new javax.swing.JButton();
+        txtFilter = new javax.swing.JTextField();
+        btnFilter = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -118,12 +161,12 @@ public class MediaPanel extends javax.swing.JPanel {
         scrDwnld.setViewportView(tblDownloads);
 
         add(scrDwnld);
-        scrDwnld.setBounds(60, 280, 700, 320);
+        scrDwnld.setBounds(60, 310, 700, 320);
 
         lblDownloads.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblDownloads.setText("Your downloads");
         add(lblDownloads);
-        lblDownloads.setBounds(60, 250, 120, 20);
+        lblDownloads.setBounds(60, 280, 120, 20);
 
         lblDate.setText("Download date");
         add(lblDate);
@@ -146,7 +189,18 @@ public class MediaPanel extends javax.swing.JPanel {
             }
         });
         add(btnDeleteItem);
-        btnDeleteItem.setBounds(300, 620, 180, 23);
+        btnDeleteItem.setBounds(300, 650, 180, 23);
+        add(txtFilter);
+        txtFilter.setBounds(200, 280, 270, 22);
+
+        btnFilter.setText("Filter");
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterActionPerformed(evt);
+            }
+        });
+        add(btnFilter);
+        btnFilter.setBounds(490, 280, 72, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void hideMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideMediaActionPerformed
@@ -154,18 +208,30 @@ public class MediaPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_hideMediaActionPerformed
 
     private void btnDeleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteItemActionPerformed
+        modelRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
         ArrayList<MyFile> files = jFrameMain.getMyFiles();
-        MyFile currentFile = files.get(tblDownloads.getSelectedRow());
+        MyFile currentFile = files.get(modelRow);
         if (!files.isEmpty()) {
             currentFile.delete();
-            jFrameMain.deleteFile(tblDownloads.getSelectedRow());
+            jFrameMain.deleteFile(modelRow);
             refreshModel();
         }
     }//GEN-LAST:event_btnDeleteItemActionPerformed
 
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
+        filterFormat();
+    }//GEN-LAST:event_btnFilterActionPerformed
+
+    void refreshModel() {
+        loadFormatFromFile();
+        loadDateFromFile();
+        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteItem;
+    private javax.swing.JButton btnFilter;
     private javax.swing.JButton hideMedia;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDownloads;
@@ -173,11 +239,7 @@ public class MediaPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblFormat;
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
+    private javax.swing.JTextField txtFilter;
     // End of variables declaration//GEN-END:variables
 
-    void refreshModel() {
-        loadFormatFromFile();
-        loadDateFromFile();
-        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
-    }
 }

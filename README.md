@@ -59,4 +59,7 @@ Recursos: https://www.youtube.com/watch?v=K648UkfJQMY
 Problema: filtrado de tablas
 Recursos: https://www.youtube.com/watch?v=6EclI2pzLiU
 
+Problema: el filtrado no funcionaba bien
+Solución: uso de Pattern.quote
+Recursos: https://stackoverflow.com/questions/79557037/java-jtable-rowfilter-doesnt-work-properly 
 

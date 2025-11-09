@@ -5,7 +5,6 @@
 package utilities;
 
 import com.carbonell.melodyseer.models.MyFile;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

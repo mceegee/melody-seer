@@ -7,7 +7,6 @@ package com.carbonell.melodyseer.models;
 import com.carbonell.melodyseer.Main;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
