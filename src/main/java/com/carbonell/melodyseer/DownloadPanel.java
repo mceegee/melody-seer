@@ -218,7 +218,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDwldFilesActionPerformed
 
     private void cmbVideoFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVideoFormatActionPerformed
-        jFrameMain.setFormat("\""+ cmbVideoFormat.getSelectedItem().toString().toLowerCase()+"\"");
+        jFrameMain.setFormat("\"" + cmbVideoFormat.getSelectedItem().toString().toLowerCase() + "\"");
     }//GEN-LAST:event_cmbVideoFormatActionPerformed
 
     private void cmbAudioFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAudioFormatActionPerformed
@@ -231,17 +231,30 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    // Replace "yourExecutable.exe" and arguments as needed
-                    ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
-                            txtUrl.getText(),
-                            "-t",
-                            jFrameMain.getFormat(),
-                            "-P",
-                            jFrameMain.getSaveToPath(),
-                            "-P",
-                            "temp:"
-                            + jFrameMain.getSaveToPathTemp(),
-                            getDownloadSpeedCommand());
+                    String downloadSpeedCommand = getDownloadSpeedCommand();
+                    ProcessBuilder pb;
+                    if (downloadSpeedCommand.equals("")) {
+                        pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
+                                txtUrl.getText(),
+                                "-t",
+                                jFrameMain.getFormat(),
+                                "-P",
+                                jFrameMain.getSaveToPath(),
+                                "-P",
+                                "temp:"
+                                + jFrameMain.getSaveToPathTemp());
+                    } else {
+                        pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
+                                txtUrl.getText(),
+                                "-t",
+                                jFrameMain.getFormat(),
+                                "-P",
+                                jFrameMain.getSaveToPath(),
+                                "-P",
+                                "temp:"
+                                + jFrameMain.getSaveToPathTemp(),
+                                downloadSpeedCommand);
+                    }
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -342,16 +355,30 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
-                            "-x",
-                            "--audio-format=" + jFrameMain.getFormat(),
-                            "-P",
-                            jFrameMain.getSaveToPath(),
-                            "-P",
-                            "temp:"
-                            + jFrameMain.getSaveToPathTemp(),
-                            txtUrl.getText(),
-                            getDownloadSpeedCommand());
+                    String downloadSpeedCommand = getDownloadSpeedCommand();
+                    ProcessBuilder pb;
+                    if (downloadSpeedCommand.equals("")) {
+                        pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
+                                "-x",
+                                "--audio-format=" + jFrameMain.getFormat(),
+                                "-P",
+                                jFrameMain.getSaveToPath(),
+                                "-P",
+                                "temp:"
+                                + jFrameMain.getSaveToPathTemp(),
+                                txtUrl.getText());
+                    } else {
+                        pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
+                                "-x",
+                                "--audio-format=" + jFrameMain.getFormat(),
+                                "-P",
+                                jFrameMain.getSaveToPath(),
+                                "-P",
+                                "temp:"
+                                + jFrameMain.getSaveToPathTemp(),
+                                txtUrl.getText(),
+                                downloadSpeedCommand);
+                    }
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 

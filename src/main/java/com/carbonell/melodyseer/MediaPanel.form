@@ -125,7 +125,7 @@
     <Component class="javax.swing.JTextField" name="txtFilter">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="190" y="280" width="400" height="-1"/>
+          <AbsoluteConstraints x="190" y="272" width="400" height="30"/>
         </Constraint>
       </Constraints>
     </Component>

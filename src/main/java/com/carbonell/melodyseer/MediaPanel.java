@@ -192,7 +192,7 @@ public class MediaPanel extends javax.swing.JPanel {
         add(btnDeleteItem);
         btnDeleteItem.setBounds(300, 650, 180, 23);
         add(txtFilter);
-        txtFilter.setBounds(190, 280, 400, 22);
+        txtFilter.setBounds(190, 272, 400, 30);
 
         btnFilter.setText("Filter");
         btnFilter.addActionListener(new java.awt.event.ActionListener() {
