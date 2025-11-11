@@ -35,6 +35,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         initComponents();
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
+        cmbAudioFormat.setVisible(false);
     }
 
     /**
@@ -141,6 +142,11 @@ public class DownloadPanel extends javax.swing.JPanel {
 
         grpFormat.add(radMp3);
         radMp3.setText("Audio");
+        radMp3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radMp3ActionPerformed(evt);
+            }
+        });
         add(radMp3);
         radMp3.setBounds(180, 150, 55, 21);
 
@@ -199,7 +205,8 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveToActionPerformed
 
     private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
-        // TODO add your handling code here:
+       cmbAudioFormat.setVisible(false);
+       cmbVideoFormat.setVisible(true);
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
@@ -224,6 +231,11 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void cmbAudioFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAudioFormatActionPerformed
         jFrameMain.setFormat("\"" + cmbAudioFormat.getSelectedItem().toString().toLowerCase() + "\"");
     }//GEN-LAST:event_cmbAudioFormatActionPerformed
+
+    private void radMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMp3ActionPerformed
+        cmbAudioFormat.setVisible(true);
+        cmbVideoFormat.setVisible(false);
+    }//GEN-LAST:event_radMp3ActionPerformed
 
     private void downloadVideo() {
         // Código proporcionado por el profesor
