@@ -225,11 +225,11 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDwldFilesActionPerformed
 
     private void cmbVideoFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVideoFormatActionPerformed
-        jFrameMain.setFormat("\"" + cmbVideoFormat.getSelectedItem().toString().toLowerCase() + "\"");
+        jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_cmbVideoFormatActionPerformed
 
     private void cmbAudioFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAudioFormatActionPerformed
-        jFrameMain.setFormat("\"" + cmbAudioFormat.getSelectedItem().toString().toLowerCase() + "\"");
+        jFrameMain.setFormat(cmbAudioFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_cmbAudioFormatActionPerformed
 
     private void radMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMp3ActionPerformed
@@ -251,7 +251,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                                 "-t",
                                 jFrameMain.getFormat(),
                                 "-P",
-                                jFrameMain.getSaveToPath(),
+                                "\""+ jFrameMain.getSaveToPath() + "\"",
                                 "-P",
                                 "temp:"
                                 + jFrameMain.getSaveToPathTemp());
@@ -259,7 +259,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 txtUrl.getText(),
                                 "-t",
-                                jFrameMain.getFormat(),
+                                "\""+jFrameMain.getFormat()+"\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -291,7 +291,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                processDownload(chunks, ".mp4");
+                processDownload(chunks, jFrameMain.getFormat());
 
             }
 
@@ -321,9 +321,15 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
             txaOutput.append(line + "\n");
 
-            if (line.contains("Destination:") && line.contains(extension)) {
+            if (line.contains("Destination:") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
                 currentFile = new File(lastSavedFile);
+                MyFile newFile = new MyFile(currentFile);
+                jFrameMain.addNewFile(newFile);
+            } else if (line.contains("Merging") && line.toLowerCase().contains("." + extension.toLowerCase())) {
+                String stringToRemove = "[Merger] Merging formats into";
+                lastSavedFile = line.substring(line.indexOf(stringToRemove) + stringToRemove.length()).trim();
+                currentFile = new File(lastSavedFile.replace("\"", ""));
                 MyFile newFile = new MyFile(currentFile);
                 jFrameMain.addNewFile(newFile);
             }
@@ -372,7 +378,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                     if (downloadSpeedCommand.equals("")) {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 "-x",
-                                "--audio-format=" + jFrameMain.getFormat(),
+                                "--audio-format=\"" + jFrameMain.getFormat()+"\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -382,7 +388,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                     } else {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 "-x",
-                                "--audio-format=" + jFrameMain.getFormat(),
+                                "--audio-format=\"" + jFrameMain.getFormat()+"\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -415,7 +421,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
             @Override
             protected void process(List<String> chunks) {
-                processDownload(chunks, ".mp3");
+                processDownload(chunks, jFrameMain.getFormat());
             }
 
             @Override
