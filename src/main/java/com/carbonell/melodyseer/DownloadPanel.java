@@ -71,9 +71,9 @@ public class DownloadPanel extends javax.swing.JPanel {
         lblUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
         lblUrl.setText("Insert video URL here:");
         add(lblUrl);
-        lblUrl.setBounds(40, 60, 140, 16);
+        lblUrl.setBounds(40, 60, 150, 16);
         add(txtUrl);
-        txtUrl.setBounds(190, 50, 410, 30);
+        txtUrl.setBounds(200, 50, 410, 30);
 
         chkOpen.setSelected(true);
         chkOpen.setText("Open after download");
