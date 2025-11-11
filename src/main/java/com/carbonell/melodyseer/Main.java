@@ -25,6 +25,7 @@ public class Main extends javax.swing.JFrame {
     private String lastSavedFile;
     private String selectedSpeed = "";
     private ArrayList<MyFile> myFiles;
+    private String format = "mp4";
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
@@ -108,6 +109,16 @@ public class Main extends javax.swing.JFrame {
     public void setSelectedSpeed(String selectedSpeed) {
         this.selectedSpeed = selectedSpeed;
     }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+    
+    
 
     public void showPreferencesPanel() {
         downloadPanel.setVisible(false);

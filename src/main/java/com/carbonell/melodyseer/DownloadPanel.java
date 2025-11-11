@@ -16,8 +16,6 @@ import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
 
-//MISSING -- change file types
-
 /**
  *
  * @author marta
@@ -65,6 +63,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbVideoFormat = new javax.swing.JComboBox<>();
         cmbAudioFormat = new javax.swing.JComboBox<>();
         btnDwldFiles = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setLayout(null);
 
@@ -145,11 +144,21 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(radMp3);
         radMp3.setBounds(180, 150, 55, 21);
 
-        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP4", "MOV", "WEBM" }));
+        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "MP4", "MKV" }));
+        cmbVideoFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbVideoFormatActionPerformed(evt);
+            }
+        });
         add(cmbVideoFormat);
         cmbVideoFormat.setBounds(290, 110, 72, 22);
 
-        cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
+        cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "MP3", "WAV" }));
+        cmbAudioFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAudioFormatActionPerformed(evt);
+            }
+        });
         add(cmbAudioFormat);
         cmbAudioFormat.setBounds(290, 150, 72, 22);
 
@@ -162,6 +171,10 @@ public class DownloadPanel extends javax.swing.JPanel {
         });
         add(btnDwldFiles);
         btnDwldFiles.setBounds(280, 610, 280, 80);
+
+        jLabel1.setText("Default format: mp4");
+        add(jLabel1);
+        jLabel1.setBounds(40, 140, 130, 16);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -194,6 +207,8 @@ public class DownloadPanel extends javax.swing.JPanel {
             downloadAudio();
         } else if (radVideo.isSelected()) {
             downloadVideo();
+        } else {
+            downloadVideo();
         }
 
     }//GEN-LAST:event_btnDownloadActionPerformed
@@ -201,6 +216,14 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void btnDwldFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDwldFilesActionPerformed
         jFrameMain.showMediaPanel();
     }//GEN-LAST:event_btnDwldFilesActionPerformed
+
+    private void cmbVideoFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVideoFormatActionPerformed
+        jFrameMain.setFormat("\""+ cmbVideoFormat.getSelectedItem().toString().toLowerCase()+"\"");
+    }//GEN-LAST:event_cmbVideoFormatActionPerformed
+
+    private void cmbAudioFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAudioFormatActionPerformed
+        jFrameMain.setFormat("\"" + cmbAudioFormat.getSelectedItem().toString().toLowerCase() + "\"");
+    }//GEN-LAST:event_cmbAudioFormatActionPerformed
 
     private void downloadVideo() {
         // Código proporcionado por el profesor
@@ -212,7 +235,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                     ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                             txtUrl.getText(),
                             "-t",
-                            "mp4", // TO BE FIXED: no se m'obren els arxius webm ni amb Reproductor Multimedia ni amb VLC :(
+                            jFrameMain.getFormat(),
                             "-P",
                             jFrameMain.getSaveToPath(),
                             "-P",
@@ -307,7 +330,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private String getDownloadSpeedCommand() {
         if (!jFrameMain.getSelectedSpeed().equals("") && !jFrameMain.getSelectedSpeed().equals("Don't limit")) {
-            return  "-r" + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
+            return "-r" + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
         } else {
             return "";
         }
@@ -321,14 +344,14 @@ public class DownloadPanel extends javax.swing.JPanel {
                 try {
                     ProcessBuilder pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                             "-x",
-                            "--audio-format=mp3",
+                            "--audio-format=" + jFrameMain.getFormat(),
                             "-P",
                             jFrameMain.getSaveToPath(),
                             "-P",
                             "temp:"
                             + jFrameMain.getSaveToPathTemp(),
                             txtUrl.getText(),
-                    getDownloadSpeedCommand());
+                            getDownloadSpeedCommand());
                     pb.redirectErrorStream(true); // Combine stdout and stderr
                     Process process = pb.start();
 
@@ -378,6 +401,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbAudioFormat;
     private javax.swing.JComboBox<String> cmbVideoFormat;
     private javax.swing.ButtonGroup grpFormat;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblChoose;
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;
