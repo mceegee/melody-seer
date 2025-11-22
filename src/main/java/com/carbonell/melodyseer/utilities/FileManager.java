@@ -5,12 +5,17 @@
 package com.carbonell.melodyseer.utilities;
 
 import com.carbonell.melodyseer.models.MyFile;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -21,11 +26,11 @@ public class FileManager {
 
     public static PersistentData readFile(String path) {
         try {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
-        PersistentData newFile = (PersistentData) ois.readObject();
-        ois.close();
-        return newFile;
-        } catch (IOException | ClassNotFoundException e) {
+            ObjectMapper om = new ObjectMapper();
+            
+            PersistentData newFile = om.readValue(new BufferedReader(new FileReader(path)), PersistentData.class);
+            return newFile;
+        } catch (IOException e) {
             System.out.println("There was a problem loading the file.");
         }
         return new PersistentData();
@@ -33,10 +38,9 @@ public class FileManager {
 
     public static void writeFile(PersistentData myFile, String path) {
         try {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
-        oos.writeObject(myFile);
-        oos.close();
-        } catch(IOException ioe) {
+            ObjectMapper om = new ObjectMapper();
+            om.writeValue(new BufferedWriter(new FileWriter(path)), myFile);
+        } catch (IOException ioe) {
             System.out.println("File cannot be saved");
         }
     }
