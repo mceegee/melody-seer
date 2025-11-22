@@ -63,13 +63,8 @@ public class LogIn extends JPanel {
 
         chkRememberMe.setBounds(250, 220, 20, 20);
         add(chkRememberMe);
-        chkRememberMe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkRememberMeActionPerformed(evt);
-            }
-        });
 
-        lblRememberMe.setBounds(280, 220, 100, 30);
+        lblRememberMe.setBounds(280, 220, 250, 30);
         lblRememberMe.setText("Remember username and password");
         add(lblRememberMe);
 
@@ -98,13 +93,13 @@ public class LogIn extends JPanel {
             token = apiClient.login(username, pwd );  
         }
         if(token != null && !token.isEmpty()) {
+            if(chkRememberMe.isSelected()) {
+                jFrameMain.getPersistentData().setSavedToken(token);
+                jFrameMain.savePersistentData();
+            }
             this.setVisible(false);
             jFrameMain.showDownloadPanel();            
         }
-
-    }
-
-    public void chkRememberMeActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
 

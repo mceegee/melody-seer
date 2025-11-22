@@ -4,11 +4,13 @@
  */
 package com.carbonell.melodyseer;
 
+import com.carbonell.melodyseer.utilities.PersistentData;
 import com.carbonell.melodyseer.models.MyFile;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import com.carbonell.melodyseer.utilities.FileManager;
+import java.util.HashSet;
 
 /**
  *
@@ -18,13 +20,14 @@ public class Main extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
-    private String ytdlp_path = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe"; 
+    private String ytdlp_path = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
     private String saveToPath = Paths.get("").toString();
     private String saveToPathTemp = saveToPath;
-    private String downloadedMediaInfoPath = Paths.get("").toString()+"downloads.txt";
+    private String downloadedMediaInfoPath = Paths.get("").toString() + "metadata.json";
     private String lastSavedFile;
     private String selectedSpeed = "";
     private ArrayList<MyFile> myFiles;
+    private PersistentData persistentData;
     private String format = "mp4";
 
     private DownloadPanel downloadPanel;
@@ -36,18 +39,23 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
-        myFiles = FileManager.readFile(downloadedMediaInfoPath);
-        if(myFiles == null)
-        {
+        persistentData = FileManager.readFile(downloadedMediaInfoPath);
+        myFiles = persistentData.getFiles();
+
+        if (myFiles == null) {
             myFiles = new ArrayList<>();
+            persistentData.setFiles(myFiles);
         }
+
+        boolean isLoggedIn = persistentData.getSavedToken() != null;
+
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
 
         downloadPanel = new DownloadPanel(this);
         getContentPane().add(downloadPanel);
-        downloadPanel.setVisible(false);
+        downloadPanel.setVisible(isLoggedIn);
 
         preferencesPanel = new PreferencesPanel(this);
         getContentPane().add(preferencesPanel);
@@ -56,12 +64,11 @@ public class Main extends javax.swing.JFrame {
         mediaPanel = new MediaPanel(this);
         getContentPane().add(mediaPanel);
         mediaPanel.setVisible(false);
-        
+
         logInPanel = new LogIn(this);
         getContentPane().add(logInPanel);
-        logInPanel.setVisible(true);
+        logInPanel.setVisible(!isLoggedIn);
 
-        
         //       tblDownloads.setModel(new MyFileTableModel(downloads));
         // FOR TESTING 
         // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
@@ -70,15 +77,19 @@ public class Main extends javax.swing.JFrame {
     public ArrayList<MyFile> getMyFiles() {
         return myFiles;
     }
-    
+
     public void addNewFile(MyFile file) {
-        myFiles.add(file);       
-        
-        FileManager.writeFile(myFiles, downloadedMediaInfoPath);
-        
+        myFiles.add(file);
+
+        savePersistentData();
+
         mediaPanel.refreshModel();
     }
-    
+
+    public void savePersistentData() {
+        FileManager.writeFile(persistentData, downloadedMediaInfoPath);
+    }
+
     public void deleteFile(int i) {
         myFiles.remove(i);
     }
@@ -86,10 +97,10 @@ public class Main extends javax.swing.JFrame {
     public String getYtdlp_path() {
         return ytdlp_path;
     }
-    
+
     public void setYtdlp_path(String ytdlp_path) {
         this.ytdlp_path = ytdlp_path;
-    }   
+    }
 
     public String getSaveToPath() {
         return saveToPath;
@@ -97,8 +108,8 @@ public class Main extends javax.swing.JFrame {
 
     public void setSaveToPath(String saveToPath) {
         this.saveToPath = saveToPath;
-    }    
-    
+    }
+
     public void setSaveToPathTemp(String saveToPathTemp) {
         this.saveToPathTemp = saveToPathTemp;
     }
@@ -122,8 +133,10 @@ public class Main extends javax.swing.JFrame {
     public void setFormat(String format) {
         this.format = format;
     }
-    
-    
+
+    public PersistentData getPersistentData() {
+        return persistentData;
+    }
 
     public void showPreferencesPanel() {
         downloadPanel.setVisible(false);

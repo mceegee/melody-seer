@@ -19,19 +19,19 @@ import java.util.ArrayList;
 // https://www.geeksforgeeks.org/java/serialization-and-deserialization-in-java/ 
 public class FileManager {
 
-    public static ArrayList<MyFile> readFile(String path) {
+    public static PersistentData readFile(String path) {
         try {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
-        ArrayList<MyFile> newFile = (ArrayList<MyFile>) ois.readObject();
+        PersistentData newFile = (PersistentData) ois.readObject();
         ois.close();
         return newFile;
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("There was a problem loading the file.");
         }
-        return null;
+        return new PersistentData();
     }
 
-    public static void writeFile(ArrayList<MyFile> myFile, String path) {
+    public static void writeFile(PersistentData myFile, String path) {
         try {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
         oos.writeObject(myFile);
