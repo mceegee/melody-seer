@@ -30,6 +30,7 @@ public class Main extends javax.swing.JFrame {
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
     private MediaPanel mediaPanel;
+    private LogIn logInPanel;
 
     /**
      * Creates new form Main
@@ -46,7 +47,7 @@ public class Main extends javax.swing.JFrame {
 
         downloadPanel = new DownloadPanel(this);
         getContentPane().add(downloadPanel);
-        downloadPanel.setVisible(true);
+        downloadPanel.setVisible(false);
 
         preferencesPanel = new PreferencesPanel(this);
         getContentPane().add(preferencesPanel);
@@ -55,6 +56,10 @@ public class Main extends javax.swing.JFrame {
         mediaPanel = new MediaPanel(this);
         getContentPane().add(mediaPanel);
         mediaPanel.setVisible(false);
+        
+        logInPanel = new LogIn(this);
+        getContentPane().add(logInPanel);
+        logInPanel.setVisible(true);
 
         
         //       tblDownloads.setModel(new MyFileTableModel(downloads));
