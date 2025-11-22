@@ -8,7 +8,7 @@ import com.carbonell.melodyseer.models.MyFile;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import utilities.FileManager;
+import com.carbonell.melodyseer.utilities.FileManager;
 
 /**
  *
