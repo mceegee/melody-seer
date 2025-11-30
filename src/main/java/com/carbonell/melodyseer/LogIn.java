@@ -6,6 +6,8 @@ package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.utilities.ApiClient;
 import com.carbonell.melodyseer.utilities.Usuari;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -25,7 +27,7 @@ public class LogIn extends JPanel {
     private Main jFrameMain;
     private Usuari user;
     private ApiClient apiClient;
-    
+
     private String token;
     private final String API_URL = "https://dimedianetapi9.azurewebsites.net/";
 
@@ -72,7 +74,7 @@ public class LogIn extends JPanel {
         btnLogIn.setText("Log in");
         add(btnLogIn);
 
-        btnLogIn.addActionListener(new java.awt.event.ActionListener()  {
+        btnLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btnLogInActionPerformed(evt);
@@ -87,18 +89,23 @@ public class LogIn extends JPanel {
     public void btnLogInActionPerformed(java.awt.event.ActionEvent evt) throws Exception {
         String username = txtUser.getText();
         String pwd = new String(pwdPwd.getPassword());
-        if(username == null || username.isEmpty() || pwd.isEmpty()) {
+        if (username == null || username.isEmpty() || pwd.isEmpty()) {
             throw new IllegalArgumentException("Username or password empty.");
         } else {
-            token = apiClient.login(username, pwd );  
+            try {
+                token = apiClient.login(username, pwd);
+            } catch (IOException ioe) {
+                JOptionPane.showMessageDialog(this, "Wrong credentials, try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        if(token != null && !token.isEmpty()) {
-            if(chkRememberMe.isSelected()) {
+        if (token != null && !token.isEmpty()) {
+            if (chkRememberMe.isSelected()) {
                 jFrameMain.getPersistentData().setSavedToken(token);
                 jFrameMain.savePersistentData();
             }
             this.setVisible(false);
-            jFrameMain.showDownloadPanel();            
+            jFrameMain.showDownloadPanel();
+
         }
 
     }

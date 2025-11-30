@@ -6,11 +6,9 @@ package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.utilities.PersistentData;
 import com.carbonell.melodyseer.models.MyFile;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import com.carbonell.melodyseer.utilities.FileManager;
-import java.util.HashSet;
 
 /**
  *
@@ -21,9 +19,9 @@ public class Main extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
     private String ytdlp_path = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
-    private String saveToPath = Paths.get("").toString();
+    private String saveToPath = System.getenv("APPDATA");
     private String saveToPathTemp = saveToPath;
-    private String downloadedMediaInfoPath = Paths.get("").toString() + "metadata.json";
+    private String downloadedMediaInfoPath = System.getenv("APPDATA") + "metadata.json";
     private String lastSavedFile;
     private String selectedSpeed = "";
     private ArrayList<MyFile> myFiles;
@@ -35,10 +33,13 @@ public class Main extends javax.swing.JFrame {
     private MediaPanel mediaPanel;
     private LogIn logInPanel;
 
+    private javax.swing.JMenuItem mniLogout;
+
     /**
      * Creates new form Main
      */
     public Main() {
+
         persistentData = FileManager.readFile(downloadedMediaInfoPath);
         myFiles = persistentData.getFiles();
 
@@ -52,6 +53,15 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
+
+        mniLogout = new javax.swing.JMenuItem();
+        mniLogout.setText("Log out");
+        mniLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniLogoutActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mniLogout);
 
         downloadPanel = new DownloadPanel(this);
         getContentPane().add(downloadPanel);
@@ -234,6 +244,12 @@ public class Main extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
         System.exit(NORMAL);
     }//GEN-LAST:event_mniExitActionPerformed
+
+    // FILE - LOG OUT
+    private void mniLogoutActionPerformed(java.awt.event.ActionEvent evt) {
+        persistentData.setSavedToken(null);
+        savePersistentData();
+    }
 
     // EDIT - PREFERENCES
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
