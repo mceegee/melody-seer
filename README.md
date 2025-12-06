@@ -84,3 +84,7 @@ Solución: uso de Pattern.quote
 
 Recursos: https://stackoverflow.com/questions/79557037/java-jtable-rowfilter-doesnt-work-properly 
 
+DI02_02
+
+Problema: Fecha en ISO
+Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 

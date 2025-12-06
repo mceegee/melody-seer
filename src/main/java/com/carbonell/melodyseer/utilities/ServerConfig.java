@@ -4,14 +4,12 @@
  */
 package com.carbonell.melodyseer.utilities;
 
-import java.awt.event.ActionEvent;
-import javax.swing.Timer;
 
 /**
  *
  * @author marta
  */
-public class ServerConfig extends ActionEvent{
+public class ServerConfig {
 
     private String apiUrl;
     private boolean isRunning;
@@ -19,8 +17,8 @@ public class ServerConfig extends ActionEvent{
     private String token;
     private String lastChecked;
 
-    public ServerConfig(Object source, int id, String command) {
-        super(source, id, command);
+    public ServerConfig() {
+
     }
 
     public String getApiUrl() {
