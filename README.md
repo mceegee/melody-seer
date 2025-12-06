@@ -88,3 +88,7 @@ DI02_02
 
 Problema: Fecha en ISO
 Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 
+
+Problema: Llamadas constantes a la API aunque no estemos en la pantalla adecuada
+Solución: isShowing()
+Recursos: https://forums.oracle.com/ords/apexds/post/isvisible-problem-5963

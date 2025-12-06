@@ -65,7 +65,7 @@ public class Main extends javax.swing.JFrame {
 
         downloadPanel = new DownloadPanel(this);
         getContentPane().add(downloadPanel);
-        downloadPanel.setVisible(isLoggedIn);
+        downloadPanel.setVisible(false);
 
         preferencesPanel = new PreferencesPanel(this);
         getContentPane().add(preferencesPanel);
@@ -77,7 +77,13 @@ public class Main extends javax.swing.JFrame {
 
         logInPanel = new LogIn(this);
         getContentPane().add(logInPanel);
-        logInPanel.setVisible(!isLoggedIn);
+        logInPanel.setVisible(false);
+
+        if (!isLoggedIn) {
+            showLogInPanel();
+        } else {
+            showDownloadPanel();
+        }
 
         //       tblDownloads.setModel(new MyFileTableModel(downloads));
         // FOR TESTING 
@@ -166,6 +172,13 @@ public class Main extends javax.swing.JFrame {
         mediaPanel.setVisible(true);
     }
 
+    public void showLogInPanel() {
+        downloadPanel.setVisible(false);
+        preferencesPanel.setVisible(false);
+        mediaPanel.setVisible(false);
+        logInPanel.setVisible(true);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -249,6 +262,7 @@ public class Main extends javax.swing.JFrame {
     private void mniLogoutActionPerformed(java.awt.event.ActionEvent evt) {
         persistentData.setSavedToken(null);
         savePersistentData();
+        showLogInPanel();
     }
 
     // EDIT - PREFERENCES

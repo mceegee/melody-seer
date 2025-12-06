@@ -8,7 +8,6 @@ package wrapperTemp;
 import com.carbonell.melodyseer.utilities.ApiClient;
 import com.carbonell.melodyseer.utilities.Media;
 import com.carbonell.melodyseer.utilities.NewMedia;
-import com.carbonell.melodyseer.utilities.ServerConfig;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +30,12 @@ import java.util.ArrayList;
 public class WrapperApiClient extends JPanel implements Serializable, ActionListener {
 
     private ApiClient apiClient;
-    private ServerConfig serverPollingConfig;
+    
+    private String apiUrl;
+    private boolean isRunning;
+    private int pollingInterval = 1000;
+    private String token;
+    private String lastChecked;
 
     private Timer timer;
     private javax.swing.JLabel lblIcon;
@@ -49,65 +53,87 @@ public class WrapperApiClient extends JPanel implements Serializable, ActionList
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png")));
         add(lblIcon, BorderLayout.CENTER); // https://stackoverflow.com/questions/5604188/how-to-make-java-swing-components-fill-available-space
 
-        timer = new Timer(serverPollingConfig.getPollingInterval(), this);
+        timer = new Timer(pollingInterval, this);
+        timer.start();
+        lastChecked = getNowAsIsoString();
     }
 
     public void loginToApi(String user, String pw) throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
         if (apiUrl != null && !apiUrl.isEmpty()) {
-            serverPollingConfig.setToken(apiClient.login(user, pw));
+            token = apiClient.login(user, pw);
         }
     }
 
     public String getNickName(int id) throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
         if (apiUrl != null && !apiUrl.isEmpty()) {
-            return apiClient.getNickName(id, serverPollingConfig.getToken());
+            return apiClient.getNickName(id, token);
         }
         return null;
+    }
+    
+    public String uploadFileMultipart(File file, String downloadedFromUrl) throws Exception {
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            return apiClient.uploadFileMultipart(file, downloadedFromUrl, token);
+        }
+        return null;
+    }
+    
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
+    public boolean isIsRunning() {
+        return isRunning;
+    }
+
+    public int getPollingInterval() {
+        return pollingInterval;
+    }
+
+    public void setPollingInterval(int pollingInterval) {
+        this.pollingInterval = pollingInterval;
+    }
+
+    public String getLastChecked() {
+        return lastChecked;
     }
 
     // UNNECESSARY for polling
     public List<Media> getAllMedia() throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
         if (apiUrl != null && !apiUrl.isEmpty()) {
-            return apiClient.getAllMedia(serverPollingConfig.getToken());
+            return apiClient.getAllMedia(token);
         }
         return null;
     }
 
     public void downloadMedia(int id, File destFile) throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
         if (apiUrl != null && !apiUrl.isEmpty()) {
-            apiClient.download(id, destFile, serverPollingConfig.getToken());
+            apiClient.download(id, destFile, token);
         }
     }
 
     public List<NewMedia> getMediaSinceLastChecked() throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
+        System.out.println("Holis");
         List<NewMedia> newMedia = new ArrayList<>();
         String timeNowISO = getNowAsIsoString();
         if (apiUrl != null && !apiUrl.isEmpty()) {
             // crear una lista de objetos que contienen media y DateTime
-            List<Media> discoveredMedia = apiClient.getMediaAddedSince(serverPollingConfig.getLastChecked(), serverPollingConfig.getToken());
+            List<Media> discoveredMedia = apiClient.getMediaAddedSince(lastChecked, token);
             for(Media media : discoveredMedia ) {
                 newMedia.add(new NewMedia(media, timeNowISO));
             }           
         }
-        serverPollingConfig.setLastChecked(timeNowISO);
+        lastChecked = timeNowISO;
         return newMedia;
-    }
-
-    public String uploadFileMultipart(File file, String downloadedFromUrl) throws Exception {
-        String apiUrl = serverPollingConfig.getApiUrl();
-        if (apiUrl != null && !apiUrl.isEmpty()) {
-            return apiClient.uploadFileMultipart(file, downloadedFromUrl, serverPollingConfig.getToken());
-        }
-        return null;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(!this.isShowing()) return;
         try {
             List<NewMedia> newMedia = getMediaSinceLastChecked();
             
