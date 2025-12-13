@@ -4,8 +4,6 @@
  */
 package com.carbonell.melodyseer;
 
-import com.carbonell.melodyseer.utilities.ApiClient;
-import com.carbonell.melodyseer.utilities.Usuari;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -25,17 +23,12 @@ public class LogIn extends JPanel {
     private javax.swing.JButton btnLogIn;
 
     private Main jFrameMain;
-    private Usuari user;
-    private ApiClient apiClient;
 
-    private String token;
-    private final String API_URL = "https://dimedianetapi9.azurewebsites.net/";
 
     public LogIn(Main jFrameMain) {
         initComponents();
         setSize(725, 500);
         this.jFrameMain = jFrameMain;
-        apiClient = new ApiClient(API_URL);
     }
 
     private void initComponents() {
@@ -89,13 +82,15 @@ public class LogIn extends JPanel {
     public void btnLogInActionPerformed(java.awt.event.ActionEvent evt) throws Exception {
         String username = txtUser.getText();
         String pwd = new String(pwdPwd.getPassword());
+        String token = null;
+        
         if (username == null || username.isEmpty() || pwd.isEmpty()) {
             throw new IllegalArgumentException("Username or password empty.");
         } else {
             try {
-                token = apiClient.login(username, pwd);
-            } catch (IOException ioe) {
-                JOptionPane.showMessageDialog(this, "Wrong credentials, try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                token = jFrameMain.getMsComponent().loginToApi(username, pwd);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Something went wrong :(", "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         if (token != null && !token.isEmpty()) {

@@ -4,6 +4,7 @@
  */
 package com.carbonell.melodyseer;
 
+import com.carbonell.melody.seer.component.MelodySeerComponent;
 import com.carbonell.melodyseer.utilities.PersistentData;
 import com.carbonell.melodyseer.models.MyFile;
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ public class Main extends javax.swing.JFrame {
         if (!isLoggedIn) {
             showLogInPanel();
         } else {
+            msComponent.setToken(persistentData.getSavedToken());
             showDownloadPanel();
         }
 
@@ -179,6 +181,12 @@ public class Main extends javax.swing.JFrame {
         logInPanel.setVisible(true);
     }
 
+    public MelodySeerComponent getMsComponent() {
+        return msComponent;
+    }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -188,6 +196,7 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        msComponent = new com.carbonell.melody.seer.component.MelodySeerComponent();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mniExit = new javax.swing.JMenuItem();
@@ -204,6 +213,10 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(800, 800));
         getContentPane().setLayout(null);
+
+        msComponent.setApiUrl("https://difreenet9.azurewebsites.net");
+        getContentPane().add(msComponent);
+        msComponent.setBounds(710, 10, 16, 16);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
@@ -311,5 +324,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
+    private com.carbonell.melody.seer.component.MelodySeerComponent msComponent;
     // End of variables declaration//GEN-END:variables
 }
