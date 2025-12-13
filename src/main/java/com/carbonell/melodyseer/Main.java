@@ -216,7 +216,7 @@ public class Main extends javax.swing.JFrame {
 
         msComponent.setApiUrl("https://difreenet9.azurewebsites.net");
         getContentPane().add(msComponent);
-        msComponent.setBounds(710, 10, 16, 16);
+        msComponent.setBounds(710, 700, 16, 16);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N

@@ -16,15 +16,15 @@ import javax.swing.table.AbstractTableModel;
 public class MyFileTableModel extends AbstractTableModel {
 
     private String columns[] = {"Filename", "Size", "MIME type", "Download date"};
-    private Main jFrameMain;
+    private ArrayList<MyFile> listFiles;
 
-    public MyFileTableModel(Main jFrameMain) {
-        this.jFrameMain = jFrameMain;
+    public MyFileTableModel(ArrayList<MyFile> listFiles) {
+        this.listFiles = listFiles;
     }
 
     @Override
     public int getRowCount() {
-        return jFrameMain.getMyFiles().size();
+        return listFiles.size();
     }
 
     @Override
@@ -34,7 +34,6 @@ public class MyFileTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ArrayList<MyFile> listFiles = jFrameMain.getMyFiles();
         try{
         switch (columnIndex) {
             case 0:

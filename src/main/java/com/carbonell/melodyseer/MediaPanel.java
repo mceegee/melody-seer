@@ -4,11 +4,15 @@
  */
 package com.carbonell.melodyseer;
 
+import com.carbonell.melody.seer.component.NewMediaEventObject;
+import com.carbonell.melody.seer.component.OnNewMediaAddedListener;
+import com.carbonell.melody.seer.component.api.Media;
 import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -21,7 +25,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author marta
  */
-public class MediaPanel extends javax.swing.JPanel {
+public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedListener {
 
     Main jFrameMain;
 
@@ -32,6 +36,8 @@ public class MediaPanel extends javax.swing.JPanel {
     int modelRow;
     private TableRowSorter<MyFileTableModel> sorter;
 
+    private ArrayList<MyFile> discoveredFiles = new ArrayList<>();
+    
     /**
      * Creates new form MediaPanel
      */
@@ -40,8 +46,8 @@ public class MediaPanel extends javax.swing.JPanel {
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
 
-        mftm = new MyFileTableModel(jFrameMain);
-        tblDownloads.setModel(mftm);
+        mftm = new MyFileTableModel(jFrameMain.getMyFiles());
+        //tblDownloads.setModel(mftm);
 
         sorter = new TableRowSorter<>(mftm);
         tblDownloads.setRowSorter(sorter);
@@ -57,6 +63,8 @@ public class MediaPanel extends javax.swing.JPanel {
         cmbFormat.setBounds(470, 100, 200, 22);
         add(cmbFormat);
 
+        jFrameMain.getMsComponent().addNewMediaListener(this);
+
         cmbFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 filterFormat();
@@ -71,7 +79,7 @@ public class MediaPanel extends javax.swing.JPanel {
 
         loadFormatFromFile();
         loadDateFromFile();
-        
+
     }
 
     private void loadFormatFromFile() {
@@ -80,7 +88,7 @@ public class MediaPanel extends javax.swing.JPanel {
         for (MyFile f : format) {
             dcbm.addElement(new MyFileMimeModel(f));
         }
-        cmbFormat.setModel(dcbm);
+        //cmbFormat.setModel(dcbm);
     }
 
     private void loadDateFromFile() {
@@ -89,7 +97,7 @@ public class MediaPanel extends javax.swing.JPanel {
         for (MyFile f : date) {
             dlm.addElement(new MyFileDateModel(f));
         }
-        lstDate.setModel(dlm);
+        //lstDate.setModel(dlm);
     }
 
     private void filterFormat() {
@@ -227,7 +235,21 @@ public class MediaPanel extends javax.swing.JPanel {
     void refreshModel() {
         loadFormatFromFile();
         loadDateFromFile();
-        tblDownloads.setModel(new MyFileTableModel(jFrameMain));
+        //tblDownloads.setModel(new MyFileTableModel(jFrameMain.getMyFiles()));
+    }
+
+    @Override
+    public void newMediaAdded(NewMediaEventObject object) {
+        List<Media> newMedia = object.getMedia();
+        
+        for (Media media : newMedia) {
+            discoveredFiles.add(new MyFile(media));
+        }
+        
+        MyFileTableModel newModel = new MyFileTableModel(discoveredFiles);
+        sorter = new TableRowSorter<>(newModel);
+        tblDownloads.setRowSorter(sorter);
+        tblDownloads.setModel(newModel);        
     }
 
 
