@@ -245,7 +245,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         lblLocal.setForeground(new java.awt.Color(255, 51, 204));
         lblLocal.setText("Local");
         add(lblLocal);
-        lblLocal.setBounds(80, 640, 28, 16);
+        lblLocal.setBounds(58, 640, 50, 16);
 
         lblNetwork.setForeground(new java.awt.Color(153, 153, 153));
         lblNetwork.setText("Network");
@@ -279,7 +279,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());;
+        int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
         MyFile currentFile = allFiles.get(selectedRow);
         try {
             if (currentFile.canBeUploaded()) {
