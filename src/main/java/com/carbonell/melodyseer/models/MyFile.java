@@ -13,48 +13,51 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.Serializable;
 
-
 /**
  *
  * @author marta
  */
-public class MyFile implements Serializable{
+public class MyFile implements Serializable {
+
     private File file;
-    private LocalDate downloadDate;
+    private LocalDate downloadDate; 
+    private String downloadedFrom;
     @JsonIgnore
     private Media media;
-    
-    public MyFile(File file)
-    {
+
+    public MyFile(File file, String downloadedFrom) {
         this.file = file;
+        this.downloadedFrom = downloadedFrom;
         downloadDate = LocalDate.now();
     }
-    
-    public MyFile(Media media)
-    {
+
+    public MyFile(Media media) {
         this.media = media;
     }
-    
-    
+
     @Override
     public String toString() {
-    return file.getName();
-}
-
-    public String getFileName() {
-        if(file == null) return media.mediaFileName;
         return file.getName();
     }
 
+    public String getFileName() {
+        if (file == null) {
+            return media.mediaFileName;
+        }
+        return file.getName();
+    }
 
     public long getSize() {
-        if(file == null) return 0;
+        if (file == null) {
+            return 0;
+        }
         return file.length();
     }
 
-
     public String getMime() throws IOException {
-        if(file == null) return media.mediaMimeType;
+        if (file == null) {
+            return media.mediaMimeType;
+        }
         return Files.probeContentType(file.toPath());
     }
 
@@ -62,16 +65,51 @@ public class MyFile implements Serializable{
         this.downloadDate = downloadDate;
     }
 
-
     public String getDownloadDate() {
         // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html
-        if(downloadDate == null) return "";
+        if (downloadDate == null) {
+            return "";
+        }
         return downloadDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-    } 
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
+    }   
+
+    public String getDownloadedFrom() {
+        return downloadedFrom;
+    }
+
+    public void setDownloadedFrom(String downloadedFrom) {
+        this.downloadedFrom = downloadedFrom;
+    }
+
     
     public void delete() {
-        if(file == null) return;
+        if (file == null) {
+            return;
+        }
         file.delete();
     }
-    
+
+    public boolean canBeUploaded() {
+        return file != null && media == null;
+    }
+
+    public boolean canBeDownloaded() {
+        return media != null && file == null;
+    }
 }

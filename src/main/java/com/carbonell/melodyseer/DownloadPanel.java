@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 /**
@@ -324,13 +325,13 @@ public class DownloadPanel extends javax.swing.JPanel {
             if (line.contains("Destination:") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
                 currentFile = new File(lastSavedFile);
-                MyFile newFile = new MyFile(currentFile);
+                MyFile newFile = new MyFile(currentFile, txtUrl.getText());
                 jFrameMain.addNewFile(newFile);
             } else if (line.contains("Merging") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 String stringToRemove = "[Merger] Merging formats into";
                 lastSavedFile = line.substring(line.indexOf(stringToRemove) + stringToRemove.length()).trim();
                 currentFile = new File(lastSavedFile.replace("\"", ""));
-                MyFile newFile = new MyFile(currentFile);
+                MyFile newFile = new MyFile(currentFile, txtUrl.getText());
                 jFrameMain.addNewFile(newFile);
             }
 
@@ -437,6 +438,8 @@ public class DownloadPanel extends javax.swing.JPanel {
         };
         worker.execute();
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;

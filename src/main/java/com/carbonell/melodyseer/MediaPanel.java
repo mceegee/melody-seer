@@ -11,6 +11,7 @@ import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -37,7 +38,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private TableRowSorter<MyFileTableModel> sorter;
 
     private ArrayList<MyFile> discoveredFiles = new ArrayList<>();
-    
+
     /**
      * Creates new form MediaPanel
      */
@@ -143,6 +144,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         btnDeleteItem = new javax.swing.JButton();
         txtFilter = new javax.swing.JTextField();
         btnFilter = new javax.swing.JButton();
+        btnUpload = new javax.swing.JButton();
+        btnDownload = new javax.swing.JButton();
 
         setLayout(null);
 
@@ -210,6 +213,25 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         });
         add(btnFilter);
         btnFilter.setBounds(620, 280, 72, 23);
+
+        btnUpload.setText("Upload");
+        btnUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadActionPerformed(evt);
+            }
+        });
+        add(btnUpload);
+        btnUpload.setBounds(540, 650, 72, 23);
+
+        btnDownload.setText("Download");
+        btnDownload.setToolTipText("");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+        add(btnDownload);
+        btnDownload.setBounds(660, 650, 100, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void hideMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideMediaActionPerformed
@@ -232,6 +254,32 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         sorter.setRowFilter(rf);
     }//GEN-LAST:event_btnFilterActionPerformed
 
+    private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+        int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
+        ArrayList<MyFile> files = jFrameMain.getMyFiles();
+        MyFile currentFile = discoveredFiles.get(selectedRow);
+        try {
+            if (currentFile.canBeUploaded()) {
+               jFrameMain.getMsComponent().uploadFileMultipart(new File(currentFile.getFileName()), currentFile.getDownloadedFrom());
+            }
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_btnUploadActionPerformed
+
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        try {
+            int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
+            ArrayList<MyFile> files = jFrameMain.getMyFiles();
+            MyFile currentFile = discoveredFiles.get(selectedRow);
+            if (currentFile.canBeDownloaded()) {
+                jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, new File(jFrameMain.getSaveToPath() + "\\"+ currentFile.getMedia().mediaFileName));
+            }
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
     void refreshModel() {
         loadFormatFromFile();
         loadDateFromFile();
@@ -241,21 +289,23 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     @Override
     public void newMediaAdded(NewMediaEventObject object) {
         List<Media> newMedia = object.getMedia();
-        
+
         for (Media media : newMedia) {
             discoveredFiles.add(new MyFile(media));
         }
-        
+
         MyFileTableModel newModel = new MyFileTableModel(discoveredFiles);
         sorter = new TableRowSorter<>(newModel);
         tblDownloads.setRowSorter(sorter);
-        tblDownloads.setModel(newModel);        
+        tblDownloads.setModel(newModel);
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteItem;
+    private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnFilter;
+    private javax.swing.JButton btnUpload;
     private javax.swing.JButton hideMedia;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDownloads;
