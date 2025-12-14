@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
@@ -284,6 +285,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         try {
             if (currentFile.canBeUploaded()) {
                 jFrameMain.getMsComponent().uploadFileMultipart(currentFile.getFile(), currentFile.getDownloadedFrom());
+            } else {
+                JOptionPane.showMessageDialog(this, "File not found on your computer", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -296,6 +299,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             MyFile currentFile = allFiles.get(selectedRow);
             if (currentFile.canBeDownloaded()) {
                 jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, new File(jFrameMain.getSaveToPath() + "\\" + currentFile.getMedia().mediaFileName));
+            } else {
+                JOptionPane.showMessageDialog(this, "File cannot be downloaded. You already have this.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             
