@@ -5,6 +5,7 @@
 package com.carbonell.melodyseer.models;
 
 import com.carbonell.melody.seer.component.api.Media;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.io.Serializable;
 public class MyFile implements Serializable {
 
     private File file;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate downloadDate; 
     private String downloadedFrom;
     @JsonIgnore
@@ -33,6 +35,10 @@ public class MyFile implements Serializable {
 
     public MyFile(Media media) {
         this.media = media;
+    }
+    
+    public MyFile() {
+        
     }
 
     @Override

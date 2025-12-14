@@ -36,8 +36,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private MyFileTableModel mftm;
     int modelRow;
     private TableRowSorter<MyFileTableModel> sorter;
-
-    private ArrayList<MyFile> discoveredFiles = new ArrayList<>();
+    private ArrayList<MyFile> allFiles = new ArrayList<>();
+    private ArrayList<Media> discoveredFiles = new ArrayList<>();
 
     /**
      * Creates new form MediaPanel
@@ -47,8 +47,12 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
 
-        mftm = new MyFileTableModel(jFrameMain.getMyFiles());
-        //tblDownloads.setModel(mftm);
+        ArrayList<MyFile> localFiles = jFrameMain.getMyFiles();
+        for (MyFile localFile : localFiles) {
+            allFiles.add(localFile);
+        }
+        mftm = new MyFileTableModel(allFiles);
+        tblDownloads.setModel(mftm);
 
         sorter = new TableRowSorter<>(mftm);
         tblDownloads.setRowSorter(sorter);
@@ -255,35 +259,44 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
-        ArrayList<MyFile> files = jFrameMain.getMyFiles();
-        MyFile currentFile = discoveredFiles.get(selectedRow);
+        int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());;
+        MyFile currentFile = allFiles.get(selectedRow);
         try {
             if (currentFile.canBeUploaded()) {
-               jFrameMain.getMsComponent().uploadFileMultipart(new File(currentFile.getFileName()), currentFile.getDownloadedFrom());
+                jFrameMain.getMsComponent().uploadFileMultipart(currentFile.getFile(), currentFile.getDownloadedFrom());
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         try {
             int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
-            ArrayList<MyFile> files = jFrameMain.getMyFiles();
-            MyFile currentFile = discoveredFiles.get(selectedRow);
+            MyFile currentFile = allFiles.get(selectedRow);
             if (currentFile.canBeDownloaded()) {
-                jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, new File(jFrameMain.getSaveToPath() + "\\"+ currentFile.getMedia().mediaFileName));
+                jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, new File(jFrameMain.getSaveToPath() + "\\" + currentFile.getMedia().mediaFileName));
             }
         } catch (Exception e) {
-
+            
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     void refreshModel() {
         loadFormatFromFile();
         loadDateFromFile();
-        //tblDownloads.setModel(new MyFileTableModel(jFrameMain.getMyFiles()));
+
+        allFiles.clear();
+
+        allFiles.addAll(jFrameMain.getMyFiles());
+        for (Media media : discoveredFiles) {
+            allFiles.add(new MyFile(media));
+        }
+
+        MyFileTableModel newModel = new MyFileTableModel(allFiles);
+        sorter = new TableRowSorter<>(newModel);
+        tblDownloads.setRowSorter(sorter);
+        tblDownloads.setModel(newModel);
     }
 
     @Override
@@ -291,13 +304,10 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         List<Media> newMedia = object.getMedia();
 
         for (Media media : newMedia) {
-            discoveredFiles.add(new MyFile(media));
+            discoveredFiles.add(media);
         }
 
-        MyFileTableModel newModel = new MyFileTableModel(discoveredFiles);
-        sorter = new TableRowSorter<>(newModel);
-        tblDownloads.setRowSorter(sorter);
-        tblDownloads.setModel(newModel);
+        refreshModel();
     }
 
 

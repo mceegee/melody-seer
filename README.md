@@ -84,7 +84,7 @@ Solución: uso de Pattern.quote
 
 Recursos: https://stackoverflow.com/questions/79557037/java-jtable-rowfilter-doesnt-work-properly 
 
-DI02_02
+### DI02_02
 
 Problema: Fecha en ISO
 Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 
@@ -92,3 +92,9 @@ Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-
 Problema: Llamadas constantes a la API aunque no estemos en la pantalla adecuada
 Solución: isShowing()
 Recursos: https://forums.oracle.com/ords/apexds/post/isvisible-problem-5963
+
+### DI02_03 
+
+Problema: Excepción al deserializar la fecha
+Solución: anotación @JsonFormat
+Recursos: https://stackoverflow.com/questions/40327970/deserialize-java-8-localdatetime-with-jacksonmapper 

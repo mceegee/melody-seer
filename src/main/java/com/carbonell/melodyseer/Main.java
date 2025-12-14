@@ -22,7 +22,7 @@ public class Main extends javax.swing.JFrame {
     private String ytdlp_path = System.getProperty("user.home") + "\\yt-dlp\\yt-dlp.exe";
     private String saveToPath = System.getenv("APPDATA");
     private String saveToPathTemp = saveToPath;
-    private String downloadedMediaInfoPath = System.getenv("APPDATA") + "metadata.json";
+    private String downloadedMediaInfoPath = System.getenv("APPDATA") + "\\" + "metadata.json";
     private String lastSavedFile;
     private String selectedSpeed = "";
     private ArrayList<MyFile> myFiles;
@@ -87,9 +87,6 @@ public class Main extends javax.swing.JFrame {
             showDownloadPanel();
         }
 
-        //       tblDownloads.setModel(new MyFileTableModel(downloads));
-        // FOR TESTING 
-        // onDownloadedFile(new MyFile(new File("C:\\Users\\marta\\flutter\\.gitattributes")));
     }
 
     public ArrayList<MyFile> getMyFiles() {

@@ -322,8 +322,9 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
             txaOutput.append(line + "\n");
 
-            if (line.contains("Destination:") && line.toLowerCase().contains("." + extension.toLowerCase())) {
-                lastSavedFile = line.substring(line.indexOf("Destination:") + "Destination:".length()).trim();
+            if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
+                lastSavedFile = line.split("\" to \"")[1];
+                lastSavedFile = lastSavedFile.substring(0, lastSavedFile.length() - 1);
                 currentFile = new File(lastSavedFile);
                 MyFile newFile = new MyFile(currentFile, txtUrl.getText());
                 jFrameMain.addNewFile(newFile);
