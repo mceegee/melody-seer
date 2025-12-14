@@ -4,7 +4,7 @@
  */
 package com.carbonell.melodyseer.models;
 
-import com.carbonell.melodyseer.Main;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
@@ -34,31 +34,45 @@ public class MyFileTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        try{
-        switch (columnIndex) {
-            case 0:
-                return listFiles.get(rowIndex).getFileName();
-            case 1:
-                return listFiles.get(rowIndex).getSize();
-            case 2:
-                return listFiles.get(rowIndex).getMime();
-            case 3:
-                return listFiles.get(rowIndex).getDownloadDate();
-            default:
-                System.out.println("S'ha produit una errada");
-        }
+        try {
+            switch (columnIndex) {
+                case 0:
+                    return listFiles.get(rowIndex).getFileName();
+                case 1:
+                    return listFiles.get(rowIndex).getSize();
+                case 2:
+                    return listFiles.get(rowIndex).getMime();
+                case 3:
+                    return listFiles.get(rowIndex).getDownloadDate();
+                default:
+                    System.out.println("S'ha produit una errada");
+            }
         } catch (IOException ioe) {
-            
+
         }
         return null;
-        
+
     }
 
     @Override
     public String getColumnName(int column) {
-        return columns[column];        
+        return columns[column];
     }
-    
-    
+
+    @Override
+    public Class getColumnClass(int c) {
+
+        return String.class;
+    }
+
+    public Color getRowColor(int row) {
+        MyFile currentFile = listFiles.get(row);
+        if (currentFile.canBeDownloaded()) {
+            return Color.LIGHT_GRAY;
+        } else if (currentFile.canBeUploaded()) {
+            return Color.MAGENTA;
+        }
+        return Color.ORANGE;
+    }
 
 }

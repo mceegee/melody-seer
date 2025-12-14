@@ -11,6 +11,7 @@ import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
+import com.carbonell.melodyseer.utilities.MyTableRowRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
         loadFormatFromFile();
         loadDateFromFile();
-
+        
+        tblDownloads.setDefaultRenderer(String.class, new MyTableRowRenderer());
     }
 
     private void loadFormatFromFile() {

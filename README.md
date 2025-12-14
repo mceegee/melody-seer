@@ -87,14 +87,28 @@ Recursos: https://stackoverflow.com/questions/79557037/java-jtable-rowfilter-doe
 ### DI02_02
 
 Problema: Fecha en ISO
+
 Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 
 
 Problema: Llamadas constantes a la API aunque no estemos en la pantalla adecuada
+
 Solución: isShowing()
+
 Recursos: https://forums.oracle.com/ords/apexds/post/isvisible-problem-5963
 
 ### DI02_03 
 
 Problema: Excepción al deserializar la fecha
+
 Solución: anotación @JsonFormat
+
 Recursos: https://stackoverflow.com/questions/40327970/deserialize-java-8-localdatetime-with-jacksonmapper 
+
+
+Problema: Diferentes colores según origen de los archivos
+
+Solución: Creación de clase TableCellRenderer
+
+Recursos: https://stackoverflow.com/questions/3875607/change-the-background-color-of-a-row-in-a-jtable
+http://stackoverflow.com/questions/45925416/confusion-over-a-jtables-setdefaultrenderer-method 
+https://stackoverflow.com/questions/18167512/java-jtable-sort-with-tablecellrenderer 
