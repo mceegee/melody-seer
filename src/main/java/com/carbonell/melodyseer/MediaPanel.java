@@ -152,6 +152,9 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         btnFilter = new javax.swing.JButton();
         btnUpload = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
+        lblLocal = new javax.swing.JLabel();
+        lblNetwork = new javax.swing.JLabel();
+        lblBoth = new javax.swing.JLabel();
 
         setLayout(null);
 
@@ -238,6 +241,21 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         });
         add(btnDownload);
         btnDownload.setBounds(660, 650, 100, 23);
+
+        lblLocal.setForeground(new java.awt.Color(255, 51, 204));
+        lblLocal.setText("Local");
+        add(lblLocal);
+        lblLocal.setBounds(80, 640, 28, 16);
+
+        lblNetwork.setForeground(new java.awt.Color(153, 153, 153));
+        lblNetwork.setText("Network");
+        add(lblNetwork);
+        lblNetwork.setBounds(130, 640, 50, 16);
+
+        lblBoth.setForeground(new java.awt.Color(255, 102, 0));
+        lblBoth.setText("Both");
+        add(lblBoth);
+        lblBoth.setBounds(200, 640, 25, 16);
     }// </editor-fold>//GEN-END:initComponents
 
     private void hideMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideMediaActionPerformed
@@ -340,10 +358,13 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnUpload;
     private javax.swing.JButton hideMedia;
+    private javax.swing.JLabel lblBoth;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDownloads;
     private javax.swing.JLabel lblFiles;
     private javax.swing.JLabel lblFormat;
+    private javax.swing.JLabel lblLocal;
+    private javax.swing.JLabel lblNetwork;
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
     private javax.swing.JTextField txtFilter;
