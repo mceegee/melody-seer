@@ -290,7 +290,20 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
         allFiles.addAll(jFrameMain.getMyFiles());
         for (Media media : discoveredFiles) {
-            allFiles.add(new MyFile(media));
+            MyFile matchingFile = null;
+            
+            for (MyFile localFile : jFrameMain.getMyFiles()) {
+                if(media.mediaFileName.equals(localFile.getFileName())) {
+                    matchingFile = localFile;
+                }
+            }
+            
+            if(matchingFile != null) {
+                matchingFile.setMedia(media);
+            }
+            else {
+                allFiles.add(new MyFile(media));
+            }            
         }
 
         MyFileTableModel newModel = new MyFileTableModel(allFiles);
@@ -301,9 +314,17 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
     @Override
     public void newMediaAdded(NewMediaEventObject object) {
-        List<Media> newMedia = object.getMedia();
-
+        List<Media> newMedia = object.getMedia();        
+        
         for (Media media : newMedia) {
+            boolean mediaExists = false;
+            for (Media discoveredFile : discoveredFiles) {
+                if(media.mediaFileName.equals(discoveredFile.mediaFileName)) {
+                    mediaExists = true;
+                    break;
+                }
+            }
+            if(mediaExists) continue;
             discoveredFiles.add(media);
         }
 
