@@ -4,8 +4,11 @@
  */
 package com.carbonell.melodyseer;
 
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -23,10 +26,8 @@ public class LogIn extends JPanel {
 
     private Main jFrameMain;
 
-
     public LogIn(Main jFrameMain) {
         initComponents();
-        setSize(725, 500);
         this.jFrameMain = jFrameMain;
     }
 
@@ -39,32 +40,37 @@ public class LogIn extends JPanel {
         lblRememberMe = new javax.swing.JLabel();
         btnLogIn = new javax.swing.JButton();
 
-        setLayout(null);
+        MigLayout layout = new MigLayout(
+                "wrap 2, align center center", 
+                "[right][fill]",
+                "[]10[]10[]10[]20[]"
+        );
+        setLayout(layout);
 
         lblUser.setText("Username:");
-        lblUser.setBounds(250, 60, 70, 50);
+        //lblUser.setBounds(250, 60, 70, 50);
         add(lblUser);
 
-        txtUser.setBounds(350, 60, 150, 30);
+        //txtUser.setBounds(350, 60, 150, 30);
         add(txtUser);
 
-        lblPwd.setBounds(250, 150, 70, 50);
+        //lblPwd.setBounds(250, 150, 70, 50);
         lblPwd.setText("Password:");
         add(lblPwd);
 
-        pwdPwd.setBounds(350, 150, 150, 30);
+        //pwdPwd.setBounds(350, 150, 150, 30);
         add(pwdPwd);
 
-        chkRememberMe.setBounds(250, 220, 20, 20);
+        //chkRememberMe.setBounds(250, 220, 20, 20);
         add(chkRememberMe);
 
-        lblRememberMe.setBounds(280, 220, 250, 30);
+        //lblRememberMe.setBounds(280, 220, 250, 30);
         lblRememberMe.setText("Remember username and password");
         add(lblRememberMe);
 
-        btnLogIn.setBounds(410, 250, 75, 40);
+        //btnLogIn.setBounds(410, 250, 75, 40);
         btnLogIn.setText("Log in");
-        add(btnLogIn);
+        add(btnLogIn, "span 2, center");
 
         btnLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,7 +88,7 @@ public class LogIn extends JPanel {
         String username = txtUser.getText();
         String pwd = new String(pwdPwd.getPassword());
         String token = null;
-        
+
         if (username == null || username.isEmpty() || pwd.isEmpty()) {
             throw new IllegalArgumentException("Username or password empty.");
         } else {

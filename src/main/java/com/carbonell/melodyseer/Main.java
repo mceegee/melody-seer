@@ -10,6 +10,9 @@ import com.carbonell.melodyseer.models.MyFile;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import com.carbonell.melodyseer.utilities.FileManager;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -35,6 +38,8 @@ public class Main extends javax.swing.JFrame {
     private LogIn logInPanel;
 
     private javax.swing.JMenuItem mniLogout;
+    
+    private CardLayout cl;
 
     /**
      * Creates new form Main
@@ -54,6 +59,12 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setSize(800, 800);
         setLocationRelativeTo(null);
+        cl = new CardLayout();
+        getContentPane().setLayout(cl);
+        
+        // !!!!!!!!!!!!!!!!!!!!!!!
+        getContentPane().remove(msComponent);
+        // !!!!!!!!!!!!!!!!!!!!!!!
 
         mniLogout = new javax.swing.JMenuItem();
         mniLogout.setText("Log out");
@@ -65,19 +76,19 @@ public class Main extends javax.swing.JFrame {
         mnuFile.add(mniLogout);
 
         downloadPanel = new DownloadPanel(this);
-        getContentPane().add(downloadPanel);
+        getContentPane().add(downloadPanel, "downloadPanel");
         downloadPanel.setVisible(false);
 
         preferencesPanel = new PreferencesPanel(this);
-        getContentPane().add(preferencesPanel);
+        getContentPane().add(preferencesPanel, "preferencesPanel");
         preferencesPanel.setVisible(false);
 
         mediaPanel = new MediaPanel(this);
-        getContentPane().add(mediaPanel);
+        getContentPane().add(mediaPanel, "mediaPanel");
         mediaPanel.setVisible(false);
 
         logInPanel = new LogIn(this);
-        getContentPane().add(logInPanel);
+        getContentPane().add(logInPanel, "loginPanel");
         logInPanel.setVisible(false);
 
         if (!isLoggedIn) {
@@ -154,28 +165,32 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void showPreferencesPanel() {
-        downloadPanel.setVisible(false);
-        mediaPanel.setVisible(false);
-        preferencesPanel.setVisible(true);
+        //downloadPanel.setVisible(false);
+        //mediaPanel.setVisible(false);
+        //preferencesPanel.setVisible(true);
+        cl.show(getContentPane(), "preferencesPanel");
     }
 
     public void showDownloadPanel() {
-        downloadPanel.setVisible(true);
-        preferencesPanel.setVisible(false);
-        mediaPanel.setVisible(false);
+        //downloadPanel.setVisible(true);
+        //preferencesPanel.setVisible(false);
+        //mediaPanel.setVisible(false);
+        cl.show(getContentPane(), "downloadPanel");
     }
 
     public void showMediaPanel() {
-        downloadPanel.setVisible(false);
-        preferencesPanel.setVisible(false);
-        mediaPanel.setVisible(true);
+        //downloadPanel.setVisible(false);
+        //preferencesPanel.setVisible(false);
+        //mediaPanel.setVisible(true);
+        cl.show(getContentPane(), "mediaPanel");
     }
 
     public void showLogInPanel() {
-        downloadPanel.setVisible(false);
-        preferencesPanel.setVisible(false);
-        mediaPanel.setVisible(false);
-        logInPanel.setVisible(true);
+//        downloadPanel.setVisible(false);
+//        preferencesPanel.setVisible(false);
+//        mediaPanel.setVisible(false);
+//        logInPanel.setVisible(true);
+        cl.show(getContentPane(), "loginPanel");
     }
 
     public MelodySeerComponent getMsComponent() {

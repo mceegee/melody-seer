@@ -3,6 +3,52 @@
 
 *Ad-free music and videos*
 
+### Unidad de Trabajo 4 - Usabilidad
+
+**1. Aspecto, color, iconos, texto, distribución de los componentes.**
+
+     - **DISTRIBUCIÓN DE LOS COMPONENTES:** 
+     Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
+          - Card Layout: Para poder ir mostrando los diferentes paneles sin que estos ocupen espacio
+          - MigLayout: Para distribuir los elementos en la rejilla. En este caso, hemos consultado los siguientes documentos
+          http://www.miglayout.com/
+          http://www.migcalendar.com/miglayout/mavensite/docs/cheatsheet.pdf 
+          http://www.miglayout.com/QuickStart.pdf 
+**2. Affordance. Feedback. Restricciones.**
+**3. Otras mejoras en la usabilidad**
+**4. Gestión de errores**
+
+### Unidad de Trabajo 3 - Creación de componentes visuales
+
+### DI02_02
+
+Problema: Fecha en ISO
+
+Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 
+
+Problema: Llamadas constantes a la API aunque no estemos en la pantalla adecuada
+
+Solución: isShowing()
+
+Recursos: https://forums.oracle.com/ords/apexds/post/isvisible-problem-5963
+
+### DI02_03 
+
+Problema: Excepción al deserializar la fecha
+
+Solución: anotación @JsonFormat
+
+Recursos: https://stackoverflow.com/questions/40327970/deserialize-java-8-localdatetime-with-jacksonmapper 
+
+
+Problema: Diferentes colores según origen de los archivos
+
+Solución: Creación de clase TableCellRenderer
+
+Recursos: https://stackoverflow.com/questions/3875607/change-the-background-color-of-a-row-in-a-jtable
+http://stackoverflow.com/questions/45925416/confusion-over-a-jtables-setdefaultrenderer-method 
+https://stackoverflow.com/questions/18167512/java-jtable-sort-with-tablecellrenderer 
+
 ### Unidad de Trabajo 1 - Confección de interfaces de usuario
 
 **MAIN**
@@ -59,7 +105,6 @@ Solución: método dispose()
 Recursos: 
 Stack Overflow:  https://stackoverflow.com/questions/6969164/button-for-closing-a-jdialog 
 
-
 ### DI01_02
 
 * Problema: serialización de los objetos
@@ -84,31 +129,3 @@ Solución: uso de Pattern.quote
 
 Recursos: https://stackoverflow.com/questions/79557037/java-jtable-rowfilter-doesnt-work-properly 
 
-### DI02_02
-
-Problema: Fecha en ISO
-
-Recursos: https://stackoverflow.com/questions/3914404/how-to-get-current-moment-in-iso-8601-format-with-date-hour-and-minute 
-
-Problema: Llamadas constantes a la API aunque no estemos en la pantalla adecuada
-
-Solución: isShowing()
-
-Recursos: https://forums.oracle.com/ords/apexds/post/isvisible-problem-5963
-
-### DI02_03 
-
-Problema: Excepción al deserializar la fecha
-
-Solución: anotación @JsonFormat
-
-Recursos: https://stackoverflow.com/questions/40327970/deserialize-java-8-localdatetime-with-jacksonmapper 
-
-
-Problema: Diferentes colores según origen de los archivos
-
-Solución: Creación de clase TableCellRenderer
-
-Recursos: https://stackoverflow.com/questions/3875607/change-the-background-color-of-a-row-in-a-jtable
-http://stackoverflow.com/questions/45925416/confusion-over-a-jtables-setdefaultrenderer-method 
-https://stackoverflow.com/questions/18167512/java-jtable-sort-with-tablecellrenderer 
