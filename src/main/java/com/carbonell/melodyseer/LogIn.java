@@ -7,7 +7,6 @@ package com.carbonell.melodyseer;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -55,27 +54,20 @@ public class LogIn extends JPanel {
         lblErrorMessage.setVisible(false);
 
         lblUser.setText("Username:");
-        //lblUser.setBounds(250, 60, 70, 50);
         add(lblUser);
 
-        //txtUser.setBounds(350, 60, 150, 30);
         add(txtUser);
 
-        //lblPwd.setBounds(250, 150, 70, 50);
         lblPwd.setText("Password:");
         add(lblPwd);
 
-        //pwdPwd.setBounds(350, 150, 150, 30);
         add(pwdPwd);
 
-        //chkRememberMe.setBounds(250, 220, 20, 20);
         add(chkRememberMe);
 
-        //lblRememberMe.setBounds(280, 220, 250, 30);
         lblRememberMe.setText("Remember username and password");
         add(lblRememberMe);
 
-        //btnLogIn.setBounds(410, 250, 75, 40);
         btnLogIn.setText("Log in");
         add(btnLogIn, "span 2, center");
         btnLogIn.setEnabled(false);

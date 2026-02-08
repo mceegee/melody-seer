@@ -14,9 +14,13 @@
           http://www.miglayout.com/
           http://www.migcalendar.com/miglayout/mavensite/docs/cheatsheet.pdf 
           http://www.miglayout.com/QuickStart.pdf 
+
+
 **Affordance. Feedback. Restricciones.**
+
      2. FEEDBACK:
      - Se añade mensaje de fallo de login en color rojo. Se elimina el JOptionPane para hacer menos intrusivo el feedback.
+
 
      3. RESTRICCIONES: 
      - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 
