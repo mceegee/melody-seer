@@ -60,11 +60,8 @@ public class Main extends javax.swing.JFrame {
         setSize(800, 800);
         setLocationRelativeTo(null);
         cl = new CardLayout();
-        getContentPane().setLayout(cl);
+        pnlContent.setLayout(cl);
         
-        // !!!!!!!!!!!!!!!!!!!!!!!
-        getContentPane().remove(msComponent);
-        // !!!!!!!!!!!!!!!!!!!!!!!
 
         mniLogout = new javax.swing.JMenuItem();
         mniLogout.setText("Log out");
@@ -76,20 +73,16 @@ public class Main extends javax.swing.JFrame {
         mnuFile.add(mniLogout);
 
         downloadPanel = new DownloadPanel(this);
-        getContentPane().add(downloadPanel, "downloadPanel");
-        downloadPanel.setVisible(false);
+        pnlContent.add(downloadPanel, "downloadPanel");
 
         preferencesPanel = new PreferencesPanel(this);
-        getContentPane().add(preferencesPanel, "preferencesPanel");
-        preferencesPanel.setVisible(false);
+        pnlContent.add(preferencesPanel, "preferencesPanel");
 
         mediaPanel = new MediaPanel(this);
-        getContentPane().add(mediaPanel, "mediaPanel");
-        mediaPanel.setVisible(false);
+        pnlContent.add(mediaPanel, "mediaPanel");
 
         logInPanel = new LogIn(this);
-        getContentPane().add(logInPanel, "loginPanel");
-        logInPanel.setVisible(false);
+        pnlContent.add(logInPanel, "loginPanel");
 
         if (!isLoggedIn) {
             showLogInPanel();
@@ -168,21 +161,21 @@ public class Main extends javax.swing.JFrame {
         //downloadPanel.setVisible(false);
         //mediaPanel.setVisible(false);
         //preferencesPanel.setVisible(true);
-        cl.show(getContentPane(), "preferencesPanel");
+        cl.show(pnlContent, "preferencesPanel");
     }
 
     public void showDownloadPanel() {
         //downloadPanel.setVisible(true);
         //preferencesPanel.setVisible(false);
         //mediaPanel.setVisible(false);
-        cl.show(getContentPane(), "downloadPanel");
+        cl.show(pnlContent, "downloadPanel");
     }
 
     public void showMediaPanel() {
         //downloadPanel.setVisible(false);
         //preferencesPanel.setVisible(false);
         //mediaPanel.setVisible(true);
-        cl.show(getContentPane(), "mediaPanel");
+        cl.show(pnlContent, "mediaPanel");
     }
 
     public void showLogInPanel() {
@@ -190,7 +183,7 @@ public class Main extends javax.swing.JFrame {
 //        preferencesPanel.setVisible(false);
 //        mediaPanel.setVisible(false);
 //        logInPanel.setVisible(true);
-        cl.show(getContentPane(), "loginPanel");
+        cl.show(pnlContent, "loginPanel");
     }
 
     public MelodySeerComponent getMsComponent() {
@@ -209,6 +202,7 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         msComponent = new com.carbonell.melody.seer.component.MelodySeerComponent();
+        pnlContent = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mniExit = new javax.swing.JMenuItem();
@@ -229,6 +223,10 @@ public class Main extends javax.swing.JFrame {
         msComponent.setApiUrl("https://difreenet9.azurewebsites.net");
         getContentPane().add(msComponent);
         msComponent.setBounds(710, 700, 16, 16);
+
+        pnlContent.setLayout(null);
+        getContentPane().add(pnlContent);
+        pnlContent.setBounds(0, 0, 800, 800);
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
@@ -337,5 +335,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
     private com.carbonell.melody.seer.component.MelodySeerComponent msComponent;
+    private javax.swing.JPanel pnlContent;
     // End of variables declaration//GEN-END:variables
 }

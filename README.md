@@ -5,18 +5,26 @@
 
 ### Unidad de Trabajo 4 - Usabilidad
 
-**1. Aspecto, color, iconos, texto, distribución de los componentes.**
+**Aspecto, color, iconos, texto, distribución de los componentes.**
 
-     - **DISTRIBUCIÓN DE LOS COMPONENTES:** 
+     4. DISTRIBUCIÓN DE LOS COMPONENTES:
      Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
           - Card Layout: Para poder ir mostrando los diferentes paneles sin que estos ocupen espacio
           - MigLayout: Para distribuir los elementos en la rejilla. En este caso, hemos consultado los siguientes documentos
           http://www.miglayout.com/
           http://www.migcalendar.com/miglayout/mavensite/docs/cheatsheet.pdf 
           http://www.miglayout.com/QuickStart.pdf 
-**2. Affordance. Feedback. Restricciones.**
-**3. Otras mejoras en la usabilidad**
-**4. Gestión de errores**
+**Affordance. Feedback. Restricciones.**
+     2. FEEDBACK:
+     - Se añade mensaje de fallo de login en color rojo. Se elimina el JOptionPane para hacer menos intrusivo el feedback.
+
+     3. RESTRICCIONES: 
+     - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 
+       En caso de borrar el contenido, se vuelve a deshabilitar el botón. Implementación mediante KeyAdapter. 
+
+**Otras mejoras en la usabilidad**
+
+**Gestión de errores**
 
 ### Unidad de Trabajo 3 - Creación de componentes visuales
 

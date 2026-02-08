@@ -4,10 +4,11 @@
  */
 package com.carbonell.melodyseer;
 
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -16,13 +17,14 @@ import net.miginfocom.swing.MigLayout;
  */
 public class LogIn extends JPanel {
 
-    private javax.swing.JTextField txtUser;
-    private javax.swing.JPasswordField pwdPwd; // https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing 
-    private javax.swing.JLabel lblUser;
-    private javax.swing.JLabel lblPwd;
-    private javax.swing.JCheckBox chkRememberMe;
-    private javax.swing.JLabel lblRememberMe;
-    private javax.swing.JButton btnLogIn;
+    private JTextField txtUser;
+    private JPasswordField pwdPwd; // https://stackoverflow.com/questions/19755259/hide-show-password-in-a-jtextfield-java-swing 
+    private JLabel lblUser;
+    private JLabel lblPwd;
+    private JCheckBox chkRememberMe;
+    private JLabel lblRememberMe;
+    private JButton btnLogIn;
+    private JLabel lblErrorMessage;
 
     private Main jFrameMain;
 
@@ -32,20 +34,25 @@ public class LogIn extends JPanel {
     }
 
     private void initComponents() {
-        txtUser = new javax.swing.JTextField();
-        pwdPwd = new javax.swing.JPasswordField();
-        lblUser = new javax.swing.JLabel();
-        lblPwd = new javax.swing.JLabel();
-        chkRememberMe = new javax.swing.JCheckBox();
-        lblRememberMe = new javax.swing.JLabel();
-        btnLogIn = new javax.swing.JButton();
+        txtUser = new JTextField();
+        pwdPwd = new JPasswordField();
+        lblUser = new JLabel();
+        lblPwd = new JLabel();
+        chkRememberMe = new JCheckBox();
+        lblRememberMe = new JLabel();
+        btnLogIn = new JButton();
+        lblErrorMessage = new JLabel();
 
         MigLayout layout = new MigLayout(
-                "wrap 2, align center center", 
+                "wrap 2, align center top",
                 "[right][fill]",
-                "[]10[]10[]10[]20[]"
+                "[]10[]10[]10[]10[]20[]"
         );
         setLayout(layout);
+        lblErrorMessage.setText("Username and password do not match. Try again.");
+        lblErrorMessage.setForeground(Color.RED);
+        add(lblErrorMessage, "span 2, center");
+        lblErrorMessage.setVisible(false);
 
         lblUser.setText("Username:");
         //lblUser.setBounds(250, 60, 70, 50);
@@ -71,6 +78,7 @@ public class LogIn extends JPanel {
         //btnLogIn.setBounds(410, 250, 75, 40);
         btnLogIn.setText("Log in");
         add(btnLogIn, "span 2, center");
+        btnLogIn.setEnabled(false);
 
         btnLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +90,20 @@ public class LogIn extends JPanel {
             }
         });
 
+        KeyAdapter keyListener = new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (txtUser.getText().isEmpty() || pwdPwd.getPassword().length == 0) {
+                    btnLogIn.setEnabled(false);
+                } else {
+                    btnLogIn.setEnabled(true);
+                }
+            }
+        };
+
+        txtUser.addKeyListener(keyListener);
+        pwdPwd.addKeyListener(keyListener);
+
     }
 
     public void btnLogInActionPerformed(java.awt.event.ActionEvent evt) throws Exception {
@@ -90,12 +112,13 @@ public class LogIn extends JPanel {
         String token = null;
 
         if (username == null || username.isEmpty() || pwd.isEmpty()) {
+            lblErrorMessage.setVisible(true);
             throw new IllegalArgumentException("Username or password empty.");
         } else {
             try {
                 token = jFrameMain.getMsComponent().loginToApi(username, pwd);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Something went wrong :(", "Login Error", JOptionPane.ERROR_MESSAGE);
+                lblErrorMessage.setVisible(true);
             }
         }
         if (token != null && !token.isEmpty()) {
@@ -104,8 +127,10 @@ public class LogIn extends JPanel {
                 jFrameMain.savePersistentData();
             }
             this.setVisible(false);
+            lblErrorMessage.setVisible(false);
             jFrameMain.showDownloadPanel();
-
+        } else {
+            lblErrorMessage.setVisible(true);
         }
 
     }
