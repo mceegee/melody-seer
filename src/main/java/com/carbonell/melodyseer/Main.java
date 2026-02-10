@@ -10,9 +10,7 @@ import com.carbonell.melodyseer.models.MyFile;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import com.carbonell.melodyseer.utilities.FileManager;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import net.miginfocom.swing.MigLayout;
 
 /**
  *

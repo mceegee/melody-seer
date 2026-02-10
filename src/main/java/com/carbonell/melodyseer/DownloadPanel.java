@@ -37,6 +37,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         setSize(800, 800);
         this.jFrameMain = jFrameMain;
         cmbAudioFormat.setVisible(false);
+        txtSaveTo.setText(jFrameMain.getSaveToPath());
     }
 
     /**
@@ -66,6 +67,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbAudioFormat = new javax.swing.JComboBox<>();
         btnDwldFiles = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        txtSaveTo = new javax.swing.JTextField();
 
         setLayout(null);
 
@@ -116,11 +118,11 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(lblChoose);
         lblChoose.setBounds(40, 110, 130, 16);
 
-        lblSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         lblSaveTo.setText("Save to...");
         add(lblSaveTo);
         lblSaveTo.setBounds(40, 200, 90, 20);
 
+        btnSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         btnSaveTo.setText("Choose");
         btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,7 +130,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             }
         });
         add(btnSaveTo);
-        btnSaveTo.setBounds(150, 200, 75, 23);
+        btnSaveTo.setBounds(630, 210, 100, 23);
 
         grpFormat.add(radVideo);
         radVideo.setSelected(true);
@@ -182,6 +184,14 @@ public class DownloadPanel extends javax.swing.JPanel {
         jLabel1.setText("Default format: mp4");
         add(jLabel1);
         jLabel1.setBounds(40, 140, 130, 16);
+
+        txtSaveTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSaveToActionPerformed(evt);
+            }
+        });
+        add(txtSaveTo);
+        txtSaveTo.setBounds(200, 200, 410, 30);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -201,6 +211,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             File f = chooser.getSelectedFile();
             String saveToPath = f.getAbsolutePath();
             jFrameMain.setSaveToPath(saveToPath);
+            txtSaveTo.setText(jFrameMain.getSaveToPath());
             System.out.println(saveToPath);
         }
     }//GEN-LAST:event_btnSaveToActionPerformed
@@ -237,6 +248,10 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbAudioFormat.setVisible(true);
         cmbVideoFormat.setVisible(false);
     }//GEN-LAST:event_radMp3ActionPerformed
+
+    private void txtSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaveToActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSaveToActionPerformed
 
     private void downloadVideo() {
         // Código proporcionado por el profesor
@@ -460,6 +475,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JRadioButton radVideo;
     private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTextArea txaOutput;
+    private javax.swing.JTextField txtSaveTo;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 }

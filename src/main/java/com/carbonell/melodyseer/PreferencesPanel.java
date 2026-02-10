@@ -24,7 +24,8 @@ public class PreferencesPanel extends javax.swing.JPanel {
         initComponents();
         setSize(725, 200);
         this.jFrameMain = jFrameMain;
-
+        txtYtDlpPath.setText(jFrameMain.getYtdlp_path());
+        txtTemporaryFiles.setText(jFrameMain.getSaveToPathTemp());
     }
     
     
@@ -40,11 +41,13 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
         lblTempFiles = new javax.swing.JLabel();
         btnTempFiles = new javax.swing.JButton();
-        btnHide = new javax.swing.JButton();
         lblLimitDwld = new javax.swing.JLabel();
         cmbLimitDwld = new javax.swing.JComboBox<>();
         lblChoosePath = new javax.swing.JLabel();
         btnChoosePath = new javax.swing.JButton();
+        lblGoBack = new javax.swing.JLabel();
+        txtYtDlpPath = new javax.swing.JTextField();
+        txtTemporaryFiles = new javax.swing.JTextField();
 
         setLayout(null);
 
@@ -52,6 +55,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
         add(lblTempFiles);
         lblTempFiles.setBounds(60, 110, 180, 16);
 
+        btnTempFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         btnTempFiles.setText("Choose");
         btnTempFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,17 +63,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
             }
         });
         add(btnTempFiles);
-        btnTempFiles.setBounds(260, 100, 75, 23);
-
-        btnHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
-        btnHide.setText("Hide preferences");
-        btnHide.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHideActionPerformed(evt);
-            }
-        });
-        add(btnHide);
-        btnHide.setBounds(490, 40, 160, 40);
+        btnTempFiles.setBounds(660, 110, 110, 23);
 
         lblLimitDwld.setText("Limit download to...");
         add(lblLimitDwld);
@@ -88,6 +82,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
         add(lblChoosePath);
         lblChoosePath.setBounds(60, 50, 100, 16);
 
+        btnChoosePath.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         btnChoosePath.setText("Choose");
         btnChoosePath.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,12 +90,24 @@ public class PreferencesPanel extends javax.swing.JPanel {
             }
         });
         add(btnChoosePath);
-        btnChoosePath.setBounds(260, 50, 72, 23);
+        btnChoosePath.setBounds(660, 40, 110, 23);
+
+        lblGoBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left.png"))); // NOI18N
+        lblGoBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGoBackMouseClicked(evt);
+            }
+        });
+        add(lblGoBack);
+        lblGoBack.setBounds(20, 10, 40, 40);
+
+        txtYtDlpPath.setPreferredSize(new java.awt.Dimension(64, 22));
+        add(txtYtDlpPath);
+        txtYtDlpPath.setBounds(230, 40, 410, 30);
+        add(txtTemporaryFiles);
+        txtTemporaryFiles.setBounds(230, 100, 410, 30);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideActionPerformed
-        jFrameMain.showDownloadPanel();
-    }//GEN-LAST:event_btnHideActionPerformed
 
     private void btnTempFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTempFilesActionPerformed
                 // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
@@ -112,6 +119,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
         if (option == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             jFrameMain.setSaveToPathTemp(f.getAbsolutePath().toString());
+            txtTemporaryFiles.setText(jFrameMain.getSaveToPathTemp());
         }
       
     }//GEN-LAST:event_btnTempFilesActionPerformed
@@ -129,16 +137,23 @@ public class PreferencesPanel extends javax.swing.JPanel {
         if (option == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             jFrameMain.setYtdlp_path(f.getAbsolutePath().toString());
+            txtYtDlpPath.setText(jFrameMain.getYtdlp_path());
         }
     }//GEN-LAST:event_btnChoosePathActionPerformed
 
+    private void lblGoBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGoBackMouseClicked
+       jFrameMain.showDownloadPanel();
+    }//GEN-LAST:event_lblGoBackMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChoosePath;
-    private javax.swing.JButton btnHide;
     private javax.swing.JButton btnTempFiles;
     private javax.swing.JComboBox<String> cmbLimitDwld;
     private javax.swing.JLabel lblChoosePath;
+    private javax.swing.JLabel lblGoBack;
     private javax.swing.JLabel lblLimitDwld;
     private javax.swing.JLabel lblTempFiles;
+    private javax.swing.JTextField txtTemporaryFiles;
+    private javax.swing.JTextField txtYtDlpPath;
     // End of variables declaration//GEN-END:variables
 }

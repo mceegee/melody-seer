@@ -60,7 +60,7 @@ public class About extends javax.swing.JDialog {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Resources:\nImages: https://www.flaticon.com/free-icons/popular\nhttps://www.flaticon.com/free-icons/ui\nhttps://www.flaticon.com/free-icons/cute\nhttps://www.flaticon.com/free-icons/folder\nhttps://www.flaticon.com/free-icons/close\nSoftware: yt-dlp (https://github.com/yt-dlp/yt-dlp), FFmpeg (https://github.com/yt-dlp/FFmpeg-Builds)");
+        jTextArea1.setText("Resources:\nImages: https://www.flaticon.com/free-icons/popular\nhttps://www.flaticon.com/free-icons/ui\nhttps://www.flaticon.com/free-icons/cute\nhttps://www.flaticon.com/free-icons/folder\nhttps://www.flaticon.com/free-icons/close\nhttps://www.flaticon.com/free-icons/back-arrow\nSoftware: yt-dlp (https://github.com/yt-dlp/yt-dlp), FFmpeg (https://github.com/yt-dlp/FFmpeg-Builds)\n");
         jScrollPane1.setViewportView(jTextArea1);
 
         getContentPane().add(jScrollPane1);

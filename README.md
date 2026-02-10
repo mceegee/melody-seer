@@ -7,7 +7,12 @@
 
 **Aspecto, color, iconos, texto, distribución de los componentes.**
 
-     4. DISTRIBUCIÓN DE LOS COMPONENTES:
+     3. Iconos: 
+        - Se añade un botón de retorno a un label que representa una flecha apuntando a la izquierda en el PreferencesPanel
+
+        - Se añade el símbolo de una carpeta en todos los botones donde el usuario puede seleccionar la carpeta deseada (Uno en DownloadPanel, dos en PreferencesPanel)
+
+     5. DISTRIBUCIÓN DE LOS COMPONENTES:
      Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
           - Card Layout: Para poder ir mostrando los diferentes paneles sin que estos ocupen espacio
           - MigLayout: Para distribuir los elementos en la rejilla. En este caso, hemos consultado los siguientes documentos
@@ -19,7 +24,10 @@
 **Affordance. Feedback. Restricciones.**
 
      2. FEEDBACK:
+
      - Se añade mensaje de fallo de login en color rojo. Se elimina el JOptionPane para hacer menos intrusivo el feedback.
+
+     - JTextFields para informar al usuario de la carpeta en que se van a descargar los archivos y los archivos temporales en DownloadPanel y PreferencesPanel.
 
 
      3. RESTRICCIONES: 
