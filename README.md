@@ -7,12 +7,14 @@
 
 **Aspecto, color, iconos, texto, distribución de los componentes.**
 
-     3. Iconos: 
+     3. ICONOS: 
+
         - Se añade un botón de retorno a un label que representa una flecha apuntando a la izquierda en el PreferencesPanel
 
         - Se añade el símbolo de una carpeta en todos los botones donde el usuario puede seleccionar la carpeta deseada (Uno en DownloadPanel, dos en PreferencesPanel)
 
      5. DISTRIBUCIÓN DE LOS COMPONENTES:
+
      Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
           - Card Layout: Para poder ir mostrando los diferentes paneles sin que estos ocupen espacio
           - MigLayout: Para distribuir los elementos en la rejilla. En este caso, hemos consultado los siguientes documentos
@@ -21,14 +23,18 @@
           http://www.miglayout.com/QuickStart.pdf 
 
 
+
 **Affordance. Feedback. Restricciones.**
+
+     1. AFFORDANCE
+
+     - De manera predeterminada, los ComboBox con el formato ya tienen una opción preseleccionada en lugar de aparecer en blanco. Así, el usuario pude percibir mejor qué opciones están disponibles según la categoría.
 
      2. FEEDBACK:
 
      - Se añade mensaje de fallo de login en color rojo. Se elimina el JOptionPane para hacer menos intrusivo el feedback.
 
      - JTextFields para informar al usuario de la carpeta en que se van a descargar los archivos y los archivos temporales en DownloadPanel y PreferencesPanel.
-
 
      3. RESTRICCIONES: 
      - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 

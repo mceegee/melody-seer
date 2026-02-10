@@ -153,7 +153,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(radMp3);
         radMp3.setBounds(180, 150, 55, 21);
 
-        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "MP4", "MKV" }));
+        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP4", "MKV" }));
         cmbVideoFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbVideoFormatActionPerformed(evt);
@@ -162,7 +162,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(cmbVideoFormat);
         cmbVideoFormat.setBounds(290, 110, 72, 22);
 
-        cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "MP3", "WAV" }));
+        cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
         cmbAudioFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbAudioFormatActionPerformed(evt);
