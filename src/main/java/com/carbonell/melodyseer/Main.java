@@ -36,7 +36,8 @@ public class Main extends javax.swing.JFrame {
     private LogIn logInPanel;
 
     private javax.swing.JMenuItem mniLogout;
-    
+    private javax.swing.JMenuItem mniExit;
+
     private CardLayout cl;
 
     /**
@@ -59,7 +60,6 @@ public class Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         cl = new CardLayout();
         pnlContent.setLayout(cl);
-        
 
         mniLogout = new javax.swing.JMenuItem();
         mniLogout.setText("Log out");
@@ -69,6 +69,15 @@ public class Main extends javax.swing.JFrame {
             }
         });
         mnuFile.add(mniLogout);
+
+        mniExit = new javax.swing.JMenuItem();
+        mniExit.setText("Exit");
+        mniExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniExitActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mniExit);
 
         downloadPanel = new DownloadPanel(this);
         pnlContent.add(downloadPanel, "downloadPanel");
@@ -187,8 +196,10 @@ public class Main extends javax.swing.JFrame {
     public MelodySeerComponent getMsComponent() {
         return msComponent;
     }
-    
-    
+
+    public MediaPanel getMediaPanel() {
+        return mediaPanel;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,7 +214,6 @@ public class Main extends javax.swing.JFrame {
         pnlContent = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
-        mniExit = new javax.swing.JMenuItem();
         mnuEdit = new javax.swing.JMenu();
         mniPreferences = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
@@ -228,15 +238,6 @@ public class Main extends javax.swing.JFrame {
 
         mnuFile.setText("File");
         mnuFile.setName("file"); // NOI18N
-
-        mniExit.setText("Exit");
-        mniExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mniExitActionPerformed(evt);
-            }
-        });
-        mnuFile.add(mniExit);
-
         jMenuBar1.add(mnuFile);
 
         mnuEdit.setText("Edit");
@@ -272,19 +273,19 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // FILE - EXIT
-    // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
-    private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
-        JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
-        System.exit(NORMAL);
-    }//GEN-LAST:event_mniExitActionPerformed
-
     // FILE - LOG OUT
     private void mniLogoutActionPerformed(java.awt.event.ActionEvent evt) {
         persistentData.setSavedToken(null);
         savePersistentData();
         showLogInPanel();
     }
+
+    // FILE - EXIT
+    // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
+    private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
+        JOptionPane.showMessageDialog(null, "Closing Melody Seer...");
+        System.exit(NORMAL);
+    }//GEN-LAST:event_mniExitActionPerformed
 
     // EDIT - PREFERENCES
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
@@ -327,7 +328,6 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem mniAbout;
-    private javax.swing.JMenuItem mniExit;
     private javax.swing.JMenuItem mniPreferences;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;

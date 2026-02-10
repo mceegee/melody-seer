@@ -38,6 +38,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         this.jFrameMain = jFrameMain;
         cmbAudioFormat.setVisible(false);
         txtSaveTo.setText(jFrameMain.getSaveToPath());
+        
     }
 
     /**
@@ -57,7 +58,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         lblProgress = new javax.swing.JLabel();
         prgDownload = new javax.swing.JProgressBar();
         scrOutput = new javax.swing.JScrollPane();
-        txaOutput = new javax.swing.JTextArea();
         lblChoose = new javax.swing.JLabel();
         lblSaveTo = new javax.swing.JLabel();
         btnSaveTo = new javax.swing.JButton();
@@ -104,12 +104,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         lblProgress.setBounds(30, 370, 60, 20);
         add(prgDownload);
         prgDownload.setBounds(120, 370, 630, 20);
-
-        txaOutput.setEditable(false);
-        txaOutput.setColumns(20);
-        txaOutput.setRows(5);
-        scrOutput.setViewportView(txaOutput);
-
         add(scrOutput);
         scrOutput.setBounds(20, 420, 740, 180);
 
@@ -335,7 +329,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             Matcher matcher = pattern.matcher(line);
 
             System.out.println("\t" + line);
-            txaOutput.append(line + "\n");
+            
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 lastSavedFile = line.split("\" to \"")[1];
@@ -474,7 +468,6 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JRadioButton radMp3;
     private javax.swing.JRadioButton radVideo;
     private javax.swing.JScrollPane scrOutput;
-    private javax.swing.JTextArea txaOutput;
     private javax.swing.JTextField txtSaveTo;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
