@@ -213,6 +213,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
        cmbAudioFormat.setVisible(false);
        cmbVideoFormat.setVisible(true);
+       jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
@@ -241,6 +242,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void radMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMp3ActionPerformed
         cmbAudioFormat.setVisible(true);
         cmbVideoFormat.setVisible(false);
+        jFrameMain.setFormat(cmbAudioFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_radMp3ActionPerformed
 
     private void txtSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaveToActionPerformed
@@ -325,7 +327,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void processDownload(List<String> chunks, String extension) {
         System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
         for (String line : chunks) {
-            Pattern pattern = Pattern.compile("\\d+\\.\\d+\\%");
+            Pattern pattern = Pattern.compile("\\d+\\.?\\d*\\%");
             Matcher matcher = pattern.matcher(line);
 
             System.out.println("\t" + line);

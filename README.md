@@ -42,6 +42,8 @@
 
 **Otras mejoras en la usabilidad**
 
+     - Arreglado problema con la progress bar: ya muestra la barra completa al finalizar la descarga sin importar el formato de % que recibamos.
+
 **Gestión de errores**
 
 ### Unidad de Trabajo 3 - Creación de componentes visuales
