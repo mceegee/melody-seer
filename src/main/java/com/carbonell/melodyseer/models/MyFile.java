@@ -71,12 +71,10 @@ public class MyFile implements Serializable {
         this.downloadDate = downloadDate;
     }
 
-    public String getDownloadDate() {
+    public LocalDate getDownloadDate() {
         // https://jenkov.com/tutorials/java-internationalization/simpledateformat.html
-        if (downloadDate == null) {
-            return "";
-        }
-        return downloadDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        
+        return downloadDate;
     }
 
     public File getFile() {
@@ -112,10 +110,10 @@ public class MyFile implements Serializable {
     }
 
     public boolean canBeUploaded() {
-        return file != null && media == null;
+        return file != null && file.exists() && media == null;
     }
 
     public boolean canBeDownloaded() {
-        return media != null && file == null;
+        return media != null && (file == null || !file.exists());
     }
 }

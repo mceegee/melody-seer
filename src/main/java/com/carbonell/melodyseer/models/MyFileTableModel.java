@@ -6,7 +6,9 @@ package com.carbonell.melodyseer.models;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -15,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class MyFileTableModel extends AbstractTableModel {
 
-    private String columns[] = {"Filename", "Size", "MIME type", "Download date"};
+    private String columns[] = {"Status", "Filename", "Size", "MIME type", "Download date"};
     private ArrayList<MyFile> listFiles;
 
     public MyFileTableModel(ArrayList<MyFile> listFiles) {
@@ -36,13 +38,15 @@ public class MyFileTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             switch (columnIndex) {
-                case 0:
-                    return listFiles.get(rowIndex).getFileName();
+                case 0: 
+                    return getStatusIcon(listFiles.get(rowIndex));
                 case 1:
-                    return listFiles.get(rowIndex).getSize();
+                    return listFiles.get(rowIndex).getFileName();
                 case 2:
-                    return listFiles.get(rowIndex).getMime();
+                    return listFiles.get(rowIndex).getSize();
                 case 3:
+                    return listFiles.get(rowIndex).getMime();
+                case 4:
                     return listFiles.get(rowIndex).getDownloadDate();
                 default:
                     System.out.println("S'ha produit una errada");
@@ -61,18 +65,26 @@ public class MyFileTableModel extends AbstractTableModel {
 
     @Override
     public Class getColumnClass(int c) {
-
-        return String.class;
+        switch (c) {
+            case 0: 
+                return ImageIcon.class;
+            case 2:
+                return Long.class;
+            case 4:
+                return LocalDate.class;
+            default:
+                return String.class;
+        }
+        
     }
 
-    public Color getRowColor(int row) {
-        MyFile currentFile = listFiles.get(row);
-        if (currentFile.canBeDownloaded()) {
-            return Color.LIGHT_GRAY;
-        } else if (currentFile.canBeUploaded()) {
-            return Color.MAGENTA;
+    private ImageIcon getStatusIcon(MyFile file) {
+        if (file.canBeDownloaded()) {
+            return new javax.swing.ImageIcon(getClass().getResource("/images/cloud.png"));
+        } else if (file.canBeUploaded()) {
+            return new javax.swing.ImageIcon(getClass().getResource("/images/local.png"));
         }
-        return Color.ORANGE;
+        return new javax.swing.ImageIcon(getClass().getResource("/images/cloud-storage.png"));
     }
 
 }

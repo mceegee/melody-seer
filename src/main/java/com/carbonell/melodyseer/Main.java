@@ -52,7 +52,8 @@ public class Main extends javax.swing.JFrame {
             myFiles = new ArrayList<>();
             persistentData.setFiles(myFiles);
         }
-
+        
+        cleanLocalFiles();
         boolean isLoggedIn = persistentData.getSavedToken() != null;
 
         initComponents();
@@ -110,6 +111,16 @@ public class Main extends javax.swing.JFrame {
         savePersistentData();
 
         mediaPanel.refreshModel();
+    }
+    
+    private void cleanLocalFiles() {
+        ArrayList<MyFile> missingFiles = new ArrayList<>();
+        for(MyFile file: myFiles){
+            if(!file.canBeUploaded()){
+                missingFiles.add(file);
+            }
+        }
+        myFiles.removeAll(missingFiles);
     }
 
     public void savePersistentData() {
@@ -335,4 +346,5 @@ public class Main extends javax.swing.JFrame {
     private com.carbonell.melody.seer.component.MelodySeerComponent msComponent;
     private javax.swing.JPanel pnlContent;
     // End of variables declaration//GEN-END:variables
+
 }

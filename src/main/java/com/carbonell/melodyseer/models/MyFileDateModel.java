@@ -4,6 +4,8 @@
  */
 package com.carbonell.melodyseer.models;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author marta
@@ -18,7 +20,7 @@ public class MyFileDateModel {
 
     @Override
     public String toString() {
-        return file.getDownloadDate();
+        return file.getDownloadDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
     
     

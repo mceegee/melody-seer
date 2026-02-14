@@ -11,7 +11,6 @@ import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileDateModel;
 import com.carbonell.melodyseer.models.MyFileMimeModel;
 import com.carbonell.melodyseer.models.MyFileTableModel;
-import com.carbonell.melodyseer.utilities.MyTableRowRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -35,7 +35,6 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private javax.swing.JList<MyFileDateModel> lstDate;
     private javax.swing.JScrollPane scrDate;
     private javax.swing.JComboBox<MyFileMimeModel> cmbFormat;
-    private MyFileTableModel mftm;
     int modelRow;
     private TableRowSorter<MyFileTableModel> sorter;
     private ArrayList<MyFile> allFiles = new ArrayList<>();
@@ -53,11 +52,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         for (MyFile localFile : localFiles) {
             allFiles.add(localFile);
         }
-        mftm = new MyFileTableModel(allFiles);
-        tblDownloads.setModel(mftm);
 
-        sorter = new TableRowSorter<>(mftm);
-        tblDownloads.setRowSorter(sorter);
+        refreshModel();
 
         lstDate = new javax.swing.JList<>();
         scrDate = new JScrollPane();
@@ -84,10 +80,6 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             }
         });
 
-        loadFormatFromFile();
-        loadDateFromFile();
-        
-        tblDownloads.setDefaultRenderer(String.class, new MyTableRowRenderer());
     }
 
     private void loadFormatFromFile() {
@@ -313,7 +305,9 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
         allFiles.clear();
 
-        allFiles.addAll(jFrameMain.getMyFiles());
+        ArrayList<MyFile> localFiles = jFrameMain.getMyFiles();
+        allFiles.addAll(localFiles);
+        
         for (Media media : discoveredFiles) {
             MyFile matchingFile = null;
             
