@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 /**
@@ -40,9 +39,10 @@ public class DownloadPanel extends javax.swing.JPanel {
         this.jFrameMain = jFrameMain;
         cmbAudioFormat.setVisible(false);
         txtSaveTo.setText(jFrameMain.getSaveToPath());
-        
+
         mediaPanel = new MediaPanel(jFrameMain);
         pnlMedia.add(mediaPanel);
+        lblError.setVisible(false);
 
     }
 
@@ -71,6 +71,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbAudioFormat = new javax.swing.JComboBox<>();
         txtSaveTo = new javax.swing.JTextField();
         pnlMedia = new javax.swing.JPanel();
+        lblError = new javax.swing.JLabel();
 
         setLayout(null);
 
@@ -99,13 +100,13 @@ public class DownloadPanel extends javax.swing.JPanel {
             }
         });
         add(btnDownload);
-        btnDownload.setBounds(290, 250, 210, 40);
+        btnDownload.setBounds(290, 240, 210, 40);
 
         lblProgress.setText("Progress");
         add(lblProgress);
-        lblProgress.setBounds(30, 310, 60, 20);
+        lblProgress.setBounds(30, 300, 60, 20);
         add(prgDownload);
-        prgDownload.setBounds(120, 310, 630, 20);
+        prgDownload.setBounds(120, 300, 630, 20);
 
         lblChoose.setText("Choose format...");
         add(lblChoose);
@@ -175,6 +176,13 @@ public class DownloadPanel extends javax.swing.JPanel {
         pnlMedia.setLayout(null);
         add(pnlMedia);
         pnlMedia.setBounds(20, 360, 760, 370);
+
+        lblError.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblError.setForeground(new java.awt.Color(204, 0, 0));
+        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblError.setText("There is a problem with YouTube right now. Please, try later.");
+        add(lblError);
+        lblError.setBounds(120, 330, 630, 16);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -235,6 +243,11 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtSaveToActionPerformed
 
     private void downloadVideo() {
+
+        if (!checkYtdlp()) {
+            JOptionPane.showMessageDialog(jFrameMain, "Cannot find yt-dlp. Go to preferences and set path manually.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         // Código proporcionado por el profesor
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
@@ -317,6 +330,10 @@ public class DownloadPanel extends javax.swing.JPanel {
             Matcher matcher = pattern.matcher(line);
 
             System.out.println("\t" + line);
+
+            if (line.toLowerCase().contains("forbidden")) {
+                lblError.setVisible(true);
+            }
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 lastSavedFile = line.split("\" to \"")[1];
@@ -446,6 +463,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbVideoFormat;
     private javax.swing.ButtonGroup grpFormat;
     private javax.swing.JLabel lblChoose;
+    private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;
     private javax.swing.JLabel lblUrl;
@@ -459,5 +477,9 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     void refreshFiles() {
         mediaPanel.refreshModel();
+    }
+
+    private boolean checkYtdlp() {
+        return new File(jFrameMain.getYtdlp_path()).exists();
     }
 }

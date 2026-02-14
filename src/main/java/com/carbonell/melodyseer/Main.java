@@ -104,7 +104,7 @@ public class Main extends javax.swing.JFrame {
 
     public void addNewFile(MyFile file) {
         myFiles.add(file);
-
+        cleanLocalFiles();
         savePersistentData();
 
         downloadPanel.refreshFiles();

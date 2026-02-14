@@ -52,6 +52,10 @@
 
      - Feedback al subir, bajar y eliminar vídeos mediante lbls y JoptionPane
 
+     - Mensaje de error en caso de recibir Error 403 de yt-dlp
+
+     - Feedback en caso de no encontrar el programa yt-dlp
+
      3. RESTRICCIONES: 
 
      - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 
