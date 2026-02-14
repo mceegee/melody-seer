@@ -9,6 +9,7 @@ import com.carbonell.melody.seer.component.OnNewMediaAddedListener;
 import com.carbonell.melody.seer.component.api.Media;
 import com.carbonell.melodyseer.models.MyFile;
 import com.carbonell.melodyseer.models.MyFileTableModel;
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         }
 
         cmbFormat = new JComboBox<>();
-        cmbFormat.setBounds(100, 10, 90, 22);
+        cmbFormat.setBounds(490, 27, 90, 22);
         add(cmbFormat);
 
         jFrameMain.getMsComponent().addNewMediaListener(this);
@@ -59,7 +60,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
                 applyFilters();
             }
         });
-        
+
         refreshModel();
     }
 
@@ -69,14 +70,14 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         dcbm.addElement("All");
         dcbm.addElement("Video");
         dcbm.addElement("Audio");
-        
+
         cmbFormat.setModel(dcbm);
     }
 
     private void applyFilters() {
-        
+
         RowFilter<MyFileTableModel, Integer> rf = RowFilter.regexFilter("(?i)" + Pattern.quote(txtFilter.getText()), 1);
-        
+
         String filterText = cmbFormat.getSelectedItem().toString();
 
         if (filterText != null && !filterText.isEmpty() && !filterText.equals("All")) {
@@ -86,7 +87,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             andFilters.add(asdfs);
             rf = RowFilter.andFilter(andFilters);
         }
-        
+
         sorter.setRowFilter(rf);
         //System.out.println("DEBUG - Expected result: " + mftm.getValueAt(0, 2));
         //System.out.println("DEBUG -  Filter: " + cmbFormat.getSelectedItem());
@@ -112,7 +113,8 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         lblLocal = new javax.swing.JLabel();
         lblNetwork = new javax.swing.JLabel();
         lblBoth = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblSearch = new javax.swing.JLabel();
+        lblAction = new javax.swing.JLabel();
 
         setLayout(null);
 
@@ -130,16 +132,16 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         scrDwnld.setViewportView(tblDownloads);
 
         add(scrDwnld);
-        scrDwnld.setBounds(30, 80, 700, 180);
+        scrDwnld.setBounds(30, 70, 700, 190);
 
         lblDownloads.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblDownloads.setText("Files");
         add(lblDownloads);
-        lblDownloads.setBounds(30, 50, 120, 20);
+        lblDownloads.setBounds(40, 30, 70, 20);
 
-        lblFormat.setText("Format");
+        lblFormat.setText("Choose format");
         add(lblFormat);
-        lblFormat.setBounds(40, 20, 70, 16);
+        lblFormat.setBounds(400, 30, 90, 16);
 
         btnDeleteItem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDeleteItem.setText("Delete selected item");
@@ -157,7 +159,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             }
         });
         add(txtFilter);
-        txtFilter.setBounds(510, 40, 190, 30);
+        txtFilter.setBounds(200, 20, 190, 30);
 
         btnUpload.setText("Upload");
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
@@ -193,10 +195,14 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         add(lblBoth);
         lblBoth.setBounds(170, 280, 60, 16);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
-        jLabel1.setToolTipText("Search");
-        add(jLabel1);
-        jLabel1.setBounds(480, 40, 30, 30);
+        lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
+        lblSearch.setToolTipText("Search");
+        add(lblSearch);
+        lblSearch.setBounds(170, 20, 30, 30);
+
+        lblAction.setText("Choose an action to perform...");
+        add(lblAction);
+        lblAction.setBounds(260, 270, 470, 16);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteItemActionPerformed
@@ -207,6 +213,9 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             currentFile.delete();
             jFrameMain.deleteFile(modelRow);
             refreshModel();
+            lblAction.setText("File has been successfully deleted.");
+            lblAction.setForeground(new Color(0, 153, 51));
+
         }
     }//GEN-LAST:event_btnDeleteItemActionPerformed
 
@@ -216,8 +225,12 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         try {
             if (currentFile.canBeUploaded()) {
                 jFrameMain.getMsComponent().uploadFileMultipart(currentFile.getFile(), currentFile.getDownloadedFrom());
+                lblAction.setText("File has been successfully uploaded.");
+                lblAction.setForeground(new Color(0, 153, 51));
+            } else if (currentFile.canBeDownloaded()) {
+                JOptionPane.showMessageDialog(this, "File not found on your computer", "Warning", JOptionPane.WARNING_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "File not found on your computer", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "File has already been uploaded.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,13 +241,19 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         try {
             int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
             MyFile currentFile = allFiles.get(selectedRow);
-            if (currentFile.canBeDownloaded()) {
-                jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, new File(jFrameMain.getSaveToPath() + "\\" + currentFile.getMedia().mediaFileName));
+            if (currentFile.canBeDownloaded()) {                
+                File targetFile = new File(jFrameMain.getSaveToPath() + "\\" + currentFile.getMedia().mediaFileName);
+                jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, targetFile);
+                currentFile.setFile(targetFile);
+                jFrameMain.addNewFile(currentFile);
+                
+                lblAction.setText("File has been successfully downloaded.");
+                lblAction.setForeground(new Color(0, 153, 51));
             } else {
-                JOptionPane.showMessageDialog(this, "File cannot be downloaded. You already have this.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "File cannot be downloaded. You already have this.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
@@ -249,22 +268,21 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
         ArrayList<MyFile> localFiles = jFrameMain.getMyFiles();
         allFiles.addAll(localFiles);
-        
+
         for (Media media : discoveredFiles) {
             MyFile matchingFile = null;
-            
+
             for (MyFile localFile : jFrameMain.getMyFiles()) {
-                if(media.mediaFileName.equals(localFile.getFileName())) {
+                if (media.mediaFileName.equals(localFile.getFileName())) {
                     matchingFile = localFile;
                 }
             }
-            
-            if(matchingFile != null) {
+
+            if (matchingFile != null) {
                 matchingFile.setMedia(media);
-            }
-            else {
+            } else {
                 allFiles.add(new MyFile(media));
-            }            
+            }
         }
 
         MyFileTableModel newModel = new MyFileTableModel(allFiles);
@@ -275,17 +293,19 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
 
     @Override
     public void newMediaAdded(NewMediaEventObject object) {
-        List<Media> newMedia = object.getMedia();        
-        
+        List<Media> newMedia = object.getMedia();
+
         for (Media media : newMedia) {
             boolean mediaExists = false;
             for (Media discoveredFile : discoveredFiles) {
-                if(media.mediaFileName.equals(discoveredFile.mediaFileName)) {
+                if (media.mediaFileName.equals(discoveredFile.mediaFileName)) {
                     mediaExists = true;
                     break;
                 }
             }
-            if(mediaExists) continue;
+            if (mediaExists) {
+                continue;
+            }
             discoveredFiles.add(media);
         }
 
@@ -297,12 +317,13 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private javax.swing.JButton btnDeleteItem;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnUpload;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblAction;
     private javax.swing.JLabel lblBoth;
     private javax.swing.JLabel lblDownloads;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblLocal;
     private javax.swing.JLabel lblNetwork;
+    private javax.swing.JLabel lblSearch;
     private javax.swing.JScrollPane scrDwnld;
     private javax.swing.JTable tblDownloads;
     private javax.swing.JTextField txtFilter;

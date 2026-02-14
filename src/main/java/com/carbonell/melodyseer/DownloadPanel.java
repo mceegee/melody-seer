@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
@@ -68,13 +69,11 @@ public class DownloadPanel extends javax.swing.JPanel {
         radMp3 = new javax.swing.JRadioButton();
         cmbVideoFormat = new javax.swing.JComboBox<>();
         cmbAudioFormat = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
         txtSaveTo = new javax.swing.JTextField();
         pnlMedia = new javax.swing.JPanel();
 
         setLayout(null);
 
-        lblUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yt.png"))); // NOI18N
         lblUrl.setText("Insert video URL here:");
         add(lblUrl);
         lblUrl.setBounds(40, 60, 150, 16);
@@ -108,7 +107,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(prgDownload);
         prgDownload.setBounds(120, 310, 630, 20);
 
-        lblChoose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
         lblChoose.setText("Choose format...");
         add(lblChoose);
         lblChoose.setBounds(40, 110, 130, 16);
@@ -165,10 +163,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         });
         add(cmbAudioFormat);
         cmbAudioFormat.setBounds(290, 150, 72, 22);
-
-        jLabel1.setText("Default format: mp4");
-        add(jLabel1);
-        jLabel1.setBounds(40, 140, 130, 16);
 
         txtSaveTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,6 +295,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
+                    JOptionPane.showMessageDialog(jFrameMain, "File has been downloaded succesfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -430,6 +425,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
+                    JOptionPane.showMessageDialog(jFrameMain, "File has been downloaded succesfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -449,7 +445,6 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbAudioFormat;
     private javax.swing.JComboBox<String> cmbVideoFormat;
     private javax.swing.ButtonGroup grpFormat;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblChoose;
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;

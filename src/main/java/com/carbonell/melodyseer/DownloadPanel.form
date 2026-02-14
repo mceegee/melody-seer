@@ -24,9 +24,6 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblUrl">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/yt.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Insert video URL here:"/>
       </Properties>
       <Constraints>
@@ -94,9 +91,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblChoose">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/choose.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Choose format..."/>
       </Properties>
       <Constraints>
@@ -203,16 +197,6 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="290" y="150" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Default format: mp4"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="140" width="130" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

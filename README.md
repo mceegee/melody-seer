@@ -50,10 +50,14 @@
 
      - JTextFields para informar al usuario de la carpeta en que se van a descargar los archivos y los archivos temporales en DownloadPanel y PreferencesPanel.
 
+     - Feedback al subir, bajar y eliminar vídeos mediante lbls y JoptionPane
+
      3. RESTRICCIONES: 
 
      - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 
        En caso de borrar el contenido, se vuelve a deshabilitar el botón. Implementación mediante KeyAdapter. 
+
+     - No se permite subir archivos que ya están en la nube. Tampoco se permiten descargar archivos que ya se tienen locales. 
 
 **Otras mejoras en la usabilidad**
 
