@@ -26,6 +26,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     Main jFrameMain;
     private String lastSavedFile;
     File currentFile;
+    private MediaPanel mediaPanel;
 
     /**
      * Creates new form DownloadPanel
@@ -39,6 +40,9 @@ public class DownloadPanel extends javax.swing.JPanel {
         cmbAudioFormat.setVisible(false);
         txtSaveTo.setText(jFrameMain.getSaveToPath());
         
+        mediaPanel = new MediaPanel(jFrameMain);
+        pnlMedia.add(mediaPanel);
+
     }
 
     /**
@@ -57,7 +61,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownload = new javax.swing.JProgressBar();
-        scrOutput = new javax.swing.JScrollPane();
         lblChoose = new javax.swing.JLabel();
         lblSaveTo = new javax.swing.JLabel();
         btnSaveTo = new javax.swing.JButton();
@@ -65,9 +68,9 @@ public class DownloadPanel extends javax.swing.JPanel {
         radMp3 = new javax.swing.JRadioButton();
         cmbVideoFormat = new javax.swing.JComboBox<>();
         cmbAudioFormat = new javax.swing.JComboBox<>();
-        btnDwldFiles = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtSaveTo = new javax.swing.JTextField();
+        pnlMedia = new javax.swing.JPanel();
 
         setLayout(null);
 
@@ -97,15 +100,13 @@ public class DownloadPanel extends javax.swing.JPanel {
             }
         });
         add(btnDownload);
-        btnDownload.setBounds(270, 250, 230, 90);
+        btnDownload.setBounds(290, 250, 210, 40);
 
         lblProgress.setText("Progress");
         add(lblProgress);
-        lblProgress.setBounds(30, 370, 60, 20);
+        lblProgress.setBounds(30, 310, 60, 20);
         add(prgDownload);
-        prgDownload.setBounds(120, 370, 630, 20);
-        add(scrOutput);
-        scrOutput.setBounds(20, 420, 740, 180);
+        prgDownload.setBounds(120, 310, 630, 20);
 
         lblChoose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/choose.png"))); // NOI18N
         lblChoose.setText("Choose format...");
@@ -165,16 +166,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         add(cmbAudioFormat);
         cmbAudioFormat.setBounds(290, 150, 72, 22);
 
-        btnDwldFiles.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnDwldFiles.setText("Downloaded files");
-        btnDwldFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDwldFilesActionPerformed(evt);
-            }
-        });
-        add(btnDwldFiles);
-        btnDwldFiles.setBounds(280, 610, 280, 80);
-
         jLabel1.setText("Default format: mp4");
         add(jLabel1);
         jLabel1.setBounds(40, 140, 130, 16);
@@ -186,6 +177,10 @@ public class DownloadPanel extends javax.swing.JPanel {
         });
         add(txtSaveTo);
         txtSaveTo.setBounds(200, 200, 410, 30);
+
+        pnlMedia.setLayout(null);
+        add(pnlMedia);
+        pnlMedia.setBounds(20, 360, 760, 370);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -211,9 +206,9 @@ public class DownloadPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveToActionPerformed
 
     private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
-       cmbAudioFormat.setVisible(false);
-       cmbVideoFormat.setVisible(true);
-       jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
+        cmbAudioFormat.setVisible(false);
+        cmbVideoFormat.setVisible(true);
+        jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_radVideoActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
@@ -226,10 +221,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_btnDownloadActionPerformed
-
-    private void btnDwldFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDwldFilesActionPerformed
-        jFrameMain.showMediaPanel();
-    }//GEN-LAST:event_btnDwldFilesActionPerformed
 
     private void cmbVideoFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVideoFormatActionPerformed
         jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
@@ -263,7 +254,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                                 "-t",
                                 jFrameMain.getFormat(),
                                 "-P",
-                                "\""+ jFrameMain.getSaveToPath() + "\"",
+                                "\"" + jFrameMain.getSaveToPath() + "\"",
                                 "-P",
                                 "temp:"
                                 + jFrameMain.getSaveToPathTemp());
@@ -271,7 +262,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 txtUrl.getText(),
                                 "-t",
-                                "\""+jFrameMain.getFormat()+"\"",
+                                "\"" + jFrameMain.getFormat() + "\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -331,7 +322,6 @@ public class DownloadPanel extends javax.swing.JPanel {
             Matcher matcher = pattern.matcher(line);
 
             System.out.println("\t" + line);
-            
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
                 lastSavedFile = line.split("\" to \"")[1];
@@ -391,7 +381,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                     if (downloadSpeedCommand.equals("")) {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 "-x",
-                                "--audio-format=\"" + jFrameMain.getFormat()+"\"",
+                                "--audio-format=\"" + jFrameMain.getFormat() + "\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -401,7 +391,7 @@ public class DownloadPanel extends javax.swing.JPanel {
                     } else {
                         pb = new ProcessBuilder(jFrameMain.getYtdlp_path(),
                                 "-x",
-                                "--audio-format=\"" + jFrameMain.getFormat()+"\"",
+                                "--audio-format=\"" + jFrameMain.getFormat() + "\"",
                                 "-P",
                                 jFrameMain.getSaveToPath(),
                                 "-P",
@@ -450,12 +440,10 @@ public class DownloadPanel extends javax.swing.JPanel {
         };
         worker.execute();
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
-    private javax.swing.JButton btnDwldFiles;
     private javax.swing.JButton btnSaveTo;
     private javax.swing.JCheckBox chkOpen;
     private javax.swing.JComboBox<String> cmbAudioFormat;
@@ -466,11 +454,15 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JPanel pnlMedia;
     private javax.swing.JProgressBar prgDownload;
     private javax.swing.JRadioButton radMp3;
     private javax.swing.JRadioButton radVideo;
-    private javax.swing.JScrollPane scrOutput;
     private javax.swing.JTextField txtSaveTo;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
+
+    void refreshFiles() {
+        mediaPanel.refreshModel();
+    }
 }

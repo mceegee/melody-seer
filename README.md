@@ -7,20 +7,34 @@
 
 **Aspecto, color, iconos, texto, distribución de los componentes.**
 
-     3. ICONOS: 
+     
+    2. COLOR:
+
+        - Reducción del número de colores usados al suprimirse la clasificación de los vídeos según local, cloud o ambos. Ahora se hace mediante iconos. 
+
+  
+    3. ICONOS: 
 
         - Se añade un botón de retorno a un label que representa una flecha apuntando a la izquierda en el PreferencesPanel
 
         - Se añade el símbolo de una carpeta en todos los botones donde el usuario puede seleccionar la carpeta deseada (Uno en DownloadPanel, dos en PreferencesPanel)
 
+        - Cambio en la visualización de archivos locales, en la nube y ambos: se pasa de leyenda mediante colores a uso de iconos para hacerlo más claro. 
+
+        - Filtro mediante icono de búsqueda + tooltip
+
+        - Eliminación de iconos innecesarios
+
      5. DISTRIBUCIÓN DE LOS COMPONENTES:
 
-     Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
+         Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:
           - Card Layout: Para poder ir mostrando los diferentes paneles sin que estos ocupen espacio
           - MigLayout: Para distribuir los elementos en la rejilla. En este caso, hemos consultado los siguientes documentos
           http://www.miglayout.com/
           http://www.migcalendar.com/miglayout/mavensite/docs/cheatsheet.pdf 
           http://www.miglayout.com/QuickStart.pdf 
+
+         - Se ha movido el Media Panel a la ventana principal.
 
 
 
@@ -37,12 +51,15 @@
      - JTextFields para informar al usuario de la carpeta en que se van a descargar los archivos y los archivos temporales en DownloadPanel y PreferencesPanel.
 
      3. RESTRICCIONES: 
+
      - No se permite al usuario pulsar el botón de login a menos que haya completado los campos de username y password. 
        En caso de borrar el contenido, se vuelve a deshabilitar el botón. Implementación mediante KeyAdapter. 
 
 **Otras mejoras en la usabilidad**
 
      - Arreglado problema con la progress bar: ya muestra la barra completa al finalizar la descarga sin importar el formato de % que recibamos.
+
+     - Mejoras en la recuperación de archivos locales, lo cual lleva a que ya no aparezcan archivos locales con tamaño 0.
 
 **Gestión de errores**
 

@@ -32,7 +32,7 @@ public class Main extends javax.swing.JFrame {
 
     private DownloadPanel downloadPanel;
     private PreferencesPanel preferencesPanel;
-    private MediaPanel mediaPanel;
+
     private LogIn logInPanel;
 
     private javax.swing.JMenuItem mniLogout;
@@ -86,9 +86,6 @@ public class Main extends javax.swing.JFrame {
         preferencesPanel = new PreferencesPanel(this);
         pnlContent.add(preferencesPanel, "preferencesPanel");
 
-        mediaPanel = new MediaPanel(this);
-        pnlContent.add(mediaPanel, "mediaPanel");
-
         logInPanel = new LogIn(this);
         pnlContent.add(logInPanel, "loginPanel");
 
@@ -110,7 +107,7 @@ public class Main extends javax.swing.JFrame {
 
         savePersistentData();
 
-        mediaPanel.refreshModel();
+        downloadPanel.refreshFiles();
     }
     
     private void cleanLocalFiles() {
@@ -189,13 +186,6 @@ public class Main extends javax.swing.JFrame {
         cl.show(pnlContent, "downloadPanel");
     }
 
-    public void showMediaPanel() {
-        //downloadPanel.setVisible(false);
-        //preferencesPanel.setVisible(false);
-        //mediaPanel.setVisible(true);
-        cl.show(pnlContent, "mediaPanel");
-    }
-
     public void showLogInPanel() {
 //        downloadPanel.setVisible(false);
 //        preferencesPanel.setVisible(false);
@@ -208,9 +198,6 @@ public class Main extends javax.swing.JFrame {
         return msComponent;
     }
 
-    public MediaPanel getMediaPanel() {
-        return mediaPanel;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
