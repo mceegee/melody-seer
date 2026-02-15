@@ -36,8 +36,11 @@ public class About extends javax.swing.JDialog {
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(850, 800));
+        setMinimumSize(new java.awt.Dimension(850, 300));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
         setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        setPreferredSize(new java.awt.Dimension(850, 300));
         getContentPane().setLayout(null);
 
         lblName.setText("Marta Carbonell Giménez");
