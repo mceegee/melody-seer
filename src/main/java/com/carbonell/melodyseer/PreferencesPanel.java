@@ -6,6 +6,7 @@ package com.carbonell.melodyseer;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -26,9 +27,29 @@ public class PreferencesPanel extends javax.swing.JPanel {
         this.jFrameMain = jFrameMain;
         txtYtDlpPath.setText(jFrameMain.getYtdlp_path());
         txtTemporaryFiles.setText(jFrameMain.getSaveToPathTemp());
+
+        MigLayout layout = new MigLayout(
+                "wrap 3, fillx, align center top",
+                "[right][left][left]",
+                "[]12[]12[]12[]12[]12[]12[]"
+        );
+        setLayout(layout);
+        
+        
+        add(lblGoBack, "left, wrap");
+        
+        add(lblChoosePath);
+        add(txtYtDlpPath, "growx");
+        add(btnChoosePath);
+        
+        add(lblTempFiles);
+        add(txtTemporaryFiles, "growx");
+        add(btnTempFiles);
+        
+        add(lblLimitDwld);
+        add(cmbLimitDwld);
+        
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,21 +60,48 @@ public class PreferencesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblGoBack = new javax.swing.JLabel();
+        lblChoosePath = new javax.swing.JLabel();
+        txtYtDlpPath = new javax.swing.JTextField();
+        btnChoosePath = new javax.swing.JButton();
         lblTempFiles = new javax.swing.JLabel();
+        txtTemporaryFiles = new javax.swing.JTextField();
         btnTempFiles = new javax.swing.JButton();
         lblLimitDwld = new javax.swing.JLabel();
         cmbLimitDwld = new javax.swing.JComboBox<>();
-        lblChoosePath = new javax.swing.JLabel();
-        btnChoosePath = new javax.swing.JButton();
-        lblGoBack = new javax.swing.JLabel();
-        txtYtDlpPath = new javax.swing.JTextField();
-        txtTemporaryFiles = new javax.swing.JTextField();
 
         setLayout(null);
+
+        lblGoBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left.png"))); // NOI18N
+        lblGoBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblGoBackMouseClicked(evt);
+            }
+        });
+        add(lblGoBack);
+        lblGoBack.setBounds(20, 10, 40, 40);
+
+        lblChoosePath.setText("Select yt-dlp path");
+        add(lblChoosePath);
+        lblChoosePath.setBounds(60, 50, 100, 16);
+        add(txtYtDlpPath);
+        txtYtDlpPath.setBounds(230, 40, 410, 30);
+
+        btnChoosePath.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
+        btnChoosePath.setText("Choose");
+        btnChoosePath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChoosePathActionPerformed(evt);
+            }
+        });
+        add(btnChoosePath);
+        btnChoosePath.setBounds(660, 40, 110, 23);
 
         lblTempFiles.setText("Path to store temporary files...");
         add(lblTempFiles);
         lblTempFiles.setBounds(60, 110, 180, 16);
+        add(txtTemporaryFiles);
+        txtTemporaryFiles.setBounds(230, 100, 410, 30);
 
         btnTempFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
         btnTempFiles.setText("Choose");
@@ -77,40 +125,11 @@ public class PreferencesPanel extends javax.swing.JPanel {
         });
         add(cmbLimitDwld);
         cmbLimitDwld.setBounds(240, 150, 120, 22);
-
-        lblChoosePath.setText("Select yt-dlp path");
-        add(lblChoosePath);
-        lblChoosePath.setBounds(60, 50, 100, 16);
-
-        btnChoosePath.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
-        btnChoosePath.setText("Choose");
-        btnChoosePath.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChoosePathActionPerformed(evt);
-            }
-        });
-        add(btnChoosePath);
-        btnChoosePath.setBounds(660, 40, 110, 23);
-
-        lblGoBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left.png"))); // NOI18N
-        lblGoBack.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblGoBackMouseClicked(evt);
-            }
-        });
-        add(lblGoBack);
-        lblGoBack.setBounds(20, 10, 40, 40);
-
-        txtYtDlpPath.setPreferredSize(new java.awt.Dimension(64, 22));
-        add(txtYtDlpPath);
-        txtYtDlpPath.setBounds(230, 40, 410, 30);
-        add(txtTemporaryFiles);
-        txtTemporaryFiles.setBounds(230, 100, 410, 30);
     }// </editor-fold>//GEN-END:initComponents
 
 
     private void btnTempFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTempFilesActionPerformed
-                // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
+        // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
@@ -121,7 +140,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
             jFrameMain.setSaveToPathTemp(f.getAbsolutePath().toString());
             txtTemporaryFiles.setText(jFrameMain.getSaveToPathTemp());
         }
-      
+
     }//GEN-LAST:event_btnTempFilesActionPerformed
 
     private void cmbLimitDwldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLimitDwldActionPerformed
@@ -142,7 +161,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnChoosePathActionPerformed
 
     private void lblGoBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGoBackMouseClicked
-       jFrameMain.showDownloadPanel();
+        jFrameMain.showDownloadPanel();
     }//GEN-LAST:event_lblGoBackMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
