@@ -7,7 +7,8 @@
 
 **Aspecto, color, iconos, texto, distribución de los componentes.**
 
-    1. ASPECTO:
+    
+1. ASPECTO:
 
     - Cambios sustanciales en el aspecto: arreglo de la alineación de los componentes, unificación del tipo de iconos, disminución del número de colores. 
      
