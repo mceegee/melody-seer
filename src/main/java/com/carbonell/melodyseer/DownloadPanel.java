@@ -5,6 +5,7 @@
 package com.carbonell.melodyseer;
 
 import com.carbonell.melodyseer.models.MyFile;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,6 +28,8 @@ public class DownloadPanel extends javax.swing.JPanel {
     private String lastSavedFile;
     File currentFile;
     private MediaPanel mediaPanel;
+    private final Color DARK_GREEN =  new Color(0, 153, 51);
+    private final Color DARK_RED = new Color (153,0, 51);
 
     /**
      * Creates new form DownloadPanel
@@ -68,7 +71,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         pnlDownloads.add(btnDownload, "skip 1, wrap, center");
         
         pnlDownloads.add(lblProgress);
-        pnlDownloads.add(prgDownload, "span 1, growx");
+        pnlDownloads.add(prgDownload, "growx, wrap");
         
         pnlDownloads.add(lblError, "skip 1, center, wrap");
 
@@ -76,7 +79,6 @@ public class DownloadPanel extends javax.swing.JPanel {
         mediaPanel.setLocation(0, 10);
         pnlMedia.add(mediaPanel);
         lblError.setVisible(false);
-
     }
 
     /**
@@ -282,7 +284,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void downloadVideo() {
 
         if (!checkYtdlp()) {
-            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.", DARK_RED);
             return;
         }
 
@@ -346,7 +348,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
-                    setMessage("File has been downloaded succesfully!");
+                    setMessage("File has been downloaded succesfully!", DARK_GREEN);
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -370,7 +372,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
 
             if (line.toLowerCase().contains("forbidden")) {
-                setMessage("There is a problem with YouTube right now. Please, try later.");
+                setMessage("There is a problem with YouTube right now. Please, try later.", DARK_RED);
             }
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
@@ -422,7 +424,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private void downloadAudio() {
         if (!checkYtdlp()) {
-            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.", DARK_RED);
             return;
         }
 
@@ -484,7 +486,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
-                    setMessage("File has been downloaded succesfully!");
+                    setMessage("File has been downloaded succesfully!", DARK_GREEN);
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -526,8 +528,9 @@ public class DownloadPanel extends javax.swing.JPanel {
         return new File(jFrameMain.getYtdlp_path()).exists();
     }
 
-    private void setMessage(String message) {
+    private void setMessage(String message, Color c) {
        lblError.setText(message);
+       lblError.setForeground(c);
        lblError.setVisible(!message.isEmpty());
     }
 }

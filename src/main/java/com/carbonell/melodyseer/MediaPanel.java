@@ -148,6 +148,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         add(lblSearch);
         lblSearch.setBounds(170, 20, 30, 30);
 
+        txtFilter.setToolTipText("Search");
         txtFilter.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtFilterKeyReleased(evt);
