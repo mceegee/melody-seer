@@ -25,6 +25,10 @@
 
         - Eliminación de iconos innecesarios
 
+    4. TEXTO
+
+    - Uso de colores y negrita para ayudar con la comprensión de lo que ocurre: rojo para errores, negrita para marcar títulos.
+
      5. DISTRIBUCIÓN DE LOS COMPONENTES:
 
          Para mejorar el aspecto de la aplicación, se ha cambiado la distribución de los componentes, puesto que no estaban alineados. Para conseguirlo, se han usado:

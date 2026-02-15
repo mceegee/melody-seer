@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -36,11 +37,44 @@ public class DownloadPanel extends javax.swing.JPanel {
     public DownloadPanel(Main jFrameMain) {
         initComponents();
         setSize(800, 800);
+        pnlDownloads.setSize(800, 270);
+        pnlMedia.setSize(800, 480);
+        
         this.jFrameMain = jFrameMain;
         cmbAudioFormat.setVisible(false);
         txtSaveTo.setText(jFrameMain.getSaveToPath());
+        
+        MigLayout layout = new MigLayout(
+                "wrap 3, fillx, align center top",
+                "[right][left][left]",
+                "[]12[]12[]12[]12[]12[]12[]"
+        );
+        pnlDownloads.setLayout(layout);
+        
+        pnlDownloads.add(lblUrl);
+        pnlDownloads.add(txtUrl, "growx");
+        pnlDownloads.add(chkOpen);
+        
+        pnlDownloads.add(lblChoose);
+        pnlDownloads.add(radVideo, "split 3");
+        pnlDownloads.add(cmbVideoFormat, "wrap, left");
+        
+        pnlDownloads.add(radMp3, "skip 1, split 3");
+        pnlDownloads.add(cmbAudioFormat, "wrap, left");
+        
+        pnlDownloads.add(lblSaveTo);
+        pnlDownloads.add(txtSaveTo, "growx");
+        pnlDownloads.add(btnSaveTo);
+        
+        pnlDownloads.add(btnDownload, "skip 1, wrap, center");
+        
+        pnlDownloads.add(lblProgress);
+        pnlDownloads.add(prgDownload, "span 1, growx");
+        
+        pnlDownloads.add(lblError, "skip 1, center, wrap");
 
         mediaPanel = new MediaPanel(jFrameMain);
+        mediaPanel.setLocation(0, 10);
         pnlMedia.add(mediaPanel);
         lblError.setVisible(false);
 
@@ -56,29 +90,32 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         grpFormat = new javax.swing.ButtonGroup();
+        pnlDownloads = new javax.swing.JPanel();
         lblUrl = new javax.swing.JLabel();
         txtUrl = new javax.swing.JTextField();
         chkOpen = new javax.swing.JCheckBox();
+        lblChoose = new javax.swing.JLabel();
+        radVideo = new javax.swing.JRadioButton();
+        cmbVideoFormat = new javax.swing.JComboBox<>();
+        radMp3 = new javax.swing.JRadioButton();
+        cmbAudioFormat = new javax.swing.JComboBox<>();
+        lblSaveTo = new javax.swing.JLabel();
+        txtSaveTo = new javax.swing.JTextField();
+        btnSaveTo = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
         lblProgress = new javax.swing.JLabel();
         prgDownload = new javax.swing.JProgressBar();
-        lblChoose = new javax.swing.JLabel();
-        lblSaveTo = new javax.swing.JLabel();
-        btnSaveTo = new javax.swing.JButton();
-        radVideo = new javax.swing.JRadioButton();
-        radMp3 = new javax.swing.JRadioButton();
-        cmbVideoFormat = new javax.swing.JComboBox<>();
-        cmbAudioFormat = new javax.swing.JComboBox<>();
-        txtSaveTo = new javax.swing.JTextField();
-        pnlMedia = new javax.swing.JPanel();
         lblError = new javax.swing.JLabel();
+        pnlMedia = new javax.swing.JPanel();
 
         setLayout(null);
 
+        pnlDownloads.setLayout(null);
+
         lblUrl.setText("Insert video URL here:");
-        add(lblUrl);
+        pnlDownloads.add(lblUrl);
         lblUrl.setBounds(40, 60, 150, 16);
-        add(txtUrl);
+        pnlDownloads.add(txtUrl);
         txtUrl.setBounds(200, 50, 410, 30);
 
         chkOpen.setSelected(true);
@@ -88,43 +125,12 @@ public class DownloadPanel extends javax.swing.JPanel {
                 chkOpenActionPerformed(evt);
             }
         });
-        add(chkOpen);
+        pnlDownloads.add(chkOpen);
         chkOpen.setBounds(620, 50, 150, 20);
 
-        btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
-        btnDownload.setText("Download");
-        btnDownload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDownloadActionPerformed(evt);
-            }
-        });
-        add(btnDownload);
-        btnDownload.setBounds(290, 240, 210, 40);
-
-        lblProgress.setText("Progress");
-        add(lblProgress);
-        lblProgress.setBounds(30, 300, 60, 20);
-        add(prgDownload);
-        prgDownload.setBounds(120, 300, 630, 20);
-
         lblChoose.setText("Choose format...");
-        add(lblChoose);
+        pnlDownloads.add(lblChoose);
         lblChoose.setBounds(40, 110, 130, 16);
-
-        lblSaveTo.setText("Save to...");
-        add(lblSaveTo);
-        lblSaveTo.setBounds(40, 200, 90, 20);
-
-        btnSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
-        btnSaveTo.setText("Choose");
-        btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveToActionPerformed(evt);
-            }
-        });
-        add(btnSaveTo);
-        btnSaveTo.setBounds(630, 210, 100, 23);
 
         grpFormat.add(radVideo);
         radVideo.setSelected(true);
@@ -134,8 +140,17 @@ public class DownloadPanel extends javax.swing.JPanel {
                 radVideoActionPerformed(evt);
             }
         });
-        add(radVideo);
+        pnlDownloads.add(radVideo);
         radVideo.setBounds(180, 110, 53, 21);
+
+        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP4", "MKV" }));
+        cmbVideoFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbVideoFormatActionPerformed(evt);
+            }
+        });
+        pnlDownloads.add(cmbVideoFormat);
+        cmbVideoFormat.setBounds(290, 110, 72, 22);
 
         grpFormat.add(radMp3);
         radMp3.setText("Audio");
@@ -144,17 +159,8 @@ public class DownloadPanel extends javax.swing.JPanel {
                 radMp3ActionPerformed(evt);
             }
         });
-        add(radMp3);
+        pnlDownloads.add(radMp3);
         radMp3.setBounds(180, 150, 55, 21);
-
-        cmbVideoFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP4", "MKV" }));
-        cmbVideoFormat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbVideoFormatActionPerformed(evt);
-            }
-        });
-        add(cmbVideoFormat);
-        cmbVideoFormat.setBounds(290, 110, 72, 22);
 
         cmbAudioFormat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MP3", "WAV" }));
         cmbAudioFormat.addActionListener(new java.awt.event.ActionListener() {
@@ -162,27 +168,59 @@ public class DownloadPanel extends javax.swing.JPanel {
                 cmbAudioFormatActionPerformed(evt);
             }
         });
-        add(cmbAudioFormat);
+        pnlDownloads.add(cmbAudioFormat);
         cmbAudioFormat.setBounds(290, 150, 72, 22);
+
+        lblSaveTo.setText("Save to...");
+        pnlDownloads.add(lblSaveTo);
+        lblSaveTo.setBounds(40, 200, 90, 20);
 
         txtSaveTo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSaveToActionPerformed(evt);
             }
         });
-        add(txtSaveTo);
+        pnlDownloads.add(txtSaveTo);
         txtSaveTo.setBounds(200, 200, 410, 30);
+
+        btnSaveTo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
+        btnSaveTo.setText("Choose");
+        btnSaveTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveToActionPerformed(evt);
+            }
+        });
+        pnlDownloads.add(btnSaveTo);
+        btnSaveTo.setBounds(630, 210, 100, 23);
+
+        btnDownload.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/downloadyt.png"))); // NOI18N
+        btnDownload.setText("Download");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+        pnlDownloads.add(btnDownload);
+        btnDownload.setBounds(310, 240, 210, 40);
+
+        lblProgress.setText("Progress");
+        pnlDownloads.add(lblProgress);
+        lblProgress.setBounds(30, 300, 60, 20);
+        pnlDownloads.add(prgDownload);
+        prgDownload.setBounds(120, 300, 630, 20);
+
+        lblError.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pnlDownloads.add(lblError);
+        lblError.setBounds(120, 330, 630, 0);
+
+        add(pnlDownloads);
+        pnlDownloads.setBounds(0, 10, 820, 400);
 
         pnlMedia.setLayout(null);
         add(pnlMedia);
-        pnlMedia.setBounds(20, 360, 760, 370);
-
-        lblError.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblError.setForeground(new java.awt.Color(204, 0, 0));
-        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblError.setText("There is a problem with YouTube right now. Please, try later.");
-        add(lblError);
-        lblError.setBounds(120, 330, 630, 16);
+        pnlMedia.setBounds(10, 280, 760, 320);
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenActionPerformed
@@ -245,7 +283,8 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void downloadVideo() {
 
         if (!checkYtdlp()) {
-            JOptionPane.showMessageDialog(jFrameMain, "Cannot find yt-dlp. Go to preferences and set path manually.", "Error", JOptionPane.ERROR_MESSAGE);
+            setErrorMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            return;
         }
 
         // Código proporcionado por el profesor
@@ -332,7 +371,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
 
             if (line.toLowerCase().contains("forbidden")) {
-                lblError.setVisible(true);
+                setErrorMessage("There is a problem with YouTube right now. Please, try later.");
             }
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
@@ -383,6 +422,10 @@ public class DownloadPanel extends javax.swing.JPanel {
     }
 
     private void downloadAudio() {
+        if (!checkYtdlp()) {
+            setErrorMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            return;
+        }
 
         SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
             @Override
@@ -467,6 +510,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblProgress;
     private javax.swing.JLabel lblSaveTo;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JPanel pnlDownloads;
     private javax.swing.JPanel pnlMedia;
     private javax.swing.JProgressBar prgDownload;
     private javax.swing.JRadioButton radMp3;
@@ -481,5 +525,10 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private boolean checkYtdlp() {
         return new File(jFrameMain.getYtdlp_path()).exists();
+    }
+
+    private void setErrorMessage(String message) {
+       lblError.setText(message);
+       lblError.setVisible(!message.isEmpty());
     }
 }

@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -49,10 +48,31 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
             allFiles.add(localFile);
         }
 
+        MigLayout layout = new MigLayout(
+                "wrap 6, fill, align center center",
+                "[left][right][fill][fill][right][right]",
+                "[]10[]10[]10[]10"
+        );
+        setLayout(layout);
+        
+        add(lblDownloads);
+        add(lblSearch, "alignx right");
+        add(txtFilter, "span 2");
+        add(lblFormat, "right");        
+        
         cmbFormat = new JComboBox<>();
         cmbFormat.setBounds(490, 27, 90, 22);
-        add(cmbFormat);
-
+        add(cmbFormat, "grow");
+        
+        add(scrDwnld, "span 6, grow");
+        add(lblAction, "span 6, grow");
+        add(lblLocal, "left");
+        add(lblNetwork, "left");
+        add(lblBoth, "left");
+        add(btnDeleteItem);
+        add(btnDownload, "grow");
+        add(btnUpload, "grow");
+        
         jFrameMain.getMsComponent().addNewMediaListener(this);
 
         cmbFormat.addActionListener(new java.awt.event.ActionListener() {
@@ -60,7 +80,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
                 applyFilters();
             }
         });
-
+        
         refreshModel();
     }
 
@@ -102,21 +122,44 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblDownloads = new javax.swing.JLabel();
+        lblSearch = new javax.swing.JLabel();
+        txtFilter = new javax.swing.JTextField();
+        lblFormat = new javax.swing.JLabel();
         scrDwnld = new javax.swing.JScrollPane();
         tblDownloads = new javax.swing.JTable();
-        lblDownloads = new javax.swing.JLabel();
-        lblFormat = new javax.swing.JLabel();
-        btnDeleteItem = new javax.swing.JButton();
-        txtFilter = new javax.swing.JTextField();
-        btnUpload = new javax.swing.JButton();
-        btnDownload = new javax.swing.JButton();
+        lblAction = new javax.swing.JLabel();
         lblLocal = new javax.swing.JLabel();
         lblNetwork = new javax.swing.JLabel();
         lblBoth = new javax.swing.JLabel();
-        lblSearch = new javax.swing.JLabel();
-        lblAction = new javax.swing.JLabel();
+        btnDeleteItem = new javax.swing.JButton();
+        btnUpload = new javax.swing.JButton();
+        btnDownload = new javax.swing.JButton();
 
         setLayout(null);
+
+        lblDownloads.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblDownloads.setText("Files");
+        add(lblDownloads);
+        lblDownloads.setBounds(40, 30, 70, 20);
+
+        lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
+        lblSearch.setToolTipText("Search");
+        add(lblSearch);
+        lblSearch.setBounds(170, 20, 30, 30);
+
+        txtFilter.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFilterKeyReleased(evt);
+            }
+        });
+        add(txtFilter);
+        txtFilter.setBounds(200, 20, 190, 30);
+
+        lblFormat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblFormat.setText("Choose format");
+        add(lblFormat);
+        lblFormat.setBounds(400, 30, 90, 16);
 
         tblDownloads.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -134,14 +177,25 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         add(scrDwnld);
         scrDwnld.setBounds(30, 70, 700, 190);
 
-        lblDownloads.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblDownloads.setText("Files");
-        add(lblDownloads);
-        lblDownloads.setBounds(40, 30, 70, 20);
+        lblAction.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAction.setText("Choose an action to perform...");
+        add(lblAction);
+        lblAction.setBounds(30, 270, 700, 16);
 
-        lblFormat.setText("Choose format");
-        add(lblFormat);
-        lblFormat.setBounds(400, 30, 90, 16);
+        lblLocal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/local.png"))); // NOI18N
+        lblLocal.setText("Local");
+        add(lblLocal);
+        lblLocal.setBounds(20, 290, 50, 16);
+
+        lblNetwork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cloud.png"))); // NOI18N
+        lblNetwork.setText("Network");
+        add(lblNetwork);
+        lblNetwork.setBounds(90, 290, 70, 16);
+
+        lblBoth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cloud-storage.png"))); // NOI18N
+        lblBoth.setText("Both");
+        add(lblBoth);
+        lblBoth.setBounds(170, 290, 60, 16);
 
         btnDeleteItem.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDeleteItem.setText("Delete selected item");
@@ -152,14 +206,6 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         });
         add(btnDeleteItem);
         btnDeleteItem.setBounds(260, 290, 180, 23);
-
-        txtFilter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFilterKeyReleased(evt);
-            }
-        });
-        add(txtFilter);
-        txtFilter.setBounds(200, 20, 190, 30);
 
         btnUpload.setText("Upload");
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
@@ -179,30 +225,6 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         });
         add(btnDownload);
         btnDownload.setBounds(620, 290, 100, 23);
-
-        lblLocal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/local.png"))); // NOI18N
-        lblLocal.setText("Local");
-        add(lblLocal);
-        lblLocal.setBounds(20, 280, 50, 16);
-
-        lblNetwork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cloud.png"))); // NOI18N
-        lblNetwork.setText("Network");
-        add(lblNetwork);
-        lblNetwork.setBounds(90, 280, 70, 16);
-
-        lblBoth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cloud-storage.png"))); // NOI18N
-        lblBoth.setText("Both");
-        add(lblBoth);
-        lblBoth.setBounds(170, 280, 60, 16);
-
-        lblSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search.png"))); // NOI18N
-        lblSearch.setToolTipText("Search");
-        add(lblSearch);
-        lblSearch.setBounds(170, 20, 30, 30);
-
-        lblAction.setText("Choose an action to perform...");
-        add(lblAction);
-        lblAction.setBounds(260, 270, 470, 16);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteItemActionPerformed
