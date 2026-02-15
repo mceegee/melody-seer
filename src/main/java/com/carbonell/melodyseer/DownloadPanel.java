@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import net.miginfocom.swing.MigLayout;
 
@@ -283,7 +282,7 @@ public class DownloadPanel extends javax.swing.JPanel {
     private void downloadVideo() {
 
         if (!checkYtdlp()) {
-            setErrorMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
             return;
         }
 
@@ -347,7 +346,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
-                    JOptionPane.showMessageDialog(jFrameMain, "File has been downloaded succesfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                    setMessage("File has been downloaded succesfully!");
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -371,7 +370,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             System.out.println("\t" + line);
 
             if (line.toLowerCase().contains("forbidden")) {
-                setErrorMessage("There is a problem with YouTube right now. Please, try later.");
+                setMessage("There is a problem with YouTube right now. Please, try later.");
             }
 
             if (line.contains("Moving file") && line.toLowerCase().contains("." + extension.toLowerCase())) {
@@ -423,7 +422,7 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     private void downloadAudio() {
         if (!checkYtdlp()) {
-            setErrorMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
+            setMessage("Cannot find yt-dlp. Go to preferences and set path manually.");
             return;
         }
 
@@ -485,7 +484,7 @@ public class DownloadPanel extends javax.swing.JPanel {
             @Override
             protected void done() {
                 try {
-                    JOptionPane.showMessageDialog(jFrameMain, "File has been downloaded succesfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                    setMessage("File has been downloaded succesfully!");
                     if (chkOpen.isSelected() && lastSavedFile != null) {
                         openMedia();
                     }
@@ -527,7 +526,7 @@ public class DownloadPanel extends javax.swing.JPanel {
         return new File(jFrameMain.getYtdlp_path()).exists();
     }
 
-    private void setErrorMessage(String message) {
+    private void setMessage(String message) {
        lblError.setText(message);
        lblError.setVisible(!message.isEmpty());
     }

@@ -7,12 +7,17 @@
 
 **Aspecto, color, iconos, texto, distribución de los componentes.**
 
+    1. ASPECTO:
+
+    - Cambios sustanciales en el aspecto: arreglo de la alineación de los componentes, unificación del tipo de iconos, disminución del número de colores. 
      
     2. COLOR:
 
         - Reducción del número de colores usados al suprimirse la clasificación de los vídeos según local, cloud o ambos. Ahora se hace mediante iconos. 
 
-  
+        - Reducción del número de colores al cambiar el tipo de iconos utilizados: han pasado de ser iconos a todo color a ser flat icons. 
+
+
     3. ICONOS: 
 
         - Se añade un botón de retorno a un label que representa una flecha apuntando a la izquierda en el PreferencesPanel
@@ -25,9 +30,13 @@
 
         - Eliminación de iconos innecesarios
 
+
     4. TEXTO
 
+    - Se aumenta la cantidad de texto de la aplicación para ayudar a la usabilidad, principalmente mediante feedback a las acciones que se toman.
+
     - Uso de colores y negrita para ayudar con la comprensión de lo que ocurre: rojo para errores, negrita para marcar títulos.
+
 
      5. DISTRIBUCIÓN DE LOS COMPONENTES:
 
@@ -41,13 +50,13 @@
          - Se ha movido el Media Panel a la ventana principal.
 
 
-
 **Affordance. Feedback. Restricciones.**
 
      1. AFFORDANCE
 
      - De manera predeterminada, los ComboBox con el formato ya tienen una opción preseleccionada en lugar de aparecer en blanco. Así, el usuario pude percibir mejor qué opciones están disponibles según la categoría.
 
+    
      2. FEEDBACK:
 
      - Se añade mensaje de fallo de login en color rojo. Se elimina el JOptionPane para hacer menos intrusivo el feedback.
@@ -59,6 +68,7 @@
      - Mensaje de error en caso de recibir Error 403 de yt-dlp
 
      - Feedback en caso de no encontrar el programa yt-dlp
+
 
      3. RESTRICCIONES: 
 
@@ -74,6 +84,12 @@
      - Mejoras en la recuperación de archivos locales, lo cual lleva a que ya no aparezcan archivos locales con tamaño 0.
 
 **Gestión de errores**
+
+     - Aviso al usuario en caso de que el login sea incorrecto mediante mensaje en la pantalla correspondiente.
+    
+     - Aviso en caso de no encontrar el programa yt-dlp mediante un mensaje al usuario.
+    
+     - Aviso en caso de que yt-dlp no funcione correctamente por error 403 (en ocasiones ocurre si se intentan descargar varios archivos seguidos).
 
 ### Unidad de Trabajo 3 - Creación de componentes visuales
 
