@@ -10,6 +10,28 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.carbonell.melodyseer.MelodySeer</exec.mainClass>
     </properties>
+    <build>
+        <plugins> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+                    <outputDirectory>${project.basedir}/doc</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins> 
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.miglayout</groupId>
