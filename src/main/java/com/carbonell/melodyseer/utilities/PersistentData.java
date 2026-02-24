@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ * Class to manage data saved on computer
+ * Includes token generated for the user and files downloaded
+ * 
  * @author marta
  */
 public class PersistentData implements Serializable{
