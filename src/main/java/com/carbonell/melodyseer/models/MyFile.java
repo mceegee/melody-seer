@@ -11,11 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.io.Serializable;
 
 /**
- *
+ * Class <code>MyFile</code> manages the information related to the files (local) and media (DB) generated after upload / download. 
  * @author marta
  */
 public class MyFile implements Serializable {
@@ -27,16 +26,28 @@ public class MyFile implements Serializable {
     @JsonIgnore
     private Media media;
 
+    /**
+     * Constructor for local files
+     * @param file <code>File</code> 
+     * @param downloadedFrom URL for the original website
+     */
     public MyFile(File file, String downloadedFrom) {
         this.file = file;
         this.downloadedFrom = downloadedFrom;
         downloadDate = LocalDate.now();
     }
 
+    /**
+     * Constructor for DB files
+     * @param media <code>Media</code>
+     */
     public MyFile(Media media) {
         this.media = media;
     }
     
+    /**
+     * No params constructor
+     */
     public MyFile() {
         
     }
@@ -101,7 +112,9 @@ public class MyFile implements Serializable {
         this.downloadedFrom = downloadedFrom;
     }
 
-    
+    /**
+     * Deletes a file from computer
+     */
     public void delete() {
         if (file == null) {
             return;
@@ -109,10 +122,20 @@ public class MyFile implements Serializable {
         file.delete();
     }
 
+    /**
+     * Checks if a file can be uploaded to a DB 
+     * To do so, checks that file is found on local machine and that it's not already on the DB
+     * @return bool
+     */
     public boolean canBeUploaded() {
         return file != null && file.exists() && media == null;
     }
 
+    /**
+     * Checks if a file can be downloaded from a DB 
+     * To do so, checks that file is not found on local machine and that it's not part of the DB
+     * @return bool
+     */
     public boolean canBeDownloaded() {
         return media != null && (file == null || !file.exists());
     }

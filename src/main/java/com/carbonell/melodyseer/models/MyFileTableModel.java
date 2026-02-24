@@ -12,7 +12,9 @@ import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * Class that implements <code>AbstractTableModel</code>
+ * Used to populate information about existing media on the app
+ * 
  * @author marta
  */
 public class MyFileTableModel extends AbstractTableModel {
@@ -20,6 +22,10 @@ public class MyFileTableModel extends AbstractTableModel {
     private String columns[] = {"Status", "Filename", "Size", "MIME type", "Download date"};
     private ArrayList<MyFile> listFiles;
 
+    /**
+     * Constructor
+     * @param listFiles an <code>ArrayList</code> of <code>MyFile</code>
+     */
     public MyFileTableModel(ArrayList<MyFile> listFiles) {
         this.listFiles = listFiles;
     }
@@ -78,6 +84,12 @@ public class MyFileTableModel extends AbstractTableModel {
         
     }
 
+    /**
+     * Checks if selected item is stored on the cloud, locally or on both places
+     * 
+     * @param file <code>MyFile</code> 
+     * @return <code>ImageIcon</code> assigned icon for each situation where media can be found
+     */
     private ImageIcon getStatusIcon(MyFile file) {
         if (file.canBeDownloaded()) {
             return new javax.swing.ImageIcon(getClass().getResource("/images/cloud.png"));

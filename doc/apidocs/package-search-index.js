@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.carbonell.melodyseer"},{"l":"com.carbonell.melodyseer.models"},{"l":"com.carbonell.melodyseer.utilities"}];updateSearchResults();
