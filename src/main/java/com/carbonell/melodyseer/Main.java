@@ -8,12 +8,14 @@ import com.carbonell.melody.seer.component.MelodySeerComponent;
 import com.carbonell.melodyseer.utilities.PersistentData;
 import com.carbonell.melodyseer.models.MyFile;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import com.carbonell.melodyseer.utilities.FileManager;
 import java.awt.CardLayout;
 
 /**
- *
+ * Class that manages the different views for our app
+ * It also includes any variable that has to be used across the different windows
+ * Objects from this main class will be instantiated on different views from our app to do so
+ * 
  * @author marta
  */
 public class Main extends javax.swing.JFrame {
@@ -41,7 +43,11 @@ public class Main extends javax.swing.JFrame {
     private CardLayout cl;
 
     /**
-     * Creates new form Main
+     * Constructor: Creates new form Main
+     * It first checks if there's any metadata saved
+     * Has a Panel with <code>CardLayout</code> and deals with initial view of subpanels
+     * 
+     * Creation and methods for Logout and Exit Menu Items
      */
     public Main() {
 
@@ -102,6 +108,14 @@ public class Main extends javax.swing.JFrame {
         return myFiles;
     }
 
+    /**
+     * Adds a new <code>MyFile</code> item to the variable with local files
+     * Checks that the information on saved items is up to date. 
+     * Saves the information to a json metadata document
+     * Refreshes the information
+     * 
+     * @param file <code>MyFile</code>
+     */
     public void addNewFile(MyFile file) {
         myFiles.add(file);
         cleanLocalFiles();
@@ -110,6 +124,9 @@ public class Main extends javax.swing.JFrame {
         downloadPanel.refreshFiles();
     }
     
+    /**
+     * Checks that local file information is up to date. If not, deletes any mismatched item. 
+     */
     private void cleanLocalFiles() {
         ArrayList<MyFile> missingFiles = new ArrayList<>();
         for(MyFile file: myFiles){
@@ -120,10 +137,17 @@ public class Main extends javax.swing.JFrame {
         myFiles.removeAll(missingFiles);
     }
 
+    /**
+     * Creates a metadata document with persistent information on a given path
+     */
     public void savePersistentData() {
         FileManager.writeFile(persistentData, downloadedMediaInfoPath);
     }
 
+    /**
+     * Deletes a given file
+     * @param i row of the file to be deleted
+     */
     public void deleteFile(int i) {
         myFiles.remove(i);
     }
@@ -172,28 +196,31 @@ public class Main extends javax.swing.JFrame {
         return persistentData;
     }
 
+    /**
+     * Changes view to Preferences Panel
+     */    
     public void showPreferencesPanel() {
-        //downloadPanel.setVisible(false);
-        //mediaPanel.setVisible(false);
-        //preferencesPanel.setVisible(true);
         cl.show(pnlContent, "preferencesPanel");
     }
 
+    /**
+    * Changes view to Download Panel
+    */
     public void showDownloadPanel() {
-        //downloadPanel.setVisible(true);
-        //preferencesPanel.setVisible(false);
-        //mediaPanel.setVisible(false);
         cl.show(pnlContent, "downloadPanel");
     }
 
+    /**
+     * Changes view to LogIn Panel
+     */
     public void showLogInPanel() {
-//        downloadPanel.setVisible(false);
-//        preferencesPanel.setVisible(false);
-//        mediaPanel.setVisible(false);
-//        logInPanel.setVisible(true);
         cl.show(pnlContent, "loginPanel");
     }
 
+    /**
+     * 
+     * @return <code>MelodySeerComponent</code> the component for the different interactions with the API
+     */
     public MelodySeerComponent getMsComponent() {
         return msComponent;
     }
@@ -271,27 +298,39 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // FILE - LOG OUT
+    /**
+     * Cleans token information to logout, updates metadata information and goes back to login panel
+     * 
+     * @param evt Click on menu item Logout
+     */
     private void mniLogoutActionPerformed(java.awt.event.ActionEvent evt) {
         persistentData.setSavedToken(null);
         savePersistentData();
         showLogInPanel();
     }
 
-    // FILE - EXIT
+    /**
+     * Closes the application
+     * @param evt click on menu item Exit
+     */
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
         System.exit(NORMAL);
     }//GEN-LAST:event_mniExitActionPerformed
 
-    // EDIT - PREFERENCES
+    /**
+     * Shows preferences panel 
+     * @param evt click on menu item Preferences
+     */
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
-//        Preferences openPreferences = new Preferences((file) -> onDownloadedFile(file));
-//        openPreferences.setVisible(true);
+
         showPreferencesPanel();
     }//GEN-LAST:event_mniPreferencesActionPerformed
 
-    // HELP - ABOUT
+    /**
+     * Shows about <code>JDialog</code>
+     * @param evt click on menu item About
+     */
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
         About openAbout = new About(this, true);
         openAbout.setVisible(true);

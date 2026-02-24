@@ -17,9 +17,10 @@ public class PreferencesPanel extends javax.swing.JPanel {
     Main jFrameMain;
 
     /**
-     * Creates new form PreferencesPanel
+     * Creates new form PreferencesPanel Implements MigLayout for visualization
      *
-     * @param jFrameMain
+     * @param jFrameMain an object from our <code>Main</code>, which deals with
+     * variables used across the app
      */
     public PreferencesPanel(Main jFrameMain) {
         initComponents();
@@ -34,21 +35,20 @@ public class PreferencesPanel extends javax.swing.JPanel {
                 "[]12[]12[]12[]12[]12[]12[]"
         );
         setLayout(layout);
-        
-        
+
         add(lblGoBack, "left, wrap");
-        
+
         add(lblChoosePath);
         add(txtYtDlpPath, "growx");
         add(btnChoosePath);
-        
+
         add(lblTempFiles);
         add(txtTemporaryFiles, "growx");
         add(btnTempFiles);
-        
+
         add(lblLimitDwld);
         add(cmbLimitDwld);
-        
+
     }
 
     /**
@@ -127,7 +127,13 @@ public class PreferencesPanel extends javax.swing.JPanel {
         cmbLimitDwld.setBounds(240, 150, 120, 22);
     }// </editor-fold>//GEN-END:initComponents
 
-
+    /**
+     * Opens a <code>JFileChooser</code> for directories and sets it as a path
+     * to store temporary files Sets the corresponding textfield to the selected
+     * path
+     *
+     * @param evt clicking on the "Choose" button to select a folder for temporary files
+     */
     private void btnTempFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTempFilesActionPerformed
         // https://stackoverflow.com/questions/10083447/selecting-folder-destination-in-java
         JFileChooser chooser = new JFileChooser();
@@ -143,10 +149,21 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnTempFilesActionPerformed
 
+    /**
+     * Selects the maximum download speed
+     *
+     * @param evt click on combo box option
+     */
     private void cmbLimitDwldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLimitDwldActionPerformed
         jFrameMain.setSelectedSpeed(cmbLimitDwld.getSelectedItem().toString());
     }//GEN-LAST:event_cmbLimitDwldActionPerformed
 
+    /**
+     * Opens a <code>JFileChooser</code> for directories and sets it as a path to store the downloaded files 
+     * Sets the corresponding textfield to the selected path
+     *
+     * @param evt clicking on the "Choose" button to select a folder for downloaded files
+     */
     private void btnChoosePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChoosePathActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -160,6 +177,11 @@ public class PreferencesPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnChoosePathActionPerformed
 
+    /**
+     * Goes back to the Download Panel
+     * 
+     * @param evt click on the arrow icon
+     */
     private void lblGoBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblGoBackMouseClicked
         jFrameMain.showDownloadPanel();
     }//GEN-LAST:event_lblGoBackMouseClicked

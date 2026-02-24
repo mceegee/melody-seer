@@ -26,12 +26,23 @@ public class LogIn extends JPanel {
     private JLabel lblErrorMessage;
 
     private Main jFrameMain;
-
+/**
+ * Constructor, initiates components and sets information from Main
+ * 
+ * @param jFrameMain object from <code>Main</code> class where variables use throughout the app are stored
+ */
     public LogIn(Main jFrameMain) {
         initComponents();
         this.jFrameMain = jFrameMain;
     }
 
+    /**
+     * Initializes components
+     * Adds them to a <code>MigLayout</code>
+     * Adds listener to login button
+     * Includes <code>KeyListener</code> which makes sure that login button is disabled until both username and password textfields have text on them
+     * 
+     */
     private void initComponents() {
         txtUser = new JTextField();
         pwdPwd = new JPasswordField();
@@ -97,7 +108,15 @@ public class LogIn extends JPanel {
         pwdPwd.addKeyListener(keyListener);
 
     }
-
+/**
+ * Log in user by calling component and sending information on username and pwd textfields
+ * If a valid token is returned, and user has selected the corresponding checkbox, token is saved to metadata document
+ * If log in is successful, Download Panel is shown
+ * If not, message error is shown
+ * 
+ * @param evt click on Login button
+ * @throws Exception in case username / password combination is not correct
+ */
     public void btnLogInActionPerformed(java.awt.event.ActionEvent evt) throws Exception {
         String username = txtUser.getText();
         String pwd = new String(pwdPwd.getPassword());
