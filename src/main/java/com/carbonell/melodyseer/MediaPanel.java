@@ -22,6 +22,9 @@ import javax.swing.table.TableRowSorter;
 import net.miginfocom.swing.MigLayout;
 
 /**
+ * Class that deals with the table with information related to media: local
+ * files, media on the cloud and items on both Implements filters, upload and
+ * download actions and a delete button
  *
  * @author marta
  */
@@ -36,7 +39,12 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
     private ArrayList<Media> discoveredFiles = new ArrayList<>();
 
     /**
-     * Creates new form MediaPanel
+     * Constructor Initializes components Uses <code>MigLayout</code> Adds
+     * listener for the mimetype filters Refreshes model by checking local and
+     * database files
+     *
+     * @param jFrameMain object from <code>Main</code> class where variables use
+     * throughout the app are stored
      */
     public MediaPanel(Main jFrameMain) {
         initComponents();
@@ -54,16 +62,16 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
                 "[]10[]10[]10[]10"
         );
         setLayout(layout);
-        
+
         add(lblDownloads);
         add(lblSearch, "alignx right");
         add(txtFilter, "span 2");
-        add(lblFormat, "right");        
-        
+        add(lblFormat, "right");
+
         cmbFormat = new JComboBox<>();
         cmbFormat.setBounds(490, 27, 90, 22);
         add(cmbFormat, "grow");
-        
+
         add(scrDwnld, "span 6, grow");
         add(lblAction, "span 6, grow");
         add(lblLocal, "left");
@@ -72,7 +80,7 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         add(btnDeleteItem);
         add(btnDownload, "grow");
         add(btnUpload, "grow");
-        
+
         jFrameMain.getMsComponent().addNewMediaListener(this);
 
         cmbFormat.addActionListener(new java.awt.event.ActionListener() {
@@ -80,10 +88,14 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
                 applyFilters();
             }
         });
-        
+
         refreshModel();
     }
 
+    /**
+     * Populates combobox with the different formats possible (video, audio,
+     * all)
+     */
     private void populateFormatCmb() {
         var format = jFrameMain.getMyFiles();
         DefaultComboBoxModel<String> dcbm = new DefaultComboBoxModel<>();
@@ -94,6 +106,10 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         cmbFormat.setModel(dcbm);
     }
 
+    /**
+     * Applies filter to table: text filter from textfield and format filter
+     * from combobox Uses them as row filter
+     */
     private void applyFilters() {
 
         RowFilter<MyFileTableModel, Integer> rf = RowFilter.regexFilter("(?i)" + Pattern.quote(txtFilter.getText()), 1);
@@ -109,8 +125,6 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         }
 
         sorter.setRowFilter(rf);
-        //System.out.println("DEBUG - Expected result: " + mftm.getValueAt(0, 2));
-        //System.out.println("DEBUG -  Filter: " + cmbFormat.getSelectedItem());
     }
 
     /**
@@ -227,7 +241,15 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         add(btnDownload);
         btnDownload.setBounds(620, 290, 100, 23);
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Deletes file from computer
+     * Checks that file corresponding to selected row exists on computer
+     * If so, deletes it and refreshes model
+     * Gives feedback to user
+     * 
+     * @param evt click on delete button
+     */
     private void btnDeleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteItemActionPerformed
         modelRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
         ArrayList<MyFile> files = jFrameMain.getMyFiles();
@@ -242,6 +264,14 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         }
     }//GEN-LAST:event_btnDeleteItemActionPerformed
 
+    /**
+     * Uploads file from selected row
+     * It first checks that it can be uploaded and, if so, calls component and uploads it to DB
+     * Then shows message informing about successful upload
+     * If file cannot be uploaded, joptionpane is shown with error message
+     * 
+     * @param evt click on upload button
+     */
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
         int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
         MyFile currentFile = allFiles.get(selectedRow);
@@ -260,16 +290,25 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         }
     }//GEN-LAST:event_btnUploadActionPerformed
 
+    /**
+     * Downloads file from selected row
+     * It first checks that it can be downloaded and, if so, calls component and downloads it from DB
+     * Then shows message informing about successful download
+     * If file cannot be downloaded, joptionpane is shown with error message
+     * File is downloaded to selected folder on <code>saveToPath</code>, Main variable set up on DownloadPanel
+     * 
+     * @param evt click on download button
+     */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         try {
             int selectedRow = tblDownloads.convertRowIndexToModel(tblDownloads.getSelectedRow());
             MyFile currentFile = allFiles.get(selectedRow);
-            if (currentFile.canBeDownloaded()) {                
+            if (currentFile.canBeDownloaded()) {
                 File targetFile = new File(jFrameMain.getSaveToPath() + "\\" + currentFile.getMedia().mediaFileName);
                 jFrameMain.getMsComponent().downloadMedia(currentFile.getMedia().id, targetFile);
                 currentFile.setFile(targetFile);
                 jFrameMain.addNewFile(currentFile);
-                
+
                 lblAction.setText("File has been successfully downloaded.");
                 lblAction.setForeground(new Color(0, 153, 51));
             } else {
@@ -280,10 +319,22 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    /**
+     * Applies filters real time as user writes on textfield
+     *
+     * @param evt key released
+     */
     private void txtFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterKeyReleased
         applyFilters();
     }//GEN-LAST:event_txtFilterKeyReleased
 
+    /**
+     * Refreshes table model
+     * Clears all files and re-adds them to array that's used to populate table model
+     * Checks both local files and items on the cloud
+     * Matches files and media from DB if not matched yet
+     * 
+     */
     void refreshModel() {
         populateFormatCmb();
 
@@ -314,6 +365,13 @@ public class MediaPanel extends javax.swing.JPanel implements OnNewMediaAddedLis
         tblDownloads.setModel(newModel);
     }
 
+    /**
+     * Checks DB to find new updates to it
+     * Adds any new Media found to an ArrayList
+     * Refreshes table model to show the information 
+     * 
+     * @param object Personalised <code>EventObject</code> to listen to DB
+     */
     @Override
     public void newMediaAdded(NewMediaEventObject object) {
         List<Media> newMedia = object.getMedia();

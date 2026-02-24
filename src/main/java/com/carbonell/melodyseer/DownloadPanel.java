@@ -19,6 +19,8 @@ import javax.swing.SwingWorker;
 import net.miginfocom.swing.MigLayout;
 
 /**
+ * Class to manage downloads By requesting an URL, the desired format and the
+ * chosen folder for the download Then processes said download
  *
  * @author marta
  */
@@ -28,51 +30,52 @@ public class DownloadPanel extends javax.swing.JPanel {
     private String lastSavedFile;
     File currentFile;
     private MediaPanel mediaPanel;
-    private final Color DARK_GREEN =  new Color(0, 153, 51);
-    private final Color DARK_RED = new Color (153,0, 51);
+    private final Color DARK_GREEN = new Color(0, 153, 51);
+    private final Color DARK_RED = new Color(153, 0, 51);
 
     /**
-     * Creates new form DownloadPanel
+     * Creates new form DownloadPanel Deals with <code>MigLayout</code>
      *
-     * @param jFrameMain
+     * @param jFrameMain an object from our <code>Main</code>, which deals with
+     * variables used across the app
      */
     public DownloadPanel(Main jFrameMain) {
         initComponents();
         setSize(800, 800);
         pnlDownloads.setSize(800, 270);
         pnlMedia.setSize(800, 480);
-        
+
         this.jFrameMain = jFrameMain;
         cmbAudioFormat.setVisible(false);
         txtSaveTo.setText(jFrameMain.getSaveToPath());
-        
+
         MigLayout layout = new MigLayout(
                 "wrap 3, fillx, align center top",
                 "[right][left][left]",
                 "[]12[]12[]12[]12[]12[]12[]"
         );
         pnlDownloads.setLayout(layout);
-        
+
         pnlDownloads.add(lblUrl);
         pnlDownloads.add(txtUrl, "growx");
         pnlDownloads.add(chkOpen);
-        
+
         pnlDownloads.add(lblChoose);
         pnlDownloads.add(radVideo, "split 3");
         pnlDownloads.add(cmbVideoFormat, "wrap, left");
-        
+
         pnlDownloads.add(radMp3, "skip 1, split 3");
         pnlDownloads.add(cmbAudioFormat, "wrap, left");
-        
+
         pnlDownloads.add(lblSaveTo);
         pnlDownloads.add(txtSaveTo, "growx");
         pnlDownloads.add(btnSaveTo);
-        
+
         pnlDownloads.add(btnDownload, "skip 1, wrap, center");
-        
+
         pnlDownloads.add(lblProgress);
         pnlDownloads.add(prgDownload, "growx, wrap");
-        
+
         pnlDownloads.add(lblError, "skip 1, center, wrap");
 
         mediaPanel = new MediaPanel(jFrameMain);
@@ -228,6 +231,13 @@ public class DownloadPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkOpenActionPerformed
 
+    /**
+     * Opens a <code>JFileChooser</code> for directories and sets it as a path
+     * for downloads Sets the corresponding textfield to the selected path Sets
+     * variable saveToPath on Main class to said path
+     *
+     * @param evt click on button Save To...
+     */
     private void btnSaveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToActionPerformed
 
         // https://www.youtube.com/watch?v=HQ8JAbHmOvs
@@ -246,12 +256,24 @@ public class DownloadPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveToActionPerformed
 
+    /**
+     * Shows video formats available Hides audio formats Sets format to the one
+     * selected
+     *
+     * @param evt click on radio button Video
+     */
     private void radVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radVideoActionPerformed
         cmbAudioFormat.setVisible(false);
         cmbVideoFormat.setVisible(true);
         jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_radVideoActionPerformed
 
+    /**
+     * Deals with download action by deriving to either
+     * <code>downloadAudio</code> or <code>downloadVideo</code> methods
+     *
+     * @param evt click on Download button
+     */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (radMp3.isSelected()) {
             downloadAudio();
@@ -263,14 +285,31 @@ public class DownloadPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnDownloadActionPerformed
 
+    /**
+     * Sets format to selected option
+     *
+     * @param evt click on video format combo box
+     */
     private void cmbVideoFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVideoFormatActionPerformed
         jFrameMain.setFormat(cmbVideoFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_cmbVideoFormatActionPerformed
 
+    /**
+     * Sets format to selected option
+     *
+     * @param evt click on video format combo box
+     */
     private void cmbAudioFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAudioFormatActionPerformed
         jFrameMain.setFormat(cmbAudioFormat.getSelectedItem().toString().toLowerCase());
     }//GEN-LAST:event_cmbAudioFormatActionPerformed
 
+    /**
+     * Shows audio formats available 
+     * Hides video formats 
+     * Sets format to the one selected
+     *
+     * @param evt click on radio button Audio
+     */
     private void radMp3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMp3ActionPerformed
         cmbAudioFormat.setVisible(true);
         cmbVideoFormat.setVisible(false);
@@ -281,6 +320,13 @@ public class DownloadPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSaveToActionPerformed
 
+    /**
+     * Downloads videos
+     * It first checks if yt-dlp path is ok, if not, shows error message
+     * Then, it sends instructions for yt-dlp using ProcessBuilder and starts the process
+     * Reads the output and processes the download with <code>processDownload</code> method
+     * Once it's done, it shows a confirmation message and, if corresponding checkbox is selected, opens the file
+     */
     private void downloadVideo() {
 
         if (!checkYtdlp()) {
@@ -362,7 +408,15 @@ public class DownloadPanel extends javax.swing.JPanel {
         worker.execute();
 
     }
-
+/** 
+ * Processes the download text using the chunks
+ * If an error is found within chunks, an error message appears
+ * Then isolates the filename to create the new file
+ * Finally, uses the download percentage to update progress bar
+ * 
+ * @param chunks sent from download method
+ * @param extension video or audio
+ */
     private void processDownload(List<String> chunks, String extension) {
         System.out.println("Process> " + chunks.size() + " lines recieved. In thread " + Thread.currentThread());
         for (String line : chunks) {
@@ -399,21 +453,28 @@ public class DownloadPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Opens last downloaded media file if corresponding checkbox is selected
+     * 
+     * @throws IOException 
+     */
     private void openMedia() throws IOException {
         if (chkOpen.isSelected()) {
             try {
                 // https://stackoverflow.com/questions/26334556/open-a-file-using-desktopjava-awt
                 Desktop desktop = Desktop.getDesktop();
                 desktop.open(currentFile);
-//            ProcessBuilder pb = new ProcessBuilder(lastSavedFile);
-//            pb.redirectErrorStream(true); 
-//            Process process = pb.start(); 
             } catch (Exception e) {
 
             }
         }
     }
 
+    /**
+     * Checks if user has selected a speed limit and, if so, sets it as maximum download speed
+     * 
+     * @return String selectedSpeed
+     */
     private String getDownloadSpeedCommand() {
         if (!jFrameMain.getSelectedSpeed().equals("") && !jFrameMain.getSelectedSpeed().equals("Don't limit")) {
             return "-r" + jFrameMain.getSelectedSpeed().split(" ")[0] + "M";
@@ -421,7 +482,14 @@ public class DownloadPanel extends javax.swing.JPanel {
             return "";
         }
     }
-
+    
+    /**
+     * Downloads audios
+     * It first checks if yt-dlp path is ok, if not, shows error message
+     * Then, it sends instructions for yt-dlp using ProcessBuilder and starts the process
+     * Reads the output and processes the download with <code>processDownload</code> method
+     * Once it's done, it shows a confirmation message and, if corresponding checkbox is selected, opens the file
+     */
     private void downloadAudio() {
         if (!checkYtdlp()) {
             setMessage("Cannot find yt-dlp. Go to preferences and set path manually.", DARK_RED);
@@ -520,17 +588,30 @@ public class DownloadPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Ensures that last downloaded files are shown on table model
+     */
     void refreshFiles() {
         mediaPanel.refreshModel();
     }
-
+/** 
+ * Checks that the correct yt-dlp.exe path is used
+ * 
+ * @return bool
+ */
     private boolean checkYtdlp() {
         return new File(jFrameMain.getYtdlp_path()).exists();
     }
 
+    /**
+     * Changes the message that's shown underneath the progress bar
+     * 
+     * @param message text to be shown
+     * @param c color of error message - green ok, red problem
+     */
     private void setMessage(String message, Color c) {
-       lblError.setText(message);
-       lblError.setForeground(c);
-       lblError.setVisible(!message.isEmpty());
+        lblError.setText(message);
+        lblError.setForeground(c);
+        lblError.setVisible(!message.isEmpty());
     }
 }

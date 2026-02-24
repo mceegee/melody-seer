@@ -5,7 +5,7 @@
 package com.carbonell.melodyseer;
 
 /**
- *
+ * Class with sources for the different classes
  * @author marta
  */
 public class About extends javax.swing.JDialog {

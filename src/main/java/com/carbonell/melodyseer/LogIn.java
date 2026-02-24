@@ -11,7 +11,8 @@ import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
 /**
- *
+ * Class to deal with the Log In process 
+ * 
  * @author marta
  */
 public class LogIn extends JPanel {

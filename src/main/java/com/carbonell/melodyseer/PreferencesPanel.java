@@ -9,7 +9,7 @@ import javax.swing.JFileChooser;
 import net.miginfocom.swing.MigLayout;
 
 /**
- *
+ * Class to set up different configurations: path for temporary files, path for yt-ldp.exe and download speed limit 
  * @author marta
  */
 public class PreferencesPanel extends javax.swing.JPanel {
@@ -129,8 +129,8 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
     /**
      * Opens a <code>JFileChooser</code> for directories and sets it as a path
-     * to store temporary files Sets the corresponding textfield to the selected
-     * path
+     * to store temporary files 
+     * Sets the corresponding textfield to the selected path
      *
      * @param evt clicking on the "Choose" button to select a folder for temporary files
      */
@@ -159,10 +159,10 @@ public class PreferencesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbLimitDwldActionPerformed
 
     /**
-     * Opens a <code>JFileChooser</code> for directories and sets it as a path to store the downloaded files 
+     * Opens a <code>JFileChooser</code> for files and sets it as a path to retrieve yt-dlp.exe
      * Sets the corresponding textfield to the selected path
      *
-     * @param evt clicking on the "Choose" button to select a folder for downloaded files
+     * @param evt clicking on the "Choose" button to select yt-dlp.exe
      */
     private void btnChoosePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChoosePathActionPerformed
         JFileChooser chooser = new JFileChooser();
