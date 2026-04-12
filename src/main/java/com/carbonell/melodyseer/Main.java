@@ -10,12 +10,23 @@ import com.carbonell.melodyseer.models.MyFile;
 import java.util.ArrayList;
 import com.carbonell.melodyseer.utilities.FileManager;
 import java.awt.CardLayout;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import javax.swing.JOptionPane;
 
 /**
- * Class that manages the different views for our app
- * It also includes any variable that has to be used across the different windows
- * Objects from this main class will be instantiated on different views from our app to do so
- * 
+ * Class that manages the different views for our app It also includes any
+ * variable that has to be used across the different windows Objects from this
+ * main class will be instantiated on different views from our app to do so
+ *
  * @author marta
  */
 public class Main extends javax.swing.JFrame {
@@ -43,10 +54,10 @@ public class Main extends javax.swing.JFrame {
     private CardLayout cl;
 
     /**
-     * Constructor: Creates new form Main
-     * It first checks if there's any metadata saved
-     * Has a Panel with <code>CardLayout</code> and deals with initial view of subpanels
-     * 
+     * Constructor: Creates new form Main It first checks if there's any
+     * metadata saved Has a Panel with <code>CardLayout</code> and deals with
+     * initial view of subpanels
+     *
      * Creation and methods for Logout and Exit Menu Items
      */
     public Main() {
@@ -58,7 +69,7 @@ public class Main extends javax.swing.JFrame {
             myFiles = new ArrayList<>();
             persistentData.setFiles(myFiles);
         }
-        
+
         cleanLocalFiles();
         boolean isLoggedIn = persistentData.getSavedToken() != null;
 
@@ -110,10 +121,9 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Adds a new <code>MyFile</code> item to the variable with local files
-     * Checks that the information on saved items is up to date. 
-     * Saves the information to a json metadata document
-     * Refreshes the information
-     * 
+     * Checks that the information on saved items is up to date. Saves the
+     * information to a json metadata document Refreshes the information
+     *
      * @param file <code>MyFile</code>
      */
     public void addNewFile(MyFile file) {
@@ -123,14 +133,15 @@ public class Main extends javax.swing.JFrame {
 
         downloadPanel.refreshFiles();
     }
-    
+
     /**
-     * Checks that local file information is up to date. If not, deletes any mismatched item. 
+     * Checks that local file information is up to date. If not, deletes any
+     * mismatched item.
      */
     private void cleanLocalFiles() {
         ArrayList<MyFile> missingFiles = new ArrayList<>();
-        for(MyFile file: myFiles){
-            if(!file.canBeUploaded()){
+        for (MyFile file : myFiles) {
+            if (!file.canBeUploaded()) {
                 missingFiles.add(file);
             }
         }
@@ -146,6 +157,7 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Deletes a given file
+     *
      * @param i row of the file to be deleted
      */
     public void deleteFile(int i) {
@@ -198,14 +210,14 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Changes view to Preferences Panel
-     */    
+     */
     public void showPreferencesPanel() {
         cl.show(pnlContent, "preferencesPanel");
     }
 
     /**
-    * Changes view to Download Panel
-    */
+     * Changes view to Download Panel
+     */
     public void showDownloadPanel() {
         cl.show(pnlContent, "downloadPanel");
     }
@@ -218,13 +230,13 @@ public class Main extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @return <code>MelodySeerComponent</code> the component for the different interactions with the API
+     *
+     * @return <code>MelodySeerComponent</code> the component for the different
+     * interactions with the API
      */
     public MelodySeerComponent getMsComponent() {
         return msComponent;
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -243,6 +255,8 @@ public class Main extends javax.swing.JFrame {
         mniPreferences = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mniAbout = new javax.swing.JMenuItem();
+        mniApiDocs = new javax.swing.JMenuItem();
+        mniUserManual = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Melody Seer");
@@ -290,6 +304,22 @@ public class Main extends javax.swing.JFrame {
         });
         mnuHelp.add(mniAbout);
 
+        mniApiDocs.setText("Open API Docs");
+        mniApiDocs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniApiDocsActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mniApiDocs);
+
+        mniUserManual.setText("Open User Manual");
+        mniUserManual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniUserManualActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mniUserManual);
+
         jMenuBar1.add(mnuHelp);
         mnuHelp.getAccessibleContext().setAccessibleDescription("");
 
@@ -299,8 +329,9 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Cleans token information to logout, updates metadata information and goes back to login panel
-     * 
+     * Cleans token information to logout, updates metadata information and goes
+     * back to login panel
+     *
      * @param evt Click on menu item Logout
      */
     private void mniLogoutActionPerformed(java.awt.event.ActionEvent evt) {
@@ -311,6 +342,7 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Closes the application
+     *
      * @param evt click on menu item Exit
      */
     // https://stackoverflow.com/questions/33017359/how-to-make-window-close-on-clicking-exit-menuitem
@@ -319,7 +351,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mniExitActionPerformed
 
     /**
-     * Shows preferences panel 
+     * Shows preferences panel
+     *
      * @param evt click on menu item Preferences
      */
     private void mniPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniPreferencesActionPerformed
@@ -329,12 +362,40 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Shows about <code>JDialog</code>
+     *
      * @param evt click on menu item About
      */
     private void mniAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAboutActionPerformed
         About openAbout = new About(this, true);
         openAbout.setVisible(true);
     }//GEN-LAST:event_mniAboutActionPerformed
+
+    private void mniApiDocsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniApiDocsActionPerformed
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(new File("apidocs/index.html"));
+            
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Can't find API Docs", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_mniApiDocsActionPerformed
+
+    private void mniUserManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniUserManualActionPerformed
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            //GET RESOURCE
+
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("Melody_Seer_User_Manual.pdf")) {
+                Path temp = Files.createTempFile("open-", "Melody_Seer_User_Manual.pdf");
+                Files.copy(is, temp, StandardCopyOption.REPLACE_EXISTING);
+
+                desktop.open(temp.toFile());
+            }
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Can't find User Manual", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_mniUserManualActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,7 +425,9 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem mniAbout;
+    private javax.swing.JMenuItem mniApiDocs;
     private javax.swing.JMenuItem mniPreferences;
+    private javax.swing.JMenuItem mniUserManual;
     private javax.swing.JMenu mnuEdit;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenu mnuHelp;
